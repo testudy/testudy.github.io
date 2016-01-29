@@ -4,7 +4,7 @@ Tags: 技术
 
 ---
 
-![不破不立](http://7xqkdt.com1.z0.glb.clouddn.com/FiLis-RiFKMNQ1nEB-gBm_9CmLRm)
+![不破不立](media/without-destroying-the-old-one-cannot-build-the-new.jpg)
 
 iOS中的`Bundle React Native code and image` Build 所使用的`../node_modules/react-native/packager/react-native-xcode.sh`脚本中，依赖React-Native的本地安装，如果将npm的全局安装配置更改到了非系统环境变量的路径中（打开`Show environment variables in build log`选项即可看到），需要在`../node_modules/react-native/packager/react-native-xcode.sh`脚本的正文开始处添加` PATH=~/.npm-global/bin:$PATH`代码。
 
