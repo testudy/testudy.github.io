@@ -4,8 +4,7 @@ Tags: 技术
 
 ---
 
-![不破不立](media/%E4%B8%8D%E7%A0%B4%E4%B8%8D%E7%AB%8B.jpg)
-
+![不破不立](image/guyue/FiLis-RiFKMNQ1nEB-gBm_9CmLRm)
 
 iOS中的`Bundle React Native code and image` Build 所使用的`../node_modules/react-native/packager/react-native-xcode.sh`脚本中，依赖React-Native的本地安装，如果将npm的全局安装配置更改到了非系统环境变量的路径中（打开`Show environment variables in build log`选项即可看到），需要在`../node_modules/react-native/packager/react-native-xcode.sh`脚本的正文开始处添加` PATH=~/.npm-global/bin:$PATH`代码。
 
