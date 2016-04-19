@@ -67,6 +67,10 @@ A/B页面
 
 ### 测试结果
 #### 1. Mac OS 10.11.4 Safari 9.1
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 | | 返回(1) | 前进 | 点击(或刷新) | 返回(2) | 唤醒 | 再次导航 |
 |-|:-------:|:----:|:---------:|:------:|:----:|:------:|
