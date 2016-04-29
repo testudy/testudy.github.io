@@ -1,4 +1,4 @@
-# 对标准JSON序列化字符串进行null替换的总结
+# 对标准JSON序列化字符串进行null替换的尝试
 
 考虑了序列化数据的嵌套
 
@@ -22,7 +22,7 @@ console.log(obj3);
 ```
 
 ## 解决办法
-用正则表达式替换null，补全双撇号的转义。
+用正则表达式替换null，补全双撇号的转义。（未做充分测试，有可能存在问题）。
 ```javascript
 outerJSON = outerJSON.replace(/(\\*)":null/g, '$1":$1"$1"');
 ```
