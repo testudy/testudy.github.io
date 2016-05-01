@@ -321,15 +321,126 @@ ECMAScript标准库中的大多数构造函数的某些属性或方法期望具�
 
 ## 数组和字典
 ### 43、使用Object的直接实例构造轻量级的字典
+JavaScript对象的核心是一个字符串属性名称与属性值的映射表。将对象作为轻量级字典的首要原则是：应该仅仅将Object的直接实例作为字典，而不是其子类，当然也不是数组。
+
+> 1. 使用对象字面量构建轻量级字典；
+> 2. 轻量级字典应该是Object.prototype的直接子类，以使for...in循环避免原型污染。
+
+
 ### 44、使用null原型以防止原型污染
+> 1. 在ES5环境中，使用`Object.create(null)`创建的空对象是不太容易被污染的；
+> 2. 在一些较老的支持`__proto__`的环境中，考虑使用`{__proto__: null}`；
+> 3. 但要注意`__proto__`既不标准，也不是完全可移植的，并且可能会在未来的JavaScript环境中去除；
+> 4. 绝不要使用`__proto__`名作为字典中的key，因为一些环境将其作为特殊的属性对待。
+
+
 ### 45、使用hasOwnProperty方法以避免原型污染
+> 1. 使用`hasOwnProperty`方法避免受原型污染；
+> 2. 使用call方法避免`hasOwnProperty`方法被覆盖；
+> 3. 考虑实现字典类，封装`hasOwnProperty`测试代码；
+> 4. 使用字典类避免将`__proto__`作为key来使用。
+
+```javascript
+function Dict(elements) {
+    this.elements = elements || {};
+    this.hasSpecialProto = false;
+    this.specialProto = undefined;
+}
+
+Dict.prototype.has = function (key) {
+    if (key === '__proto__') {
+        return this.hasSpecialProto;
+    }
+    return ({}).hasOwnProperty.call(this.elements, key);
+};
+
+Dict.prototype.get = function (key) {
+    if (key === '__proto__') {
+        return this.specialProto;
+    }
+    return this.has(key) ? this.elements[key] : undefined;
+};
+
+Dict.prototype.set = function (key, value) {
+    if (key === '__proto__') {
+        this.hasSpecialProto = true;
+        this.specialProto = value;
+    } else {
+        this.elements[key] = value;
+    }
+};
+
+Dict.prototype.remove = function (key) {
+    if (key === '__proto__') {
+        this.hasSpecialProto = false;
+        this.specialProto = undefined;
+    } else {
+        delete this.elements[key];
+    }
+};
+```
+
+
 ### 46、使用数组而不要使用字典来存储有序集合
+一个JavaScript对象是一个无序的属性集合。获取和设置不同的属性与顺序无关，都会以大致相同的效率产生相同的结果。ECMAScript标准并未规定属性存储的任何特定顺序，甚至对于枚举对象也未涉及。
+
+例如：浮点型算术运算的四舍五入会导致对计算顺序的微妙依赖。
+```javascript
+(0.8 + 0.7 + 0.6 + 0.9) / 4;
+(0.6 + 0.8 + 0.7 + 0.9) / 4;
+```
+
+> 1. 使用for...in循环来枚举对象属性应当与顺序无关；
+> 2. 如果聚集运算字典中的数据，确保聚集操作与顺序无关；
+> 3. 是用数组而不是字典来存储有序集合。
+
+
 ### 47、绝不要在Object.prototype中增加可枚举的属性
+> 1. 避免在Object.prototype中增加属性；
+> 2. 考虑编写一个函数代替Object.prototype方法；
+> 3. 如果你确实需要在Object.prototype中增加属性，请使用ES5中的Object.defineProperty方法将他们定义为不可枚举的属性。
+
+
 ### 48、避免在枚举期间修改对象
+ECMAScript标准中规定：
+如果被枚举的对象在枚举期间添加了新的属性，那么在枚举期间并不能保证新添加的属性能够被访问。
+
+> 1. 当使用for...in循环枚举一个对象的属性时，确保不要修改该对象；
+> 2. 当迭代一个对象时，如果该对象的内容可能会在循环期间被改变，应该使用while循环或经典的for循环来代替for...in循环；
+> 3. 为了在不断变化的数据结构中能够预测枚举，考虑使用一个有序的数据结构，例如数组，而不要使用字典对象。
+
+
 ### 49、数组迭代要优先使用for循环而不是for...in循环
+> 1. 迭代数组的索引属性应当总是使用for循环而不是for...in循环，即使是数组的索引属性，对象属性key始终是字符串；
+> 2. 考虑在循环之前将数组的长度存储在一个局部变量中以避免重新计算数组长度；
+
+
 ### 50、迭代方法优于循环
+> 1. 使用迭代方法（如Array.prototype.forEach和Array.prototype.map）替换for循环使得代码更可读，并且避免了重复循环控制逻辑；
+> 2. 使用自定义的迭代函数来抽象未被标准库支持的常见循环模式；
+> 3. 在需要提前终止循环的情况下，仍然推荐使用传统的循环。另外，some和every方法也可用于提前退出。
+
+
 ### 51、在类数组上复用通用的数组方法
+Array.prototype中的标准方法被设计成“类数组”对象可复用的方法，即使这些对象并没有继承Array。
+数组对象的基本契约有两个基本规则：
+1. 具有一个范围在0到2^32 - 1的整型length属性；
+2. length属性大于该对象的最大索引。索引是一个范围在0到2^32 - 2的整数，它的字符串表示的是该对象中的一个key。
+
+符合这两个规则的对象即可以看做“类数组”对象，例如arguments对象、NodeList类、字符串等。
+
+模拟JavaScript数组的所有行为很精妙，这主要归功于数组行为的两个方面：
+1. 将length属性值设为小于n的值会自动的删除索引值大于或等于n的所有属性；
+2. 增加一个索引值为n（大于或等于length属性值）的属性会自动的设置length属性为n + 1；
+
+> 1. 对于类数组对象，通过提取方法对象并使用其call方法来复用通用的Array方法；
+> 2. 任意一个具有索引属性和恰当length属性的对象都可以使用通用的Array方法。
+
 ### 52、数组字面量优于数组构造函数
+> 1. 如果数组构造函数的只有一个实参且参数值是数字，则数组构造函数的行为和其他实参情况的行为是不同的；
+> 2. 使用数组字面量代替数组构造函数。
+
+
 ## 库和API设计
 ### 53、保持一致的约定
 ### 54、将undefined看作“没有值”
