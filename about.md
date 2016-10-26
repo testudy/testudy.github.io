@@ -1,15 +1,15 @@
 ---
 layout: page
-title: About
+title: 胡继伟的博客简介
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+我不是一个聪明人，我只能付出双倍甚至更多倍的努力，来取得一点进步——勤能补拙是良训，一分辛苦一分才，故将博客取名“补拙”。
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
+我于学习的态度是：知识来源于对未知问题的发现和执着的追逐，通过不断尝试的方法研究总结出结论，融合 尝试（test）和学习（study）两种意思，即，
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+Test & Study = Testudy
+
+这也是博客域名的来源，同时感谢黄豆同学对这个名字的审阅。
+
+2016-10-26 夜
