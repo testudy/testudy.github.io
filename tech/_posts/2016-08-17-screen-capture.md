@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 浏览器截屏思路
+tags: 技术 原创
 ---
 
 ## 缘起
