@@ -48,3 +48,6 @@ HTTPS的静态文件被劫持，可能存在的情况主要有下面三种情况
 111.111.111.19 domain-a.com
 {% endhighlight %}
 结果：劫持内容复现，证书签名正确，排除中间人劫持，进一步怀疑是CDN回源路径中存在劫持。
+
+## 基本概念
+1. [劫持](https://en.wikipedia.org/wiki/DNS_hijacking)
