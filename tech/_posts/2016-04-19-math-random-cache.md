@@ -1,4 +1,8 @@
-# Math.random()函数在手机浏览器中的缓存问题
+---
+layout: post
+title: Math.random()函数在手机浏览器中的缓存问题
+tags: 技术 原创
+---
 
 > 前些时间做一个小功能，在页面中随机显示两个template中的一个，自然用到了JavaScript中的Math.random这个方法。却无意中发现，两者是不平均的。仔细分析，原因出在网页的回退中。
 
@@ -11,7 +15,7 @@ Android不同系统版本间的同款浏览器表现存在差异。
 
 ### 测试代码如下：
 A/B页面
-``` html
+{% highlight html %}
 <script>
 (function () {
     'use strict';
@@ -55,7 +59,7 @@ A/B页面
 <div id="show"></div>
 <div id="hide"></div>
 <div id="pop"></div>
-```
+{% endhighlight %}
 
 ### 测试步骤
 1. A页面超链接进入B页面，返回（1）查看A页面的各项内容是否更新；
