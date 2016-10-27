@@ -43,7 +43,7 @@ HTTPS的静态文件被劫持，可能存在的情况主要有下面三种情况
 
 结果：两个查询都不存在，疑似是劫持者服务器IP。
 
-3、绑定本地hosts文件，再次被劫持的URL`https://domain-a.com/stats.js`
+3、绑定本地hosts文件，再次请求被劫持的URL`https://domain-a.com/stats.js`
 {% highlight text %}
 111.111.111.19 domain-a.com
 {% endhighlight %}
