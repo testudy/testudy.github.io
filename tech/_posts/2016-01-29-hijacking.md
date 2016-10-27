@@ -1,8 +1,9 @@
-﻿# 劫持
-
-Tags: 技术
-
 ---
+layout: post
+title: 劫持
+tags: 技术 原创
+---
+
 ## [DNS劫持](http://baike.baidu.com/view/3163602.htm)
 
 广告劫持是运营商或恶意团体将用户正常页面指向到广告页面或在正常页面中插入第三方广告的劫持行为
