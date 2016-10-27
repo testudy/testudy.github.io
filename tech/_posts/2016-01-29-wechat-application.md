@@ -1,4 +1,8 @@
-# 微信应用号
+---
+layout: post
+title: 微信应用号
+tags: 技术 原创 预研
+---
 
 Tags: 技术预研
 
