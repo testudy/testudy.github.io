@@ -27,6 +27,7 @@ disqus:
     shortname: testudycc
 
 analytics: true
+seopush: true
 
 # Build settings
 markdown: kramdown
