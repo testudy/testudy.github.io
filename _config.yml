@@ -26,5 +26,7 @@ github_username: testudy
 disqus:
     shortname: testudycc
 
+analytics: true
+
 # Build settings
 markdown: kramdown
