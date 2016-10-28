@@ -6,7 +6,7 @@
 
     var ds = document.createElement('script');
     ds.type = 'text/javascript';
-	ds.async = true;
+    ds.async = true;
     ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
     ds.charset = 'UTF-8';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
@@ -14,4 +14,11 @@
 </script>
 <!-- 多说公共JS代码 end -->
 <noscript>Please enable JavaScript to view the <a href="http://duoshuo.com/" rel="nofollow">comments powered by 多说.</a></noscript>
+
+<div class="ds-share" data-thread-key="{{ page.id }}" data-title="{{ page.title }}" data-images="/assets/favicon/favicon.jpeg" data-content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}" data-url="{{ page.url | absolute_url }}">
+    <div class="ds-share-aside-right">
+        <div class="ds-share-aside-inner"></div>
+        <div class="ds-share-aside-toggle">分享到</div>
+    </div>
+</div>
 {% endif %}
