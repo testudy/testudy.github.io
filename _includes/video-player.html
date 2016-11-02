@@ -1,0 +1,33 @@
+<script src="//yuntv.letv.com/player/vod/bcloud.js"></script>
+<script>
+    function videoPlayer(eid, vu) {
+
+        function isMobile() {
+            var ua = navigator.userAgent.toLowerCase(),
+                ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                isAndroid = ua.match(/(Android)\s+([\d.]+)/);
+
+            return isIphone || isAndroid;
+        }
+
+        var player = new CloudVodPlayer(), 
+	        parentNode = document.getElementById(eid),
+            playerWidth = parentNode.clientWidth,
+            playerHeight = playerWidth * 9 / 16;
+
+        if(!isMobile()){
+            playerHeight += 36;
+        }
+
+        player.init({
+            "uu": "5mhwkxsu8y",
+            "vu": vu,
+            "auto_play": 0,
+            "gpcflag": 1,
+            "width": playerWidth,
+            "height": playerHeight,
+            "lang":"zh_CN"
+        });
+    }
+</script>
