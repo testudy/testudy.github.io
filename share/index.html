@@ -1,14 +1,14 @@
 ---
 layout: default
-title: 技术
+title: 分享
 ---
 
 <div class="home">
 
-  <h1 class="page-heading">{{ page.title }}文章列表</h1>
+  <h1 class="page-heading">{{ page.title }}博文列表</h1>
 
   <ul class="post-list">
-    {% for post in site.posts %}
+    {% for post in site.categories.share %}
       <li>
         <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
