@@ -18,7 +18,7 @@ MVC是经典的解耦思想，是现在前端工程师的必备技能。这个�
 
 
 ## 视频录制
-{% include videoPlayer.html %}
+{% include video-player.html %}
 ### 基于Backbone的MVC演示项目1
 <div id="player1" class="video-player">
 <script>
