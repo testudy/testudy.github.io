@@ -43,6 +43,12 @@ table ol,
 table ul{
     margin: 0;
 }
+.nav-tabs {
+    margin-bottom: 0;
+}
+.tab-content {
+    margin-top: -1px;
+}
 
 /* https://github.com/mojombo/tpw/blob/master/css/syntax.css */
 .highlight  { background: #ffffff; }
@@ -109,7 +115,7 @@ table ul{
 
 .highlight {
     padding: 0;
-    margin: 10px 0;
+    margin: 0 0 10px 0;
 }
 
 .highlight > pre {
@@ -128,6 +134,7 @@ table ul{
     margin: 0;
 }
 .highlight .gutter {
+    width: 50px;
     border-right: 1px solid #ddd;
     border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
