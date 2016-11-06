@@ -1,0 +1,251 @@
+<div class="row">
+	<div class="span12">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#simpio1" data-toggle="tab">simpio.h</a></li>
+			<li><a href="#simpio2" data-toggle="tab">simpio.c</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="simpio1">
+{% highlight c linenos %}
+/*
+ * File: simpio.h
+ * Version: 1.0
+ * Last modified on Wed Apr 27 07:29:13 1994 by eroberts
+ * -----------------------------------------------------
+ * This interface provides access to a simple package of
+ * functions that simplify the reading of input data.
+ */
+
+#ifndef _simpio_h
+#define _simpio_h
+
+#include "genlib.h"
+
+/*
+ * Function: GetInteger
+ * Usage: i = GetInteger();
+ * ------------------------
+ * GetInteger reads a line of text from standard input and scans
+ * it as an integer.  The integer value is returned.  If an
+ * integer cannot be scanned or if more characters follow the
+ * number, the user is given a chance to retry.
+ */
+
+int GetInteger(void);
+
+/*
+ * Function: GetLong
+ * Usage: l = GetLong();
+ * ---------------------
+ * GetLong reads a line of text from standard input and scans
+ * it as a long integer.  The value is returned as a long.
+ * If an integer cannot be scanned or if more characters follow
+ * the number, the user is given a chance to retry.
+ */
+
+long GetLong(void);
+
+/*
+ * Function: GetReal
+ * Usage: x = GetReal();
+ * ---------------------
+ * GetReal reads a line of text from standard input and scans
+ * it as a double.  If the number cannot be scanned or if extra
+ * characters follow after the number ends, the user is given
+ * a chance to reenter the value.
+ */
+
+double GetReal(void);
+
+/*
+ * Function: GetLine
+ * Usage: s = GetLine();
+ * ---------------------
+ * GetLine reads a line of text from standard input and returns
+ * the line as a string.  The newline character that terminates
+ * the input is not stored as part of the string.
+ */
+
+string GetLine(void);
+
+/*
+ * Function: ReadLine
+ * Usage: s = ReadLine(infile);
+ * ----------------------------
+ * ReadLine reads a line of text from the input file and
+ * returns the line as a string.  The newline character
+ * that terminates the input is not stored as part of the
+ * string.  The ReadLine function returns NULL if infile
+ * is at the end-of-file position.
+ */
+
+string ReadLine(FILE *infile);
+
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="simpio2">
+{% highlight c linenos %}
+/*
+ * File: simpio.c
+ * Version: 1.0
+ * Last modified on Fri Jul 15 14:10:41 1994 by eroberts
+ * -----------------------------------------------------
+ * This file implements the simpio.h interface.
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+#include "genlib.h"
+#include "strlib.h"
+#include "simpio.h"
+
+/*
+ * Constants:
+ * ----------
+ * InitialBufferSize -- Initial buffer size for ReadLine
+ */
+
+#define InitialBufferSize 120
+
+/* Exported entries */
+
+/*
+ * Functions: GetInteger, GetLong, GetReal
+ * ---------------------------------------
+ * These functions first read a line and then call sscanf to
+ * translate the number.  Reading an entire line is essential to
+ * good error recovery, because the characters after the point of
+ * error would otherwise remain in the input buffer and confuse
+ * subsequent input operations.  The sscanf line allows white space
+ * before and after the number but no other extraneous characters.
+ */
+
+int GetInteger(void)
+{
+    string line;
+    int value;
+    char termch;
+
+    while (TRUE) {
+        line = GetLine();
+        switch (sscanf(line, " %d %c", &value, &termch)) {
+          case 1:
+            FreeBlock(line);
+            return (value);
+          case 2:
+            printf("Unexpected character: '%c'\n", termch);
+            break;
+          default:
+            printf("Please enter an integer\n");
+            break;
+        }
+        FreeBlock(line);
+        printf("Retry: ");
+    }
+}
+
+long GetLong(void)
+{
+    string line;
+    long value;
+    char termch;
+
+    while (TRUE) {
+        line = GetLine();
+        switch (sscanf(line, " %ld %c", &value, &termch)) {
+          case 1:
+            FreeBlock(line);
+            return (value);
+          case 2:
+            printf("Unexpected character: '%c'\n", termch);
+            break;
+          default:
+            printf("Please enter an integer\n");
+            break;
+        }
+        FreeBlock(line);
+        printf("Retry: ");
+    }
+}
+
+double GetReal(void)
+{
+    string line;
+    double value;
+    char termch;
+
+    while (TRUE) {
+        line = GetLine();
+        switch (sscanf(line, " %lf %c", &value, &termch)) {
+          case 1:
+            FreeBlock(line);
+            return (value);
+          case 2:
+            printf("Unexpected character: '%c'\n", termch);
+            break;
+          default:
+            printf("Please enter a real number\n");
+            break;
+        }
+        FreeBlock(line);
+        printf("Retry: ");
+    }
+}
+
+/*
+ * Function: GetLine
+ * -----------------
+ * This function is a simple wrapper; all the work is done by
+ * ReadLine.
+ */
+
+string GetLine(void)
+{
+    return (ReadLine(stdin));
+}
+
+/*
+ * Function: ReadLine
+ * ------------------
+ * This function operates by reading characters from the file
+ * into a dynamically allocated buffer.  If the buffer becomes
+ * full before the end of the line is reached, a new buffer
+ * twice the size of the previous one is allocated.
+ */
+
+string ReadLine(FILE *infile)
+{
+    string line, nline;
+    int n, ch, size;
+
+    n = 0;
+    size = InitialBufferSize;
+    line = GetBlock(size + 1);
+    while ((ch = getc(infile)) != '\n' && ch != EOF) {
+        if (n == size) {
+            size *= 2;
+            nline = (string) GetBlock(size + 1);
+            strncpy(nline, line, n);
+            FreeBlock(line);
+            line = nline;
+        }
+        line[n++] = ch;
+    }
+    if (n == 0 && ch == EOF) {
+        FreeBlock(line);
+        return (NULL);
+    }
+    line[n] = '\0';
+    nline = (string) GetBlock(n + 1);
+    strcpy(nline, line);
+    FreeBlock(line);
+    return (nline);
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

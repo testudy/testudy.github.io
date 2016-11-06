@@ -1,0 +1,169 @@
+<div class="row">
+	<div class="span12">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#random1" data-toggle="tab">random.h</a></li>
+			<li><a href="#random2" data-toggle="tab">random.c</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="random1">
+{% highlight c linenos %}
+/*
+ * File: random.h
+ * Version: 1.0
+ * Last modified on Fri Jul 22 16:44:36 1994 by eroberts
+ * -----------------------------------------------------
+ * This interface provides several functions for generating
+ * pseudo-random numbers.
+ */
+
+#ifndef _random_h
+#define _random_h
+
+#include "genlib.h"
+#include <stdlib.h>
+
+/*
+ * Constant: RAND_MAX
+ * ------------------
+ * Unfortunately, several libraries that supposedly conform to
+ * the ANSI standard do not define RAND_MAX in <stdlib.h>.  To
+ * reduce portability problems, this interface defines RAND_MAX
+ * to be the largest positive integer if it is undefined.
+ */
+
+#ifndef RAND_MAX
+#  define RAND_MAX ((int) ((unsigned) ~0 >> 1))
+#endif
+
+/*
+ * Function: Randomize
+ * Usage: Randomize();
+ * -------------------
+ * This function sets the random seed so that the random sequence
+ * is unpredictable.  During the debugging phase, it is best not
+ * to call this function, so that program behavior is repeatable.
+ */
+
+void Randomize(void);
+
+/*
+ * Function: RandomInteger
+ * Usage: n = RandomInteger(low, high);
+ * ------------------------------------
+ * This function returns a random integer in the range low to high,
+ * inclusive.
+ */
+
+int RandomInteger(int low, int high);
+
+/*
+ * Function: RandomReal
+ * Usage: d = RandomReal(low, high);
+ * ---------------------------------
+ * This function returns a random real number in the half-open
+ * interval [low .. high), meaning that the result is always
+ * greater than or equal to low but strictly less than high.
+ */
+
+double RandomReal(double low, double high);
+
+/*
+ * Function: RandomChance
+ * Usage: if (RandomChance(p)) . . .
+ * ---------------------------------
+ * The RandomChance function returns TRUE with the probability
+ * indicated by p, which should be a floating-point number between
+ * 0 (meaning never) and 1 (meaning always).  For example, calling
+ * RandomChance(.30) returns TRUE 30 percent of the time.
+ */
+
+bool RandomChance(double p);
+
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="random2">
+{% highlight c linenos %}
+/*
+ * File: random.c
+ * Version: 1.0
+ * Last modified on Mon Sep 13 10:42:45 1993 by eroberts
+ * -----------------------------------------------------
+ * This file implements the random.h interface.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "genlib.h"
+#include "random.h"
+
+/*
+ * Function: Randomize
+ * -------------------
+ * This function operates by setting the random number
+ * seed to the current time.  The srand function is
+ * provided by the <stdlib.h> library and requires an
+ * integer argument.  The time function is provided
+ * by <time.h>.
+ */
+
+void Randomize(void)
+{
+    srand((int) time(NULL));
+}
+
+/*
+ * Function: RandomInteger
+ * -----------------------
+ * This function first obtains a random integer in
+ * the range [0..RAND_MAX] by applying four steps:
+ * (1) Generate a real number between 0 and 1.
+ * (2) Scale it to the appropriate range size.
+ * (3) Truncate the value to an integer.
+ * (4) Translate it to the appropriate starting point.
+ */
+
+int RandomInteger(int low, int high)
+{
+    int k;
+    double d;
+
+    d = (double) rand() / ((double) RAND_MAX + 1);
+    k = (int) (d * (high - low + 1));
+    return (low + k);
+}
+
+/*
+ * Function: RandomReal
+ * --------------------
+ * The implementation of RandomReal is similar to that
+ * of RandomInteger, without the truncation step.
+ */
+
+double RandomReal(double low, double high)
+{
+    double d;
+
+    d = (double) rand() / ((double) RAND_MAX + 1);
+    return (low + d * (high - low));
+}
+
+/*
+ * Function: RandomChance
+ * ----------------------
+ * This function uses RandomReal to generate a number
+ * between 0 and 100, which it then compares to p.
+ */
+
+bool RandomChance(double p)
+{
+    return (RandomReal(0, 1) < p);
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>
