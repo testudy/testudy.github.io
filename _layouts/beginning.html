@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% assign basepath = "/beginning" %}
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/2.3.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap/2.3.1/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="/assets/css/beginning.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+    <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+</head>
+<body>
+    <div style="display: none;">
+        <img src="/assets/favicon/favicon.jpeg" />
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a href="{{ '/' | prepend: basepath }}" class="brand">清凌渡</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">科学艺术<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ '/art/genlib' | prepend: basepath }}">通用库</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">抽象思维<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ '/abstraction/recursion.php' | prepend: basepath }}">递归</a></li>
+								<li><a href="{{ '/abstraction/sort.php' | prepend: basepath }}">排序</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">数据抽象</li>
+								<li><a href="{{ '/abstraction/adt.php' | prepend: basepath }}">数据类型</a></li>
+								<li><a href="{{ '/abstraction/symtab.php' | prepend: basepath }}">符号表</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">递归数据</li>
+								<li><a href="{{ '/abstraction/list.php' | prepend: basepath }}">列表</a></li>
+								<li><a href="{{ '/abstraction/tree.php' | prepend: basepath }}">树</a></li>
+								<li><a href="{{ '/abstraction/set.php' | prepend: basepath }}">集合</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">数据结构<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ '/chapter3/array.php' | prepend: basepath }}">数组</a></li>
+								<li><a href="{{ '/chapter3/listing.php' | prepend: basepath }}">列表</a></li>
+							</ul>
+						</li>
+						<li><a href="{{ '/about.php' | prepend: basepath }}">简介</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+    </div>
+    {{ content }}
+    <div class="container">
+	    <hr />
+	    <footer>
+		    <p class="pull-right">算法学习是一种修行</p>
+		    <p>&copy;清凌</p>
+	    </footer>
+    </div>
+    <script src="/assets/lib/jquery/2.0.0/jquery.js"></script>
+    <script src="/assets/lib/bootstrap/2.3.1/js/bootstrap.js"></script>
+    <script src="/assets/lib/underscore/1.4.4/underscore.js"></script>
+    <script src="/assets/js/tao.js"></script>
+    <script src="/assets/js/board.js"></script>
+    {% if jekyll.environment == 'production' and site.analytics %}
+        {% include analytics.html %}
+    {% endif %}
+    {% if jekyll.environment == 'production' and site.seopush %}
+        {% include seopush.html %}
+    {% endif %}
+</body>
+</html>
