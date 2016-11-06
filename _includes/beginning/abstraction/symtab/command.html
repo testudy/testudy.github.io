@@ -1,0 +1,89 @@
+<div class="row">
+	<div class="span12">
+		<h3>命令分派表</h3>
+        <p>将一个命令名称转换为对应操作的过程称为<strong>命令分派</strong>（command dispatching）。相比跳跃链表，使用符号表实现命令分派有如下优点：</p>
+        <ol>
+            <li>分派操作更加高效；</li>
+            <li>程序结构更易读懂；</li>
+            <li>命令表可以更加容易的扩展。</li>
+        </ol>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#command1" data-toggle="tab">跳跃链表</a></li>
+			<li><a href="#command2" data-toggle="tab">符号表</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="command1">
+{% highlight c linenos %}
+#include<stdio.h>
+#include<string.h>
+
+typedef char *string;
+
+static void ExecuteCommand(string cmd){
+    if(strcmp(cmd, "clear") == 0){
+        ClearCmd();
+    }
+    else if(strcmp(cmd, "run") == 0){
+        RumCmd();
+    }
+    else if(strcmp(cmd, "help") == 0){
+        HelpCmd();
+    }
+    else if(strcmp(cmd, "quit") == 0){
+        QuitCmd();
+    }
+    else{
+        printf("Undefined command: %s\n", cmd);
+    }
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="command2">
+{% highlight c linenos %}
+#include<stdlib.h>
+#include<stdio.h>
+#include"symtab.h"
+
+typedef void (*commandFnT)(void);
+
+// 函数指针和void *类型不兼容
+typedef struct{
+    commandFnT fn;
+} *commandEntryT;
+
+static void InitCommandTable(void);
+static void DefineCommand(string cmd, commandFnT fn);
+static void ExecuteCommand(string cmd);
+
+static symtabADT commandTable;
+
+static void InitCommandTable(void){
+    commandTable = NewSymbolTable();
+    DefineCommand("clear", ClearCmd);
+    DefineCommand("run", RunCmd);
+    DefineCommand("help", HelpCmd);
+    DefineCommand("quit", QuitCmd);
+}
+
+static void DefineCommand(string cmd, commandFnT fn){
+    commandEntryT entry;
+
+    entry = malloc(sizeof (commandEntryT));
+    entry->fn = fn;
+    Enter(commandTable, cmd, entry);
+}
+
+static void ExecuteCommand(string cmd){
+    commandEntryT entry;
+    entry = Lookup(commandTable, cmd);
+    if(entry == UNDEFINED){
+        printf("Undefined command: %s\n", cmd);
+        return;
+    }
+    entry->fn();
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,109 @@
+<div class="row">
+	<div class="span12">
+		<h3>迭代器</h3>
+		<p><strong>迭代器</strong>允许客户遍历集合中的值，例如符号表中的键。让NewIterator完成关键的工作，建立其内部结构，使得迭代器包含表中所有键的一个完整列表，具有如下优点：</p>
+        <ol>
+            <li>能够建立一个完整列表的迭代器实现起来比较简单；</li>
+            <li>建立一个列表可以减少为了按照逻辑顺序处理值的必要消耗；</li>
+            <li>客户代码中的循环体能够改变迭代器所进行操作的ADT的内容。</li>
+        </ol>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#iterator1" data-toggle="tab">抽象接口</a></li>
+			<li><a href="#iterator2" data-toggle="tab">实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="iterator1">
+{% highlight c linenos %}
+#ifndef _iterator_h
+#define _iterator_h
+
+#include<stdlib.h>
+#include"symtab.h"
+
+typedef enum{false, true} bool;
+
+typedef struct iteratorCDT *iteratorADT;
+
+iteratorADT NewIterator(symtabADT table);
+bool StepIterator(iteratorADT iterator, string *key);
+void FreeIterator(iteratorADT iterator);
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="iterator2">
+{% highlight c linenos %}
+#include<string.h>
+#include"iterator.h"
+
+typedef struct cellT{
+    string key;
+    struct cellT *link;
+} cellT;
+
+struct iteratorCDT{
+    cellT *start;
+};
+
+static void InsertKey(string key, void *value, void *clientData);
+
+iteratorADT NewIterator(symtabADT table){
+    iteratorADT iterator;
+
+    iterator = malloc(sizeof (iteratorADT));
+    iterator->start = NULL;
+    MapSymbolTable(InsertKey, table, iterator);
+
+    return (iterator);
+}
+
+bool StepIterator(iteratorADT iterator, string *key){
+    cellT *cp;
+    cp = iterator->start;
+    if(cp == NULL){
+        return (false);
+    }
+    *key = cp->key;
+    iterator->start = cp->link;
+    free(cp);
+    return (true);
+}
+
+void FreeIterator(iteratorADT iterator){
+    cellT *cp;
+    while((cp=iterator->start) != NULL){
+        iterator->start = cp->link;
+        free(cp);
+    }
+    free(iterator);
+}
+
+static void InsertKey(string key, void *value, void *clientData){
+    iteratorADT iterator;
+    cellT *prev, *next, *cp;
+
+    iterator = (iteratorADT)clientData;
+    prev = NULL;
+    next = iterator->start;
+
+    while(next!=NULL && strcmp(key, next->key)>0){
+        prev = next;
+        next = next->link;
+    }
+
+    cp = malloc(sizeof (cellT));
+    cp->key = key;
+    cp->link = next;
+
+    if(prev == NULL){
+        iterator->start = cp;
+    }
+    else{
+        prev->link = cp;
+    }
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>
