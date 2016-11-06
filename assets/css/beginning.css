@@ -1,0 +1,44 @@
+body{
+	padding-top: 60px;
+}
+canvas{
+	height: 320px;
+}
+canvas, .canvas{
+	width: 100%;
+	min-height: 320px;
+	background-color: rgb(238,238,238);
+	border-radius: 6px;
+}
+.canvas table{
+	width: 100%;
+}
+.table thead th,
+.canvas table th,
+.canvas table td{
+	text-align: center;
+}
+.canvas thead tr{
+	height: 36px;
+}
+.canvas .parent{
+	color: rgb(0,0,136);
+	font-weight: bold;
+}
+.canvas .child{
+	color: rgb(0,136,0);
+	font-weight: bold;
+}
+.canvas .deleted{
+	color: rgb(136,0,0);
+	font-weight: bold;
+}
+input.console{
+	padding-left: 0;
+	padding-right: 0;
+	width: 100%;
+}
+table ol,
+table ul{
+    margin: 0;
+}

@@ -1,23 +1,21 @@
 ---
-layout: default
-title: 启源
+layout: beginning
+title: 清凌渡
 ---
-
-<div class="home">
-
-  <h1 class="page-heading">{{ page.title }}博文列表</h1>
-
-  <ul class="post-list">
-    {% for post in site.categories.beginning %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
-
-
-</div>
+<body>
+	<div class="container">
+		<div class="hero-unit">
+			<h1>连通性</h1>
+			<p>假设给定整数对的一个序列，其中每个整数表示某种类型的一个对象，用p-q表示“p连接到q”。假设“连通”关系是可以传递的：也就是说如果p和q之间连通，q和r之间连通，那么p和r之间也连通。我们的目标是写一个过滤集合中无关对的程序。</p>
+		</div>
+<?php
+    require_once('index/search.php');
+    require_once('index/merge.php');
+    require_once('index/weighted.php');
+?>
+	</div>
+<?php 
+    require_once("footer.php"); 
+?>
+</body>
+</html>
