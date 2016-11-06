@@ -1,0 +1,87 @@
+<div class="row">
+	<div class="span12">
+		<h3>探测回文</h3>
+		<p>回文是一种字符串，它的正向读和反向读都是一样的。比如“level”和“noon”。由于任何一个字符长度大于1的回文，必须在其内部包含一个更短的回文，所以检测一个字符串是否为回文，需要：</p>
+		<ol>
+			<li>检查第一个和最后一个字符是否相同；</li>
+			<li>在将第一个和最后一个字符删除之后，检查剩下的字符串是否仍是回文。</li>
+		</ol>
+		<p>很明显，任何一个只有一个字符组成的字符串是一个回文，空字符串也可以将其看做回文。</p>
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#palindrome1" data-toggle="tab">递归实现1</a></li>
+			<li><a href="#palindrome2" data-toggle="tab">递归实现2</a></li>
+			<li><a href="#palindrome3" data-toggle="tab">迭代实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="palindrome1">
+<pre class="prettyprint linenums">
+typedef enum {false, true} bool;
+typedef char *string;
+
+bool IsPalindrome(string str){
+    int len = strlen(str);
+
+    if(len &lt;= 1){
+        return true;
+    }
+    else{
+        bool result1 = str[0] == str[len-1];
+        if(result1){
+
+            string sub = malloc(len-1);
+            strncpy(sub, str+1, len-2);
+            sub[len-2] = '\0';
+
+            bool result2 = IsPalindrome(sub);
+            free(sub);
+
+            return result1 && result2;
+        }
+        return false;
+    }
+}
+</pre>
+			</div>
+			<div class="tab-pane" id="palindrome2">
+<pre class="prettyprint linenums">
+typedef enum {false, true} bool;
+typedef char *string;
+
+bool IsPalindrome(string str){
+    return CheckPalindrome(str, strlen(str));
+}
+
+static bool CheckPalindrome(string str, int len){
+    if(len &lt;= 1){
+        return true;
+    }
+    else{
+        return str[0]==str[len-1] && CheckPalindrome(str+1, len-2);
+    }
+}
+</pre>
+			</div>
+			<div class="tab-pane" id="palindrome3">
+<pre class="prettyprint linenums">
+typedef enum {false, true} bool;
+typedef char *string;
+
+bool IsPalindrome(string str){
+    int i; 
+    int len = strlen(str);
+    int middle = len/2;
+
+    for(i=0; i&lt;middle; i++){
+        if(str[i] != str[len-1-i]){
+            return false;
+        }
+    }
+    return true;
+}
+</pre>
+			</div>
+		</div>
+	</div>
+</div>

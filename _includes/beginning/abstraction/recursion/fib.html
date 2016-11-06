@@ -1,0 +1,71 @@
+<div class="row">
+	<div class="span12">
+		<h3>费波那契函数</h3>
+		<p>费波那契问题是，如果它们按照如下规则，兔子的数量是如何从一代到一代的增长：</p>
+		<ol>
+			<li>每对发育成熟的兔子每月产下一对新的后代；</li>
+			<li>兔子在出生后的第二个月发育成熟；</li>
+			<li>老兔子不死；</li>
+		</ol>
+		<p>如果在1月引入一对未发育成熟的兔子，那么在年终时将会有多少对兔子？</p>
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#fib1" data-toggle="tab">递归实现1</a></li>
+			<li><a href="#fib2" data-toggle="tab">递归实现2</a></li>
+			<li><a href="#fib3" data-toggle="tab">迭代实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="fib1">
+<pre class="prettyprint linenums">
+int Fib(int n){
+    if(n &lt; 2){
+        return n;
+    }
+    else{
+        return Fib(n-1) + Fib(n-2);
+    }
+}
+</pre>
+			</div>
+			<div class="tab-pane" id="fib2">
+<pre class="prettyprint linenums">
+int Fib(int n){
+    return AdditiveSequence(n, 0, 1);
+}
+
+int AdditiveSequence(int n, int t0, int t1){
+    if(n == 0){
+        return t0;
+    }
+    if(n == 1){
+        return t1;
+    }
+    return AdditiveSequence(n-1, t1, t0+t1);
+}
+</pre>
+			</div>
+			<div class="tab-pane" id="fib3">
+<pre class="prettyprint linenums">
+int Fib(int n){
+    int t0 = 0,
+        t1 = 1,
+        tn, i;
+    if(n == 0){
+        return t0;
+    }
+    if(n == 1){
+        return t1;
+    }
+    for(i=1; i&lt;n; i++){
+        tn = t0 + t1;
+        t0 = t1;
+        t1 = tn;
+    }
+    return tn;
+}
+</pre>
+			</div>
+		</div>
+	</div>
+</div>

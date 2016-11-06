@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="span12">
+		<h3>交互递归</h3>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#binary1" data-toggle="tab">递归实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="binary1">
+<pre class="prettyprint linenums">
+typedef enum {false, true} bool;
+
+bool IsEven(unsigned n){
+    if(n == 0){
+        return true;
+    }
+    else{
+        return IsOdd(n-1);
+    }
+}
+
+bool IsOdd(unsigned n){
+    return !IsEven(n);
+}
+</pre>
+			</div>
+		</div>
+	</div>
+</div>
