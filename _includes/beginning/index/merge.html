@@ -1,0 +1,124 @@
+<div class="row">
+	<div class="span12">
+		<h3>快速合并算法</h3>
+		<p>对于M&gt;N，快速合并算法求解N个对象、M个对象的连通问题需要执行M*N/2条指令。</p>
+{% highlight c linenos %}
+#include <stdio.h>
+#define N 10
+main(){
+    int i, j, p, q, id[N];
+    for(i=0; i<N; i++){
+        id[i] = i;
+    }
+    while(scanf("%d-%d", &p, &q) == 2){
+        for(i=id[p]; i!=id[i]; i=id[i]);
+        for(j=id[q]; j!=id[j]; j=id[j]);
+        if (i == j) {
+            continue;
+        }
+        id[i] = j;
+        printf("%d-%d\n", p, q);
+    }
+}
+{% endhighlight %}
+	</div>
+</div>
+<div class="row">
+	<form id="frmConsole2" action="#" class="span12">
+		<input type="text" class="console" placeholder="直接输入'p-q'回车执行即可…" data-title="输入错误" data-trigger="manual" />
+	</form>
+</div>
+<div class="row">
+	<div class="span6">
+		<div class="canvas">
+			<table class="table table-bordered table-condensed table-striped table-hover">
+				<thead>
+					<tr>
+						<th>输入</th>
+						<th>0</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+						<th>5</th>
+						<th>6</th>
+						<th>7</th>
+						<th>8</th>
+						<th>9</th>
+						<th>输出</th>
+					</tr>
+				</thead>
+				<tfoot>
+				</tfoot>
+				<tbody id="tbdyNodes2">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="span6">
+		<canvas id="cnvsNodes2"></canvas>
+	</div>
+</div>
+<script>
+// 快速合并算法
+$(function(){
+	var N = 10,
+		i,
+		id = [],
+		nodes = [];
+	var FORMAT = /^(\d*)\s*-\s*(\d*)$/;
+	for(i=0; i<N; i++){
+		id[i] = i;
+	}
+	for(i=0; i<N+2; i++){
+		nodes.push({
+			value: i-1,
+			parent: false,
+			child: false
+		});
+	}
+	var main = function(p, q){
+		var i, j;
+		for(i=0; i<N; i++){
+			nodes[i+1].parent = false;
+			nodes[i+1].child = false;
+		}
+		nodes[0].value = '' + p + '-' + q;
+		for(i=id[p]; i!=id[i]; i=id[i]);
+		for(j=id[q]; j!=id[j]; j=id[j]);
+
+		if(i===j){
+			nodes[nodes.length-1].value = '';
+			return;
+		}
+
+		id[i] = j;
+		nodes[i+1].value = j;
+		nodes[i+1].child = true;
+		nodes[j+1].parent = true;
+		nodes[nodes.length-1].value = nodes[0].value;
+	};
+
+	var meditation = qling.meditation;
+	var table = new meditation.Table('#tbdyNodes2', $('#tmplNodes').html());
+
+	$('#frmConsole2').submit(function(){
+		var input = this.elements[0];
+
+		if(FORMAT.test(input.value.trim())){
+			main(+RegExp.$1, +RegExp.$2);
+			table.render(nodes);
+			input.value = '';
+			input.focus();
+		}
+		else{
+			input.select();
+			$(input).tooltip('show').one('input', function(){
+				$(this).tooltip('hide');
+			});
+		}
+
+		return false;
+	});
+});
+</script>

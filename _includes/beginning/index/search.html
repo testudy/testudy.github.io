@@ -1,0 +1,138 @@
+<div class="row">
+	<div class="span12">
+		<h3>快速查找算法</h3>
+		<p>求解N个对象的连通性问题，如果执行M次合并操作，至少需要执行M*N条指令。</p>
+{% highlight c linenos %}
+#include <stdio.h>
+#define N 10
+main(){
+    int i, p, q, t, id[N];
+    for(i=0; i<N; i++){
+        id[i] = i;
+    }
+    while(scanf("%d-%d", &p, &q) == 2){
+        if(id[p] == id[q]){
+            continue;
+        }
+        for(i=0, t=id[p]; i<N; i++){
+            if(t == id[i]){
+                id[i] = id[q];
+            }
+        }
+        printf("%d-%d\n", p, q);
+    }
+}
+{% endhighlight %}
+	</div>
+</div>
+<div class="row">
+	<form id="frmConsole" action="#" class="span12">
+		<input type="text" class="console" placeholder="直接输入'p-q'回车执行即可…" data-title="输入错误" data-trigger="manual" />
+	</form>
+</div>
+<div class="row">
+	<div class="span6">
+		<div class="canvas">
+			<table class="table table-bordered table-condensed table-striped table-hover">
+				<thead>
+					<tr>
+						<th>输入</th>
+						<th>0</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+						<th>5</th>
+						<th>6</th>
+						<th>7</th>
+						<th>8</th>
+						<th>9</th>
+						<th>输出</th>
+					</tr>
+				</thead>
+				<tfoot>
+				</tfoot>
+				<tbody id="tbdyNodes">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="span6">
+		<canvas id="cnvsNodes"></canvas>
+	</div>
+</div>
+<script id="tmplNodes" type="text/template">
+<tr>
+<% _.each(nodes, function(node){ %>
+	<td class="<%= node.parent ? 'parent' : node.child ? 'child' : '' %>"><%= node.value %></td>
+<% }); %>
+</tr>
+</script>
+<script>
+// 快速查找算法
+$(function(){
+	var N = 10,
+		i,
+		id = [],
+		nodes = [];
+	var FORMAT = /^(\d*)\s*-\s*(\d*)$/;
+	for(i=0; i<N; i++){
+		id[i] = i;
+	}
+	for(i=0; i<N+2; i++){
+		nodes.push({
+			value: i-1,
+			parent: false,
+			child: false
+		});
+	}
+	var main = function(p, q){
+		var i, t;
+		nodes[0].value = '' + p + '-' + q;
+		if(id[p] === id[q]){
+			nodes[nodes.length-1].value = '';
+			return;
+		}
+		for(i=0, t=id[p]; i<N; i++){
+			nodes[i+1].parent = false;
+			nodes[i+1].child = false;
+			if(t === id[i]){
+				id[i] = id[q];
+				nodes[i+1].value=id[q];
+				nodes[i+1].child=true;
+			}
+		}
+		nodes[q+1].parent = true;
+		nodes[nodes.length-1].value = nodes[0].value;
+	};
+
+	var board = $.board('#cnvsNodes', {
+		num: 10
+	});
+
+	var meditation = qling.meditation;
+	var table = new meditation.Table('#tbdyNodes', $('#tmplNodes').html());
+
+	$('#frmConsole').submit(function(){
+		var input = this.elements[0];
+
+		if(FORMAT.test(input.value.trim())){
+			main(+RegExp.$1, +RegExp.$2);
+			table.render(nodes);
+			if(nodes[nodes.length-1].value){
+				board.refresh(nodes.slice(1,-1));
+			}
+			input.value = '';
+			input.focus();
+		}
+		else{
+			input.select();
+			$(input).tooltip('show').one('input', function(){
+				$(this).tooltip('hide');
+			});
+		}
+
+		return false;
+	});
+});
+</script>
