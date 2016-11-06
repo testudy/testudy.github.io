@@ -1,0 +1,182 @@
+<div class="row">
+	<div class="span12">
+		<h3>用链表表示大整数</h3>
+        <p>在编码过程中保护数字数据的现代技术通常需要使用比硬件所能提供的类型大得多的整数。解除硬件带来限制的最简单方法是将大整数打散成小块，每个小块存储到一个单独的内存空间，这种技术一般称为<strong>多精度算法</strong>（multiple-precision arithmetic）。</p>
+        <p>为了便于计算，以跟习惯相反的顺序在链表中存储数字，即各位在链表链的第一个位置出现，然后依次是高位数字。将表示bigIntADT的链表分为头和尾两个组成部分，头表示末位数，尾表示的是原整数的前面数字，即如果一个bigIntADT的数学值是n，则头为n%10，尾为n/10，用空表示数学值0。</p>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#bigint1" data-toggle="tab">接口</a></li>
+			<li><a href="#bigint2" data-toggle="tab">实现</a></li>
+			<li><a href="#bigint3" data-toggle="tab">使用</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="bigint1">
+{% highlight c linenos %}
+#ifndef _bigint_h
+#define _bigint_h
+
+typedef char *string;
+
+typedef struct bigIntCDT *bigIntADT;
+
+bigIntADT NewBigInt(int i);
+
+bigIntADT StringToBigInt(string str);
+string BigIntToString(bigIntADT n);
+
+bigIntADT AddBigInt(bigIntADT n1, bigIntADT n2);
+
+bigIntADT MultiplyBigInt(bigIntADT n1, bigIntADT n2);
+
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="bigint2">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "bigint.h"
+
+struct bigIntCDT{
+    int finalDigit;
+    bigIntADT leadingDigits;
+};
+
+static bigIntADT StringToBigIntWithLength(string str, int len);
+static bigIntADT AddWithCarry(bigIntADT n1, bigIntADT n2, int carry);
+static bigIntADT MultiplyDigit(int digit, bigIntADT n);
+static bigIntADT DigitCons(bigIntADT leadingDigits, int finalDigit);
+static int FinalDigit(bigIntADT n);
+static bigIntADT LeadingDigits(bigIntADT n);
+
+bigIntADT NewBigInt(int i){
+    if(i == 0){
+        return (NULL);
+    }
+    else if(i > 0){
+        return (DigitCons(NewBigInt(i/10), i%10));
+    }
+}
+
+bigIntADT StringToBigInt(string str){
+    int len;
+    len = strlen(str);
+    if(len == 0){
+        return NULL;
+    }
+    return StringToBigIntWithLength(str, len);
+}
+string BigIntToString(bigIntADT n){
+    string str1, str2, str3;
+    int len;
+    str1 = malloc(sizeof(char) * 2);
+    str1[0] = FinalDigit(n) + '0';
+    str1[1] = '\0';
+    if(LeadingDigits(n) != NULL){
+        str2 = BigIntToString(LeadingDigits(n));
+        int len = strlen(str2);
+        str3 = malloc(sizeof(char) * (2 + len));
+        strcpy(str3, str2);
+        strcpy(str3+len, str1);
+        free(str1);
+        free(str2);
+        return (str3);
+    }
+    else{
+        return (str1);
+    }
+}
+
+bigIntADT AddBigInt(bigIntADT n1, bigIntADT n2){
+    return (AddWithCarry(n1, n2, 0));
+}
+
+bigIntADT MultiplyBigInt(bigIntADT n1, bigIntADT n2){
+    if(n1==NULL || n2==NULL){
+        return (NULL);
+    }
+    return (AddBigInt(MultiplyDigit(FinalDigit(n1), n2), MultiplyBigInt(LeadingDigits(n1), DigitCons(n2, 0))));
+}
+
+static bigIntADT StringToBigIntWithLength(string str, int len){
+    char digit;
+    if(len == 0){
+        return NULL;
+    }
+    digit = str[len-1] - '0';
+    return (DigitCons(StringToBigIntWithLength(str, --len), digit));
+}
+static bigIntADT AddWithCarry(bigIntADT n1, bigIntADT n2, int carry){
+    int sum;
+    bigIntADT p1, p2;
+
+    p1 = LeadingDigits(n1);
+    p2 = LeadingDigits(n2);
+
+    sum = FinalDigit(n1) + FinalDigit(n2) + carry;
+
+    if(sum==0 && p1==NULL && p2==NULL){
+        return (NULL);
+    }
+    return (DigitCons(AddWithCarry(p1, p2, sum/10), sum%10));
+}
+static bigIntADT MultiplyDigit(int digit, bigIntADT n){
+    if(digit == 0){
+        return NULL;
+    }
+    return (AddBigInt(n, MultiplyDigit(digit-1, n)));
+}
+static bigIntADT DigitCons(bigIntADT leadingDigits, int finalDigit){
+    bigIntADT cp;
+
+    int len;
+    len = sizeof(*cp);
+
+    if(leadingDigits==NULL && finalDigit==0){
+        return NULL;
+    }
+    cp = malloc(sizeof(*cp));
+    cp->finalDigit = finalDigit;
+    cp->leadingDigits = leadingDigits;
+
+    return (cp);
+}
+static int FinalDigit(bigIntADT n){
+    return (n==NULL ? 0 : n->finalDigit);
+}
+static bigIntADT LeadingDigits(bigIntADT n){
+    return (n==NULL ? NULL : n->leadingDigits);
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="bigint3">
+{% highlight c linenos %}
+#include <stdio.h>
+#include "bigint.h"
+
+#define LowerLimit 0
+#define UpperLimit 20
+
+static bigIntADT BigFact(int n);
+
+main(){
+    int i;
+    for(i=LowerLimit; i<=UpperLimit; i++){
+        printf("%2d!=%s\n", i, BigIntToString(BigFact(i)));
+    }
+}
+
+static bigIntADT BigFact(int n){
+    if(n == 0){
+        return NewBigInt(1);
+    }
+    else{
+        return (MultiplyBigInt(NewBigInt(n), BigFact(n-1)));
+    }
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

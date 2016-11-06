@@ -1,0 +1,104 @@
+<div class="row">
+	<div class="span12">
+		<h3>链表的递归表述</h3>
+        <p>如果将链表看成是指向一个表项的指针，那么链表是由更小的子链表构成。最简单的情景就是常量NULL，表示一个空链表。非空链表构成了递归的情况，每个链表都是由一个指向第一个元素的链表表项的指针和一个由随后元素组成的链表构成。链表的第一个元素称为<strong>头</strong>，除去头的子链表称为<strong>尾</strong>。链表的头和尾是不同的概念类型，链表的头总是单个元素，尾则是一个链表，尽管这个链表可能为空。在进行递归处理时，每个链表都符合以下两种情况之一：</p>
+        <ol>
+            <li>空链表，由常量NULL表示；</li>
+            <li>非空链表，由一个紧随着一个链表的元素构成。</li>
+        </ol>
+        <p>禁止用户对其底层进行任何修改的抽象类型称为<strong>不变类型</strong>。不变类型具有一下几个重要特征：</p>
+        <ol>
+            <li>不变类型通常具有简单的内部结构；</li>
+            <li>在不变类型中，可以使用空指针来指名空抽象值；</li>
+            <li>使用不变类型通常使得程序的行为更易理解；</li>
+            <li>不变类型允许数据的内部共享。</li>
+        </ol>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#recursion1" data-toggle="tab">接口</a></li>
+			<li><a href="#recursion2" data-toggle="tab">实现</a></li>
+			<li><a href="#recursion3" data-toggle="tab">使用</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="recursion1">
+{% highlight c linenos %}
+#ifndef _list_h
+#define _list_h
+
+typedef void *listElementT;
+typedef struct listCDT *listADT;
+
+listADT ListCons(listElementT head, listADT tail);
+
+listElementT ListHead(listADT list);
+listADT ListTail(listADT list);
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="recursion2">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include "list.h"
+
+struct listCDT{
+    listElementT head;
+    listADT tail;
+};
+
+listADT ListCons(listElementT head, listADT tail){
+    listADT list;
+
+    list = malloc(sizeof (*list));
+    list->head = head;
+    list->tail = tail;
+
+    return (list);
+}
+
+listElementT ListHead(listADT list){
+    return (list->head);
+}
+listADT ListTail(listADT list){
+    return (list->tail);
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="recursion3">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include "list.h"
+
+int ListLength(listADT list){
+    if(list == NULL){
+        return (0);
+    }
+    else{
+        return (ListLength(ListTail(list)) + 1);
+    }
+}
+
+listElementT NthElement(listADT list, int n){
+    if(list == NULL){
+        // 应抛出错误
+    }
+    else if(n == 0){
+        return (ListHead(list));
+    }
+    else{
+        return (NthElement(ListTail(list), n-1));
+    }
+}
+
+listADT ListConcat(listADT list1, listADT list2){
+    if(list1 == NULL){
+        return (list2);
+    }
+    else{
+        return (ListCons(ListHead(list1), ListConcat(ListTail(list1), list2)));
+    }
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>
