@@ -1,0 +1,462 @@
+<div class="row">
+	<div class="span12">
+		<h3>编辑器缓冲区</h3>
+        <p>编辑器在内部维护的是字符的序列，通常称为缓冲区。</p>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#editor1" data-toggle="tab">抽象接口</a></li>
+			<li><a href="#editor2" data-toggle="tab">编辑器实现</a></li>
+			<li><a href="#editor3" data-toggle="tab">数组实现</a></li>
+			<li><a href="#editor4" data-toggle="tab">栈实现</a></li>
+			<li><a href="#editor5" data-toggle="tab">单向链表实现</a></li>
+			<li><a href="#editor6" data-toggle="tab">双向链表实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="editor1">
+{% highlight c linenos %}
+#ifndef _buffer_h
+#define _buffer_h
+typedef struct bufferCDT * bufferADT;
+
+bufferADT NewBuffer(void);
+
+void FreeBuffer(bufferADT buffer);
+
+void MoveCursorForward(bufferADT buffer);
+void MoveCursorBackward(bufferADT buffer);
+
+void MoveCursorToStart(bufferADT buffer);
+void MoveCursorToEnd(bufferADT buffer);
+
+void InsertCharacter(bufferADT buffer, char ch);
+void DeleteCharacter(bufferADT buffer);
+
+void DisplayBuffer(bufferADT buffer);
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="editor2">
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "buffer.h"
+
+typedef char *string;
+typedef enum {false, true} bool;
+
+static void ExecuteCommand(bufferADT buffer, string line);
+static void HelpCommand(void);
+
+main(){
+    char str[80];
+    bufferADT buffer;
+    buffer = NewBuffer();
+    while(true){
+        printf("* ");
+        scanf("%s", str);
+        ExecuteCommand(buffer, str);
+        DisplayBuffer(buffer);
+    }
+    FreeBuffer(buffer);
+}
+
+static void ExecuteCommand(bufferADT buffer, string line){
+    int i;
+    switch(toupper(line[0])){
+        case 'I':
+            for(i=1; line[i]!= '\0'; i++){
+                InsertCharacter(buffer, line[i]);
+            }
+            break;
+        case 'D':
+            DeleteCharacter(buffer);
+            break;
+        case 'F':
+            MoveCursorForward(buffer);
+            break;
+        case 'B':
+            MoveCursorBackward(buffer);
+            break;
+        case 'J':
+            MoveCursorToStart(buffer);
+            break;
+        case 'E':
+            MoveCursorToEnd(buffer);
+            break;
+        case 'H':
+            HelpCommand();
+            break;
+        case 'Q':
+            exit(0);
+        default:
+            printf("Illegal command\n");
+            break;
+    }
+}
+
+static void HelpCommand(void){
+    printf("Use the following commands to edit the buffer: \n");
+    printf(" I      Inserts text up to the end of the line\n");
+    printf(" F      Moves forward a character\n");
+    printf(" B      Moves backword a character\n");
+    printf(" J      Jumps to the beginning of the buffer\n");
+    printf(" E      Jumps to the end of the buffer\n");
+    printf(" D      Deletes the next character\n");
+    printf(" H      Cenerates a help message\n");
+    printf(" Q      Quits the program\n");
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="editor3">
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+#include "buffer.h"
+
+#define MaxBuffer 100
+
+struct bufferCDT{
+    char text[MaxBuffer];
+    int length;
+    int cursor;
+};
+
+bufferADT NewBuffer(void){
+    bufferADT buffer;
+
+    buffer = malloc(sizeof *buffer);
+    buffer->length = buffer->cursor = 0;
+
+    return (buffer);
+}
+
+void FreeBuffer(bufferADT buffer){
+    free(buffer);
+}
+
+void MoveCursorForward(bufferADT buffer){
+    if(buffer->cursor < buffer->length){
+        buffer->cursor++;
+    }
+}
+void MoveCursorBackward(bufferADT buffer){
+    if(buffer->cursor > 0){
+        buffer->cursor--;
+    }
+}
+
+void MoveCursorToStart(bufferADT buffer){
+    buffer->cursor = 0;
+}
+void MoveCursorToEnd(bufferADT buffer){
+    buffer->cursor = buffer->length;
+}
+
+void InsertCharacter(bufferADT buffer, char ch){
+    int i;
+    if(buffer->length == MaxBuffer){
+        return;
+    }
+    for(i=buffer->length; i>buffer->cursor; i--){
+        buffer->text[i] = buffer->text[i-1];
+    }
+    buffer->text[buffer->cursor] = ch;
+    buffer->length++;
+    buffer->cursor++;
+}
+void DeleteCharacter(bufferADT buffer){
+    int i;
+    if(buffer->cursor < buffer->length){
+        for(i=buffer->cursor+1; i<buffer->length; i++){
+            buffer->text[i-1] = buffer->text[i];
+        }
+        buffer->length--;
+    }
+}
+
+void DisplayBuffer(bufferADT buffer){
+    int i;
+
+    for(i=0; i<buffer->length; i++){
+        printf("%c", buffer->text[i]);
+    }
+    printf("\n");
+
+    for(i=0; i<buffer->cursor; i++){
+        printf(" ");
+    }
+    printf("^\n");
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="editor4">
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+#include "stack.h"
+#include "buffer.h"
+
+struct bufferCDT{
+    stackADT before;
+    stackADT after;
+};
+
+bufferADT NewBuffer(void){
+    bufferADT buffer;
+
+    buffer = malloc(sizeof *buffer);
+    buffer->before = NewStack();
+    buffer->after = NewStack();
+
+    return (buffer);
+}
+
+void FreeBuffer(bufferADT buffer){
+    FreeStack(buffer->before);
+    FreeStack(buffer->after);
+    free(buffer);
+}
+
+void MoveCursorForward(bufferADT buffer){
+    if(!StackIsEmpty(buffer->after)){
+        Push(buffer->before, Pop(buffer->after));
+    }
+}
+void MoveCursorBackward(bufferADT buffer){
+    if(!StackIsEmpty(buffer->before)){
+        Push(buffer->after, Pop(buffer->before));
+    }
+}
+
+void MoveCursorToStart(bufferADT buffer){
+    while(!StackIsEmpty(buffer->before)){
+        Push(buffer->after, Pop(buffer->before));
+    }
+}
+void MoveCursorToEnd(bufferADT buffer){
+    while(!StackIsEmpty(buffer->after)){
+        Push(buffer->before, Pop(buffer->after));
+    }
+}
+
+void InsertCharacter(bufferADT buffer, char ch){
+    Push(buffer->before, ch);
+}
+void DeleteCharacter(bufferADT buffer){
+    if(StackIsEmpty(buffer->after)){
+        Pop(buffer->after);
+    }
+}
+
+void DisplayBuffer(bufferADT buffer){
+    int i;
+    int blen = StackDepth(buffer->before);
+    int alen = StackDepth(buffer->after);
+
+    for(i=blen-1; i>=0; i--){
+        printf("%c", GetStackElement(buffer->before, i));
+    }
+    for(i=0; i<alen; i++){
+        printf("%c", GetStackElement(buffer->after, i));
+    }
+    printf("\n");
+
+    for(i=0; i<blen; i++){
+        printf(" ");
+    }
+    printf("^\n");
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="editor5">
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+#include "buffer.h"
+
+typedef struct cellT{
+    char value;
+    struct cellT * link;
+} cellT;
+
+struct bufferCDT{
+    cellT * start;
+    cellT * cursor;
+};
+
+bufferADT NewBuffer(void){
+    bufferADT buffer;
+
+    buffer = malloc(sizeof *buffer);
+    buffer->start = buffer->cursor = malloc(sizeof(cellT));
+    buffer->start->link = NULL;
+
+    return (buffer);
+}
+
+void FreeBuffer(bufferADT buffer){
+    cellT *cp, *next;
+    cp = buffer->start;
+    while(cp != NULL){
+        next = cp->link;
+        free(cp);
+        cp = next;
+    }
+    free(buffer);
+}
+
+void MoveCursorForward(bufferADT buffer){
+    if(buffer->cursor->link != NULL){
+        buffer->cursor = buffer->cursor->link;
+    }
+}
+void MoveCursorBackward(bufferADT buffer){
+    cellT *cp;
+    if(buffer->start != buffer->cursor){    // 此处判断可以省略，逻辑不会出现错误
+        cp = buffer->start;
+        while(cp->link != buffer->cursor){
+            cp = cp->link;
+        }
+        buffer->cursor = cp;
+    }
+}
+
+void MoveCursorToStart(bufferADT buffer){
+    buffer->cursor = buffer->start;
+}
+void MoveCursorToEnd(bufferADT buffer){
+    while(buffer->cursor->link != NULL){
+        // MoveCursorForward(buffer);
+        buffer->cursor = buffer->cursor->link;
+    }
+}
+
+void InsertCharacter(bufferADT buffer, char ch){
+    cellT *cp = malloc(sizeof(cellT));
+    cp->value = ch;
+    cp->link = buffer->cursor->link;
+    buffer->cursor->link = cp;
+    buffer->cursor = cp;
+}
+void DeleteCharacter(bufferADT buffer){
+    cellT *cp;
+    if(buffer->cursor->link != NULL){
+        cp = buffer->cursor->link;
+        buffer->cursor->link = cp->link;
+        free(cp);
+    }
+}
+
+void DisplayBuffer(bufferADT buffer){
+    cellT *cp;
+
+    for(cp=buffer->start->link; cp!=NULL; cp=cp->link){
+        printf("%c", cp->value);
+    }
+
+    printf("\n");
+
+    for(cp=buffer->start; cp!=buffer->cursor; cp=cp->link){
+        printf(" ");
+    }
+    printf("^\n");
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="editor6">
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+#include "buffer.h"
+
+typedef struct cellT{
+    char value;
+    struct cellT * prev;
+    struct cellT * next;
+} cellT;
+
+struct bufferCDT{
+    cellT * start;
+    cellT * cursor;
+};
+
+bufferADT NewBuffer(void){
+    bufferADT buffer;
+
+    buffer = malloc(sizeof *buffer);
+    buffer->start = buffer->cursor = malloc(sizeof(cellT));
+    buffer->start->next = buffer->start;
+    buffer->start->prev = buffer->start;
+
+    return (buffer);
+}
+
+void InsertCharacter(bufferADT buffer, char ch){
+    cellT *cp = malloc(sizeof(cellT));
+    cp->value = ch;
+    cp->next = buffer->cursor->next;
+    cp->prev = buffer->cursor;
+    cp->next->prev = cp;
+    buffer->cursor->next = cp;
+    buffer->cursor = cp;
+}
+
+void DeleteCharacter(bufferADT buffer){
+    cellT *cp;
+    if(buffer->cursor->next != buffer->start){
+        cp = buffer->cursor->next;
+        buffer->cursor->next = cp->next;
+        cp->next->prev = buffer->cursor;
+        free(cp);
+    }
+}
+
+void FreeBuffer(bufferADT buffer){
+    cellT *cp, *next;
+    cp = buffer->start;
+    do{
+        next = cp->next;
+        free(cp);
+        cp = next;
+    }while(cp != buffer->start);
+    free(buffer);
+}
+
+void MoveCursorForward(bufferADT buffer){
+    if(buffer->cursor->next != buffer->start){
+        buffer->cursor = buffer->cursor->next;
+    }
+}
+void MoveCursorBackward(bufferADT buffer){
+    if(buffer->cursor->prev != buffer->start->prev){
+        buffer->cursor = buffer->cursor->prev;
+    }
+}
+
+void MoveCursorToStart(bufferADT buffer){
+    buffer->cursor = buffer->start;
+}
+void MoveCursorToEnd(bufferADT buffer){
+    buffer->cursor = buffer->start->prev;
+}
+
+void DisplayBuffer(bufferADT buffer){
+    cellT *cp;
+
+    for(cp=buffer->start->next; cp!=buffer->start; cp=cp->next){
+        printf("%c", cp->value);
+    }
+
+    printf("\n");
+
+    for(cp=buffer->start; cp!=buffer->cursor; cp=cp->next){
+        printf(" ");
+    }
+    printf("^\n");
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

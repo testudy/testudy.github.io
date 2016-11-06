@@ -1,0 +1,271 @@
+<div class="row">
+	<div class="span12">
+		<h3>栈</h3>
+		<p>栈是这样一种编程结构：它的抽象行为特征为从栈中删除元素的顺序与加入元素的顺序相反（后进先出，last in first out，LIFO）。最后加入的元素最先出来。向栈中加入一个新值称为“入栈”，删除一个最新的值称为“出栈”。</p>
+		<p>栈中的数据值的类型必须由客户来决定。遗憾的是ANSI C没有为定义多态的接口提供一种理想的机制，以便使得同一个接口可以处理很多不同的类型。尽管限制了客户使用指针的类型，但是通过使用void *类型作为基础类型可以在一定程度上实现多态性。另一种方法是根据一种新的类型如stackElementT定义接口，这样使任何对于基础类型的依赖性都限制在单个的定义上。</p>
+		<p>定义栈为ADT使得改变他们的底层表示而客户不需要改变他们的代码成为了可能。在本章中，栈使用了静态和动态数组两种实现方式。</p>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#stack1" data-toggle="tab">抽象接口</a></li>
+			<li><a href="#stack2" data-toggle="tab">静态数组实现</a></li>
+			<li><a href="#stack3" data-toggle="tab">动态数组实现</a></li>
+			<li><a href="#stack4" data-toggle="tab">链表实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="stack1">
+{% highlight c linenos %}
+#ifndef _stack_h
+#define _stack_h
+
+typedef enum {false, true} bool;
+
+typedef char stackElementT;
+
+typedef struct stackCDT * stackADT;
+
+stackADT NewStack(void);
+
+void FreeStack(stackADT stack);
+
+void Push(stackADT stack, stackElementT element);
+
+stackElementT Pop(stackADT stack);
+
+bool StackIsEmpty(stackADT stack);
+
+bool StackIsFull(stackADT stack);
+
+int StackDepth(stackADT stack);
+
+stackElementT GetStackElement(stackADT stack, int index);
+
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="stack2">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include "stack.h"
+
+#define MaxStackSize 100
+
+struct stackCDT{
+    stackElementT elements[MaxStackSize];
+    int count;
+};
+
+stackADT NewStack(void){
+    stackADT stack;
+    stack = malloc(sizeof (* stack));
+    stack->count = 0;
+    return (stack);
+}
+
+void FreeStack(stackADT stack){
+    free(stack);
+}
+
+void Push(stackADT stack, stackElementT element){
+    if(!StackIsFull(stack)){
+        stack->elements[stack->count++] = element;
+    }
+}
+
+stackElementT Pop(stackADT stack){
+    if(!StackIsEmpty(stack)){
+        return (stack->elements[--stack->count]);
+    }
+}
+
+bool StackIsEmpty(stackADT stack){
+    return (stack->count == 0);
+}
+
+bool StackIsFull(stackADT stack){
+    return (stack->count == MaxStackSize);
+}
+
+int StackDepth(stackADT stack){
+    return (stack->count);
+}
+
+stackElementT GetStackElement(stackADT stack, int index){
+    if(index>=0 && index<stack->count){
+        return (stack->elements[stack->count - index - 1]);
+    }
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="stack3">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include "stack.h"
+
+#define InitialStackSize 100
+
+struct stackCDT{
+    stackElementT * elements;
+    int count;
+    int size;
+};
+
+static void ExpandStack(stackADT stack){
+    stackElementT *array;
+    int i, newSize;
+
+    newSize = stack->size * 2;
+    array = malloc(newSize * sizeof(stackElementT));
+    for(i=0; i<stack->size; i++){
+        array[i] = stack->elements[i];
+    }
+    free(stack->elements);
+    stack->elements = array;
+    stack->size = newSize;
+}
+
+stackADT NewStack(void){
+    stackADT stack;
+    stack = malloc(sizeof (* stack));
+    stack->elements = malloc(InitialStackSize * sizeof(stackElementT));
+    stack->count = 0;
+    stack->size = InitialStackSize;
+    return (stack);
+}
+
+void FreeStack(stackADT stack){
+    free(stack->elements);
+    free(stack);
+}
+
+void Push(stackADT stack, stackElementT element){
+    if(stack->count == stack->size){
+        ExpandStack(stack);
+    }
+    stack->elements[stack->count++] = element;
+}
+
+stackElementT Pop(stackADT stack){
+    if(!StackIsEmpty(stack)){
+        return (stack->elements[--stack->count]);
+    }
+}
+
+bool StackIsEmpty(stackADT stack){
+    return (stack->count == 0);
+}
+
+bool StackIsFull(stackADT stack){
+    return (false);
+}
+
+int StackDepth(stackADT stack){
+    return (stack->count);
+}
+
+stackElementT GetStackElement(stackADT stack, int index){
+    if(index>=0 && index<stack->count){
+        return (stack->elements[stack->count - index - 1]);
+    }
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="stack4">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include "stack.h"
+
+typedef struct cellT{
+    stackElementT element;
+    struct cellT * link;
+} cellT;
+
+struct stackCDT{
+    cellT * start;
+};
+
+stackADT NewStack(void){
+    stackADT stack;
+
+    stack = malloc(sizeof (* stack));
+    stack->start = NULL;
+
+    return (stack);
+}
+
+void FreeStack(stackADT stack){
+    cellT *cp, *next;
+
+    cp = stack->start;
+    while(cp != NULL){
+        next = cp->link;
+        free(cp);
+        cp = next;
+    }
+
+    free(stack);
+}
+
+void Push(stackADT stack, stackElementT element){
+    cellT *cp;
+    cp = malloc(sizeof (*cp));
+    cp->element = element;
+    cp->link = stack->start;
+    stack->start = cp;
+}
+
+stackElementT Pop(stackADT stack){
+    cellT *cp;
+    stackElementT element;
+
+    if(!StackIsEmpty(stack)){
+        element = stack->start->element;
+        cp = stack->start;
+        stack->start = cp->link;
+        free(cp);
+    }
+
+    // 此处存在错误，当是空栈时应该抛出异常
+    return element;
+}
+
+bool StackIsEmpty(stackADT stack){
+    return (stack->start == NULL);
+}
+
+bool StackIsFull(stackADT stack){
+    return (false);
+}
+
+int StackDepth(stackADT stack){
+    int count;
+    cellT *cp;
+
+    count = 0;
+    cp = stack->start;
+    while(cp != NULL){
+        cp = cp->link;
+        count++;
+    }
+
+    return count;
+}
+
+stackElementT GetStackElement(stackADT stack, int index){
+    int i;
+    cellT *cp;
+
+    if(index>=0 && index<(StackDepth(stack))){
+        cp = stack->start;
+        for(i=0; i<index; i++){
+            cp = cp->link;
+        }
+    }
+
+    // 此处存在错误，当是空栈时应该抛出异常
+    return cp->element;
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

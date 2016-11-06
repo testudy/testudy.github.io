@@ -1,0 +1,184 @@
+<div class="row">
+	<div class="span12">
+		<h3>队列</h3>
+        <p>以FIFO（first in, first out）规则存储其数据项的数据结构称为<strong>队列</strong>。队列的基本操作与栈的压入和弹出操作类似，即Enqueue和Dequeue。<em>入队</em>操作在队列的最后（队尾）增加一个新元素。<em>出队</em>操作删除在队列最前面（队首）的一个元素。</p>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#queue1" data-toggle="tab">抽象接口</a></li>
+			<li><a href="#queue2" data-toggle="tab">数组实现</a></li>
+			<li><a href="#queue3" data-toggle="tab">链表实现</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="queue1">
+{% highlight c linenos %}
+#ifndef _queue_h
+#define _queue_h
+
+#include <stdlib.h>
+
+typedef enum {false, true} bool;
+
+typedef void *queueElementT;
+typedef struct queueCDT *queueADT;
+
+queueADT NewQueue(void);
+void FreeQueue(queueADT queue);
+
+void Enqueue(queueADT queue, queueElementT element);
+queueElementT Dequeue(queueADT queue);
+
+bool QueueIsEmpty(queueADT queue);
+bool QueueIsFull(queueADT queue);
+
+int QueueLength(queueADT queue);
+
+queueElementT GetQueueElement(queueADT queue, int index);
+
+#endif
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="queue2">
+{% highlight c linenos %}
+#include "queue.h"
+
+#define MaxQueueSize 100
+#define QueueArraySize (MaxQueueSize+1)
+
+struct queueCDT{
+    queueElementT elements[QueueArraySize];
+    int head;
+    int tail;
+};
+
+queueADT NewQueue(void){
+    queueADT queue;
+    queue = malloc(sizeof (*queue));
+    queue->head = queue->tail = 0;
+    return (queue);
+}
+void FreeQueue(queueADT queue){
+    free(queue);
+}
+
+void Enqueue(queueADT queue, queueElementT element){
+    int tail;
+    if(!QueueIsFull(queue)){
+        queue->elements[tail] = element;
+        queue->tail = (queue->tail + 1) % QueueArraySize;
+    }
+}
+queueElementT Dequeue(queueADT queue){
+    queueElementT element;
+    if(!QueueIsEmpty(queue)){
+        element = queue->elements[queue->head];
+        queue->head = (queue->head + 1) % QueueArraySize;
+        return (element);
+    }
+}
+
+bool QueueIsEmpty(queueADT queue){
+    return (queue->head == queue->tail);
+}
+bool QueueIsFull(queueADT queue){
+    return ((queue->tail+1)%QueueArraySize == queue->head);
+}
+
+int QueueLength(queueADT queue){
+    return ((queue->tail - queue->head + QueueArraySize) % QueueArraySize);
+}
+
+queueElementT GetQueueElement(queueADT queue, int index){
+    if(index>=0 && index<QueueLength(queue)){
+        return (queue->elements[(queue->head + index) % QueueArraySize]);
+    }
+}
+{% endhighlight %}
+			</div>
+			<div class="tab-pane" id="queue3">
+{% highlight c linenos %}
+#include "queue.h"
+
+typedef struct cellT{
+    queueElementT element;
+    struct cellT *link;
+} cellT;
+
+struct queueCDT{
+    cellT *head;
+    cellT *tail;
+};
+
+queueADT NewQueue(void){
+    queueADT queue;
+    queue = malloc(sizeof (*queue));
+    queue->head = NULL;
+    return queue;
+}
+void FreeQueue(queueADT queue){
+    cellT *cp, *next;
+    cp = queue->head;
+    while(cp != NULL){
+        next = cp->link;
+        free(cp);
+        cp = next;
+    }
+    free(queue);
+}
+
+void Enqueue(queueADT queue, queueElementT element){
+    cellT *cp;
+    cp = malloc(sizeof (*cp));
+    cp->element = element;
+    cp->link = NULL;
+    if(queue->head == NULL){
+        queue->head = cp;
+    }
+    else{
+        queue->tail->link = cp;
+    }
+    queue->tail = cp;
+}
+queueElementT Dequeue(queueADT queue){
+    cellT *cp;
+    queueElementT element;
+    if(!QueueIsEmpty(queue)){
+        cp = queue->head;
+        element = cp->element;
+        queue->head = cp->link;
+        free(cp);
+        return (element);
+    }
+}
+
+bool QueueIsEmpty(queueADT queue){
+    return (queue->head == NULL);
+}
+bool QueueIsFull(queueADT queue){
+    return (false);
+}
+
+int QueueLength(queueADT queue){
+    int n;
+    cellT *cp;
+    for(n=0,cp=queue->head; cp!=NULL; cp=cp->link){
+        n++;
+    }
+    return (n);
+}
+
+queueElementT GetQueueElement(queueADT queue, int index){
+    int i;
+    cellT *cp;
+    if(index>=0 && index<QueueLength(queue)){
+        cp = queue->head;
+        for(i=1; i<index; i++){
+            cp = cp->link;
+        }
+        return (cp->element);
+    }
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>
