@@ -56,7 +56,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a href="{{ '/' | prepend: basepath }}" class="brand">清凌渡</a>
+				<a href="{{ '/' | prepend: basepath }}" class="brand">{{ site.title | escape }}·启源</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li class="dropdown">
@@ -90,6 +90,9 @@
 						</li>
 						<li><a href="{{ '/about.php' | prepend: basepath }}">简介</a></li>
 					</ul>
+					<ul class="nav pull-right">
+						<li><a href="{{ "/" | relative_url}}">返回{{ site.title | escape }}</a></li>
+                    </ul>
 				</div>
 			</div>
 		</div>
@@ -99,7 +102,14 @@
 	    <hr />
 	    <footer>
 		    <p class="pull-right">算法学习是一种修行</p>
-		    <p>&copy;清凌</p>
+		    <p>
+                &copy;
+                {% if site.author %}
+                  {{ site.author | escape }}
+                {% else %}
+                  清凌渡
+                {% endif %}
+            </p>
 	    </footer>
     </div>
     <script src="/assets/lib/bootstrap/2.3.1/js/bootstrap.js"></script>
