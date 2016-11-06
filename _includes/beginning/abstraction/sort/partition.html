@@ -1,0 +1,54 @@
+<div class="row">
+	<div class="span12">
+		<h3>快速排序</h3>
+		<p><a href="http://zh.wikipedia.org/wiki/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" target="_blank">快速排序</a>的最简单情景和合并排序一样即认为对不含或仅含一个元素的数组顺序都是排好了的。递归部分如下：</p>
+		<ol>
+			<li>选一个元素作为小元素与大元素的分界线，该元素常称为<strong>枢轴</strong>；</li>
+			<li>重排数组中的元素使大元素移到数组的末端而小元素移到数组首端，即<strong>分割</strong>数组；</li>
+			<li>为每一个子数组元素排序。</li>
+		</ol>
+{% highlight c linenos %}
+typedef enum {false, true} bool;
+
+void SortIntegerArray(int array[], int n){
+    int boundary;
+    if(n <= 1){
+        return;
+    }
+    boundary = Partition(array, n);
+    SortIntegerArray(array, boundary);
+    SortIntegerArray(array+boundary+1, n-boundary-1);
+}
+
+static int Partition(int array[], int n){
+    int pivot, lh, rh, temp;
+    pivot = array[0];
+    lh = 1;
+    rh = n - 1;
+    while(true){
+        while(lh<rh && array[rh]>=pivot){
+            rh--;
+        }
+        while(lh<rh && array[lh]<pivot){
+            lh++;
+        }
+        if(lh == rh){
+            break;
+        }
+        temp = array[lh];
+        array[lh] = array[rh];
+        array[rh] = temp;
+    }
+
+    if(array[lh] >= pivot){
+        return 0;
+    }
+    else{
+        array[0] = array[lh];
+        array[lh] = pivot;
+        return lh;
+    }
+}
+{% endhighlight %}
+	</div>
+</div>

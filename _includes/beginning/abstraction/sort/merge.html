@@ -1,0 +1,57 @@
+<div class="row">
+	<div class="span12">
+		<h3>合并排序</h3>
+		<p>合并排序的基本思想如下：</p>
+		<ol>
+			<li>检查数组是否为空或是否只有一个元素。如果是，那么它一定是已排序的，函数不用做任何工作即可返回。这是递归的最简单情景；</li>
+			<li>把数组分解为两个子数组，每个新数组都是原数组长度的一半；</li>
+			<li>递归的为这两个数组排序；</li>
+			<li>把两个数组合并为一个。</li>
+		</ol>
+{% highlight c linenos %}
+void SortIntegerArray(int array[], int n){
+    int n1, n2, *subarr1, *subarr2;
+    if(n <= 1){
+        return;
+    }
+    n1 = n / 2;
+    n2 = n - n1;
+    subarr1 = CopySubArray(array, 0, n1);
+    subarr2 = CopySubArray(array, n1, n2);
+    SortIntegerArray(subarr1, n1);
+    SortIntegerArray(subarr2, n2);
+    Merge(array, subarr1, n1, subarr2, n2);
+    free(subarr1);
+    free(subarr2);
+}
+
+static void Merge(int array[], int subarr1[], int n1, int subarr2[], int n2){
+    int p, p1, p2;
+    p = p1 = p2 = 0;
+    while(p1<n1 && p2<n2){
+        if(subarr1[p1] < subarr2[p2]){
+            array[p++] = subarr1[p1++];
+        }
+        else{
+            array[p++] = subarr2[p2++];
+        }
+    }
+    while(p1 < n1){
+        array[p++] = subarr1[p1++];
+    }
+    while(p2 < n2){
+        array[p++] = subarr2[p2++];
+    }
+}
+
+static int * CopySubArray(int array[], int start, int n){
+    int i, *result;
+    result = malloc(n * sizeof(int));
+    for(i=0; i<n; i++){
+        result[i] = array[start+i];
+    }
+    return result;
+}
+{% endhighlight %}
+	</div>
+</div>
