@@ -1,0 +1,222 @@
+    <div class="container">
+        <div class="hero-unit">
+            <h1>列表</h1>
+            <dfn><strong>链表</strong>是一组数据项的集合，其中每个数据项都是一个节点的一部分，每个节点都包含指向下一个节点的链接。</dfn>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <h3>约瑟夫问题</h3>
+                <p>循环链表范例</p>
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node* link;
+struct node {int item; link next;};
+main(int argc, char *argv[]){
+    int i;
+    int N = atol(argv[1]);
+    int M = atol(argv[2]);
+    link t = malloc(sizeof *t);
+    t->item = 1;
+    t->next = t;
+
+    link x = t;
+    for(i=2; i<=N; i++){
+        x->next = malloc(sizeof *x);
+        x = x->next;
+        x->item = i;
+    }
+    x->next = t;
+
+    while(x != x->next){
+        for(i=1; i<M; i++) x = x->next;
+        x->next = x->next->next;
+    }
+
+    printf("%d\n", x->item);
+}
+{% endhighlight %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <canvas id="cnvsNodes"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <h3>约瑟夫问题</h3>
+                <p>链表的数组表示，初始状态，设第i+1个人的索引为next[i]，next[8]=0形成一个循环链表。如下：M（12）个人，N（5）出局</p>
+{% highlight c linenos %}
+#include <stdio.h>
+#include <stdlib.h>
+main(int argc, char *argv[]){
+    int i, j;
+    int N = atol(argv[1]);
+    int M = atol(argv[2]);
+    int *next = malloc(N*sizeof(int));
+
+    if(next == NULL){
+        printf("Insufficient memory.\n");
+        return;
+    }
+
+    for(i=0; i<N-1; i++){
+        next[i] = i + 1;
+    }
+    next[i] = 0;
+
+    while(next[i] != i){
+        for(j=0; j<M-1; j++){
+            i = next[i];
+        }
+        next[i] = next[next[i]];
+    }
+
+    printf("%i\n", i+1);
+}
+{% endhighlight %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="canvas">
+                    <table class="table table-bordered table-condensed table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>item</th>
+                                {% for i in (0..11) %}
+                                    <th>{{ i }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tfoot>
+                        </tfoot>
+                        <tbody id="tbdyNodes">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="tmplNodes" type="text/template">
+    <tr>
+    <% _.each(nodes, function(node){ %>
+        <td class="<%= node.parent ? 'parent' : node.child ? 'child' : node.deleted ? 'deleted' : '' %>"><%= node.value %></td>
+    <% }); %>
+    </tr>
+    </script>
+    <script>
+    $(function(){
+        var Circle = qling.geometry.Circle,
+            N = 12, 
+            M = 5,
+            $target = $('#cnvsNodes'),
+            width = $target.width(),
+            height = $target.height(),
+            ctx = $target[0].getContext('2d'),
+            i,
+            radius = 12,
+            cx = width >> 1,
+            cy = height >> 1,
+            cr = Math.min(width, height) >> 2;
+
+        $target.attr({
+            width: width,
+            height: height
+        });
+        
+        ctx.translate(cx, cy);
+
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        var redraw = function(head){
+            ctx.clearRect(-cx, -cy, width, height);
+            var len=1, t = head, delta, i=0;
+            while(t.next != head){
+                len++;
+                t = t.next;
+            }
+            if(len === 1){
+                head.circle.moveTo(0, 0);
+                head.circle.draw();
+            }
+            else{
+                delta = 2 * Math.PI / len;
+                t = head;
+                do{
+                    t.circle.moveTo(cr*Math.sin(i*delta), -cr*Math.cos(i*delta));
+                    t.circle.draw();
+                    t = t.next;
+                    i++;
+                }while(t != head)
+            }
+        };
+
+        var t = {item:1, next:t, circle:new Circle(0, 0, radius, ctx, 1)};
+        var x = t;
+        for(i=2; i<=N; i++){
+            x = x.next = {item:i, circle:new Circle(0, 0, radius, ctx, i)};
+        }
+        x.next = t;
+
+        redraw(t);
+
+        var go = function(){
+            if(x != x.next){
+                for(i=1; i<M; i++){
+                    x = x.next;
+                }
+                x.next = x.next.next;
+                redraw(x);
+                setTimeout(go, 3000);
+            }
+        };
+
+        setTimeout(go, 3000);
+
+    });
+    // 约瑟夫问题（用数组表示链表）
+    $(function(){
+        var meditation = qling.meditation,
+            table = new meditation.Table('#tbdyNodes', $('#tmplNodes').html()),
+            N = 12,
+            M = 5,
+            i,
+            j,
+            counter = 0,
+            next = [],
+            nodes = [];
+
+        for(i=0; i<N-1; i++){
+            next[i] = i + 1;
+            nodes[i+1] = {value: next[i]};
+        }
+        next[i] = 0;
+        nodes[i+1] = {value: next[i]};
+        nodes[0] = {value: ''};
+
+        var reset = function(){
+            for(var i=0; i<N+1; i++){
+                nodes[i].parent = false;
+                nodes[i].child = false;
+            }
+        };
+        
+        while(next[i] != i){
+            for(j=0; j<M-1; j++){
+                i = next[i];
+            }
+            reset();
+            nodes[next[i] + 1].deleted = true;
+            nodes[next[i] + 1].child = true;
+            next[i] = next[next[i]];
+            nodes[i+1].value = next[i];
+            nodes[i+1].parent = true;
+            nodes[0].value = ++counter;
+            table.render(nodes);
+        }
+    });
+    </script>
