@@ -1,0 +1,26 @@
+<div class="row">
+	<div class="span12">
+		<h3>家谱树</h3>
+        <p>家谱树提供了一种表示从单个人开始经历若干代的血缘关系的方法。树中的每一个节点都可以有几个<em>孩子</em>，但只能有一个<em>双亲</em>；在树中，<em>祖先</em>和<em>子孙</em>的意义与日常语言中的意义完全一致，<em>兄弟</em>用来表示具有相同双亲的两个节点；与根形成对比的是没有孩子的节点，这些节点称为<em>叶</em>（leaf）；既不是根又不是叶的节点称为<em>内部节点</em>；树的<em>高度</em>定义为从根到叶的最长路径的长度。</p>
+        <p>树的每一层次都是分叉形式。如果任意选取树中的一个节点和它的子孙，所得到的部分符合树的定义，这个树称为原树的<em>子树</em>（subtree）。</p>
+        <p>树中的每个节点都可以看做是以它为根的子树的根，如果以递归的观点考察树，那么树只是一个节点和一个附着在其上的子树的集合——在叶节点中该集合为空。</p>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#genealogy1" data-toggle="tab">家族树</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="genealogy1">
+{% highlight c linenos %}
+// 节点类型 
+typedef struct familyNodeT{
+    string name;
+    struct familyNodeT *children[MaxChildren];
+} familyNodeT;
+
+// 树类型
+typedef familyNodeT * familyTreeT;
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

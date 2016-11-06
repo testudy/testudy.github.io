@@ -1,0 +1,129 @@
+<div class="row">
+	<div class="span12">
+		<h3>二叉搜索树</h3>
+        <p>通过合理的限制孩子的数量，使得树的实现更加容易。树的一个最重要的子类是<strong>二叉树</strong>（binary tree），二叉树的特征如下：</p>
+        <ol>
+            <li>树中的每个节点至多有两个孩子；</li>
+            <li>除了根以外的其他节点要么是双亲节点的左孩子，要么是右孩子。</li>
+        </ol>
+        <p><small>第二点强调：二叉树中的孩子节点对于他们的双亲来说是有序的。</small></p>
+        <p>二叉树的节点所具有的几何关系使得用二叉树表示数据的有序集合十分方便。通常的应用使用一种称为<strong>二叉搜索树</strong>（binary search tree）的特殊二叉树，它由以下特征定义：</p>
+        <ol>
+            <li>每个节点包含一个称为“键”的特殊值，该值定义了节点的顺序；</li>
+            <li>键值具有唯一性，在树中键不能出现多于一次；</li>
+            <li>在树中的每一个节点，键值必须大于其子树中左孩子中的所有键，小于子树中右孩子的所有键。</li>
+        </ol>
+        <p>遍历树中节点并对每个节点执行一些操作的过程称为树的<strong>遍历</strong>（traversing或walking）。</p>
+        <ol>
+            <li>将当前节点的处理放在左子树和右子树的递归调用之间称为<strong>中序遍历</strong>（inorder traversing）；</li>
+            <li>将当前节点的处理放在左子树和右子树的递归调用之前称为<strong>前序遍历</strong>（inorder traversing）；</li>
+            <li>将当前节点的处理放在左子树和右子树的递归调用之后称为<strong>后序遍历</strong>（inorder traversing）。</li>
+        </ol>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#binary1" data-toggle="tab">二叉搜索树</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="binary1">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+typedef char *string;
+
+typedef struct nodeT{
+    string key;
+    struct nodeT *left, *right;
+} nodeT, *treeT;
+
+treeT FindNode(treeT tree, string key);
+void InsertNode(treeT *tptr, string key);
+void DisplayTree(treeT tree);
+static string CopyString(string str);
+
+main(){
+    treeT tree;
+
+    tree = NULL;
+
+    InsertNode(&tree, "Grumpy");
+    InsertNode(&tree, "Doc");
+    InsertNode(&tree, "Sleepy");
+    InsertNode(&tree, "Bashful");
+    InsertNode(&tree, "Dopey");
+    InsertNode(&tree, "Happy");
+    InsertNode(&tree, "Sneeny");
+
+    DisplayTree(tree);
+}
+
+treeT FindNode(treeT tree, string key){
+    int sign;
+
+    if(tree == NULL){
+        return (NULL);
+    }
+
+    sign = strcmp(key, tree->key);
+
+    if(sign == 0){
+        return tree;
+    }
+    else if(sign < 0){
+        return FindNode(tree->left, key);
+    }
+    else{
+        return FindNode(tree->right, key);
+    }
+}
+
+void InsertNode(treeT *tptr, string key){
+    treeT tree;
+    int sign;
+
+    tree = *tptr;
+
+    if(tree == NULL){
+        tree = malloc(sizeof *tree);
+        tree->key = CopyString(key);
+        tree->left = tree->right = NULL;
+        (*tptr) = tree;
+        return ;
+    }
+
+    sign = strcmp(key, tree->key);
+    if(sign == 0){
+        return ;
+    }
+    else if(sign < 0){
+        InsertNode(&tree->left, key);
+    }
+    else{
+        InsertNode(&tree->right, key);
+    }
+}
+
+void DisplayTree(treeT tree){
+    if(tree != NULL){
+        DisplayTree(tree->left);
+        printf("%s\n", tree->key);
+        DisplayTree(tree->right);
+    }
+}
+
+static string CopyString(string str){
+    string copy;
+    int len;
+
+    len = strlen(str);
+    copy = malloc(sizeof(char) * (1 + len));
+    strcpy(copy, str);
+
+    return (copy);
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>

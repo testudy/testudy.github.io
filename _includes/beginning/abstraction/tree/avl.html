@@ -1,0 +1,250 @@
+<div class="row">
+	<div class="span12">
+		<h3>平衡二叉树</h3>
+        <p>如果每个节点的左子树和右子树的高度至多相差1，则称该二叉树是<strong>平衡二叉树</strong>。</p>
+        <p>1962年，俄国数学家乔吉·安德森·维斯基和埃维基尼·兰蒂斯提出了实现平衡二叉树的AVL算法。为了追踪树是否平衡，AVL算法将每个子节点都关联一个整数，该整数表示的是右子树高度减去左子树高度的值，该值称为节点的<strong>平衡因子</strong>（balance factor）。</p>
+        <p>AVL策略的基本思想是：总可以通过一次简单的节点重新排列（左旋转、右旋转，双旋转）来使树达到平衡。AVL算法具有如下特征：</p>
+        <ol>
+            <li>如果向AVL树中插入一个新节点，总可以通过执行至多一次操作来重新平衡，该操作是一个单旋转或双旋转；</li>
+            <li>在执行完旋转操作后，旋转轴的子树的高度总是和旋转前一致。这个特性保证了不会改变任何树中更高层次的平衡因子。</li>
+        </ol>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#avl1" data-toggle="tab">AVL</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="avl1">
+{% highlight c linenos %}
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+typedef char * string;
+
+typedef struct nodeT{
+    string key;
+    struct nodeT *left, *right;
+    int bf;
+} nodeT, *treeT;
+
+treeT FindNode(treeT tree, string key);
+void InsertNode(treeT *tptr, string key);
+void DisplayTree(treeT tree);
+static int InsertAVL(treeT *tptr, string key);
+static void FixLeftImbalance(treeT *tptr);
+static void RotateLeft(treeT *tptr);
+static void FixRightImbalance(treeT *tptr);
+static void RotateRight(treeT *tptr);
+static string CopyString(string str);
+
+main(){
+    treeT tree;
+
+    tree = NULL;
+
+    InsertNode(&tree, "Sneeny");
+    InsertNode(&tree, "Grumpy");
+    InsertNode(&tree, "Doc");
+    InsertNode(&tree, "Happy");
+    InsertNode(&tree, "Bashful");
+    InsertNode(&tree, "Dopey");
+    InsertNode(&tree, "Sleepy");
+
+    DisplayTree(tree);
+}
+
+treeT FindNode(treeT tree, string key){
+    int sign;
+
+    if(tree == NULL){
+        return (NULL);
+    }
+
+    sign = strcmp(key, tree->key);
+
+    if(sign == 0){
+        return tree;
+    }
+    else if(sign < 0){
+        return FindNode(tree->left, key);
+    }
+    else{
+        return FindNode(tree->right, key);
+    }
+}
+
+void InsertNode(treeT *tptr, string key){
+    (void)InsertAVL(tptr, key);
+}
+
+void DisplayTree(treeT tree){
+    if(tree != NULL){
+        printf("%s\n", tree->key);
+        DisplayTree(tree->left);
+        DisplayTree(tree->right);
+    }
+}
+
+static int InsertAVL(treeT *tptr, string key){
+    treeT t;
+    int sign, delta;
+
+    t = *tptr;
+    if(t == NULL){
+        t = malloc(sizeof *t);
+        t->key = CopyString(key);
+        t->bf = 0;
+        t->left = t->right = NULL;
+        *tptr = t;
+
+        return (+1);
+    }
+
+    sign = strcmp(key, t->key);
+    //printf("%s - %s = %i\n", key, t->key, sign);
+    if(sign == 0){
+        return (0);
+    }
+    else if(sign < 0){
+        delta = InsertAVL(&t->left, key);
+        //printf("1: %i\n", t->bf);
+        if(delta == 0){
+            return (0);
+        }
+        switch(t->bf){
+            case +1:
+                t->bf = 0;
+                return (0);
+            case 0:
+                t->bf = -1;
+                return (+1);
+            case -1:
+                FixLeftImbalance(tptr);
+                return (0);
+        }
+    }
+    else{
+        delta = InsertAVL(&t->right, key);
+        //printf("2: %i\n", t->bf);
+        if(delta == 0){
+            return (0);
+        }
+        switch(t->bf){
+            case +1:
+                FixRightImbalance(tptr);
+                return (0);
+            case 0:
+                t->bf = +1;
+                return (+1);
+            case -1:
+                t->bf = 0;
+                return (0);
+        }
+    }
+}
+
+static void FixLeftImbalance(treeT *tptr){
+    treeT t, parent, child, *cptr;
+    int oldBf;
+
+    parent = *tptr;
+    cptr = &(parent->left);
+    child = *cptr;
+
+    if(child->bf != parent->bf){
+        oldBf = child->right->bf;
+        RotateLeft(cptr);
+        RotateRight(tptr);
+        t = *tptr;
+        t->bf = 0;
+        switch(oldBf){
+            case -1:
+                t->left->bf = 0;
+                t->right->bf = +1;
+                break;
+            case 0:
+                t->left->bf = t->right->bf = 0;
+                break;
+            case +1:
+                t->left->bf = -1;
+                t->right->bf = 0;
+                break;
+        }
+    }
+    else{
+        RotateRight(tptr);
+        t = *tptr;
+        t->right->bf = t->bf = 0;
+    }
+}
+
+static void RotateLeft(treeT *tptr){
+    treeT parent, child;
+
+    parent = *tptr;
+    child = parent->right;
+    parent->right = child->left;
+    child->left = parent;
+    (*tptr) = child;
+}
+
+static void FixRightImbalance(treeT *tptr){
+    treeT t, parent, child, *cptr;
+    int oldBf;
+
+    parent = *tptr;
+    cptr = &(parent->right);
+    child = *cptr;
+
+    if(child->bf != parent->bf){
+        oldBf = child->left->bf;
+        RotateRight(cptr);
+        RotateLeft(tptr);
+        t = *tptr;
+        t->bf = 0;
+        switch(oldBf){
+            case -1:
+                t->left->bf = +1;
+                t->right->bf = 0;
+                break;
+            case 0:
+                t->left->bf = t->right->bf = 0;
+                break;
+            case +1:
+                t->left->bf = 0;
+                t->right->bf = -1;
+                break;
+        }
+    }
+    else{
+        RotateLeft(tptr);
+        t = *tptr;
+        t->left->bf = t->bf = 0;
+    }
+}
+
+static void RotateRight(treeT *tptr){
+    treeT parent, child;
+
+    parent = *tptr;
+    child = parent->left;
+    parent->left = child->right;
+    child->right = parent;
+    (*tptr) = child;
+}
+
+static string CopyString(string str){
+    string copy;
+    int len;
+
+    len = strlen(str);
+    copy = malloc(sizeof(char) * (1 + len));
+    strcpy(copy, str);
+
+    return (copy);
+}
+{% endhighlight %}
+			</div>
+		</div>
+	</div>
+</div>
