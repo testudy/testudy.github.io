@@ -7,7 +7,7 @@
 
 		<div class="tab-content">
 			<div class="tab-pane active" id="binary1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 typedef enum {false, true} bool;
 typedef char *string;
 
@@ -17,7 +17,7 @@ int FindStringInSortedArray(string key, string array[], int n){
 
 static int BinarySearch(string key, string array[], int low, int high){
     int mid, cmp;
-    if(low &gt; high){
+    if(low > high){
         return -1;
     }
 
@@ -27,14 +27,14 @@ static int BinarySearch(string key, string array[], int low, int high){
     if(cmp == 0){
         return mid;
     }
-    else if(cmp &lt; 0){
+    else if(cmp < 0){
         return BinarySearch(key, array, low, mid-1);
     }
     else{
         return BinarySearch(key, array, mid+1, high);
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>

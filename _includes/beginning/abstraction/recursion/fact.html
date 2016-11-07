@@ -10,7 +10,7 @@
 
 		<div class="tab-content">
 			<div class="tab-pane active" id="fact1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 int Fact(int n){
     if(n==0){
         return 1;
@@ -19,21 +19,21 @@ int Fact(int n){
         return n * Fact(n-1);
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 			<div class="tab-pane" id="fact2">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 int Fact(int n){
     int i, product;
     if(n==0){
         return 1;
     }
-    for(i=1, product=1; i&lt;=n; i++){
+    for(i=1, product=1; i<=n; i++){
         product *= i;
     }
     return product;
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>

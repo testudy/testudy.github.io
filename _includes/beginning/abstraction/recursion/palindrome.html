@@ -16,14 +16,14 @@
 
 		<div class="tab-content">
 			<div class="tab-pane active" id="palindrome1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 typedef enum {false, true} bool;
 typedef char *string;
 
 bool IsPalindrome(string str){
     int len = strlen(str);
 
-    if(len &lt;= 1){
+    if(len <= 1){
         return true;
     }
     else{
@@ -42,10 +42,10 @@ bool IsPalindrome(string str){
         return false;
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 			<div class="tab-pane" id="palindrome2">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 typedef enum {false, true} bool;
 typedef char *string;
 
@@ -54,17 +54,17 @@ bool IsPalindrome(string str){
 }
 
 static bool CheckPalindrome(string str, int len){
-    if(len &lt;= 1){
+    if(len <= 1){
         return true;
     }
     else{
         return str[0]==str[len-1] && CheckPalindrome(str+1, len-2);
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 			<div class="tab-pane" id="palindrome3">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 typedef enum {false, true} bool;
 typedef char *string;
 
@@ -73,14 +73,14 @@ bool IsPalindrome(string str){
     int len = strlen(str);
     int middle = len/2;
 
-    for(i=0; i&lt;middle; i++){
+    for(i=0; i<middle; i++){
         if(str[i] != str[len-1-i]){
             return false;
         }
     }
     return true;
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>

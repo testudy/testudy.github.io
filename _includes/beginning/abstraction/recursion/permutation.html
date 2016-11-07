@@ -9,7 +9,7 @@
 
 		<div class="tab-content">
 			<div class="tab-pane active" id="permutation1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 static void ListPermutations(string str){
     RecursivePermute(str, 0);
 }
@@ -22,7 +22,7 @@ static void RecursivePermute(string str, int k){
         printf("%s\n", str);
     }
     else{
-        for(i=k; i&lt;len; i++){
+        for(i=k; i<len; i++){
             ExchangeCharacters(str, k, i);
             RecursivePermute(str, k+1);
             ExchangeCharacters(str, k, i);
@@ -37,7 +37,7 @@ static void ExchangeCharacters(string str, int p1, int p2){
         str[p1] ^= str[p2];
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>

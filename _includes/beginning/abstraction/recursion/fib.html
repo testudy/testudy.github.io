@@ -17,19 +17,19 @@
 
 		<div class="tab-content">
 			<div class="tab-pane active" id="fib1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 int Fib(int n){
-    if(n &lt; 2){
+    if(n < 2){
         return n;
     }
     else{
         return Fib(n-1) + Fib(n-2);
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 			<div class="tab-pane" id="fib2">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 int Fib(int n){
     return AdditiveSequence(n, 0, 1);
 }
@@ -43,10 +43,10 @@ int AdditiveSequence(int n, int t0, int t1){
     }
     return AdditiveSequence(n-1, t1, t0+t1);
 }
-</pre>
+{% endhighlight %}
 			</div>
 			<div class="tab-pane" id="fib3">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 int Fib(int n){
     int t0 = 0,
         t1 = 1,
@@ -57,14 +57,14 @@ int Fib(int n){
     if(n == 1){
         return t1;
     }
-    for(i=1; i&lt;n; i++){
+    for(i=1; i<n; i++){
         tn = t0 + t1;
         t0 = t1;
         t1 = tn;
     }
     return tn;
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>

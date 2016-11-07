@@ -7,7 +7,7 @@
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="hanoi1">
-<pre class="prettyprint linenums">
+{% highlight c linenos %}
 void MoveSingleDisk(char start, char finish){
     printf("%c - %c\n", start, finish);
 }
@@ -22,7 +22,7 @@ void MoveTower(int n, char start, char finish, char temp){
         MoveTower(n-1, temp, finish, start);
     }
 }
-</pre>
+{% endhighlight %}
 			</div>
 		</div>
 	</div>
