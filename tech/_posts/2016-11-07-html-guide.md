@@ -1,7 +1,7 @@
 ---
 layout: post
 title: HTML代码风格指南
-tags: 转摘 技术 规范
+tags: 转载 技术 规范
 ---
 
 [原文](https://google.github.io/styleguide/htmlcssguide.xml)
