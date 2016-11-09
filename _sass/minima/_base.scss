@@ -150,6 +150,33 @@ pre {
   }
 }
 
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: $spacing-unit / 2;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: $spacing-unit / 2;
+        vertical-align: top;
+        border-bottom: 1px solid $grey-color;
+    }
+
+    td + td {
+        border-left: 1px solid $grey-color;
+    }
+
+    thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid $grey-color-dark;
+    }
+
+    tbody + tbody {
+        border-top: 2px solid $grey-color-dark;
+    }
+}
+
 
 
 /**
