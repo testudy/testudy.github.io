@@ -1,0 +1,85 @@
+/*
+# CSS Property Order</h1>
+
+有两篇文章介绍的比较全面</p>
+[译文1](http://css-tricks.com/poll-results-how-do-you-order-your-css-properties/)
+[译文2](http://younglaker.diandian.com/post/2012-08-28/40037927162)
+
+译文一是描述的是CSS2的书写顺序，译文二是描述的是CSS2和CSS3相结合时的书写顺序
+
+个人比较认可第二种写法，组讨论的时候大家再一起讨论看哪种更合适
+*/
+
+/* 译文一书写顺序归纳如下： */
+.selector {
+    /* Positioning */
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    right: 0;
+ 
+    /* Display & Box Model */
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 10px solid #333;
+    margin: 10px;
+ 
+    /* Color */
+    background: #000;
+    color: #fff
+    
+    /* Text */
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: right;
+ 
+    /* Other */
+    cursor: pointer;
+}
+
+/* 译文二书写顺序归纳如下：*/
+.selector {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+ 
+    /* Display & Box Model */
+    display: inline-block;/inline;/block;
+    visibility: visible / hidden / ...
+    float
+    clear	 
+    overflow: hidden;
+    box-sizing:border-box;
+    margin: 10px;
+    padding: 10px;
+    min/max-width
+    min/max-height
+    width: 100px;
+    height: 100px;
+    
+
+    /* Color */
+    border: 10px solid #333;
+    border-radius
+    background: #000;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader
+    box-shadow
+    color
+    
+    /* Text */
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: right;
+ 
+    /* Other */
+    zoom
+    cursor: pointer;
+}
