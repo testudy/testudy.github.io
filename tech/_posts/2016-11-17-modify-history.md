@@ -5,7 +5,9 @@ tags: 技术 原创
 ---
 
 > 这个技术对用户会有打扰，须遵循`不作恶`的底线慎重使用。
-> [参考效果](http://blog.sina.cn/dpool/blog/s/blog_4e64da9b0100dqoy.html?md=gd)
+> 
+> 1. [新浪博客参考效果](http://blog.sina.cn/dpool/blog/s/blog_4e64da9b0100dqoy.html?md=gd)；
+> 2. 当前页面返回会先返回到首页，再返回入口页面也是这个效果。
 
 ## 基础API
 `history`对象是BOM提供了的对浏览器历史记录的访问能力。常用的方法如下：
