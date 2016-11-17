@@ -118,7 +118,6 @@
     try {
         var modifyHistory = new ModifyHistory([
             global.location.protocol + '//' + global.location.host + '/',
-            global.location.protocol + '//' + global.location.host + '/about/',
         ]);
         modifyHistory.init();
     } catch (ex) {
