@@ -47,7 +47,7 @@ HTML5引进了history.pushState()方法和history.replaceState()方法，允许�
 2. 将当前页面2 pushState为新的历史记录；
 3. 执行完步骤1和步骤2之后，当前的历史记录条目中添加了页面1；
 4. 在页面2中监听popstate事件，监听后退到页面1时，reload页面，更新为页面1的内容；
-5. 在页面1中监听popstate事件，监听前进道页面2时，reload页面，更新为页面2的内容。
+5. 在页面1中监听popstate事件，监听前进到页面2时，reload页面，更新为页面2的内容。
 
 
 ## 示意代码
