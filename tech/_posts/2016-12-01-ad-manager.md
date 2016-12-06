@@ -8,7 +8,8 @@ tags: 技术 原创
 
 1. 简单性，以前直接写在页面中的HTML结构广告要能低成本的改造；
 2. 用基本的HTML结构和Style标签作为数据结构，方便后续广告系统的开发和使用，实现基本的可视方案；
-3. 通过函数参数简化数据传输。
+3. 通过函数参数简化数据传输；
+4. 下载链接的配置参考[AppLink](/tech/2016/11/25/applink.html)。
 
 
 ## HTML部分
@@ -30,6 +31,14 @@ tags: 技术 原创
         <p>Slogan</p>
     </div>
     <a class="am-join" href="#">立即打开</a>
+    <a class="am-join" 
+        href="download-link"                         // 服务器端设置的根据UA判断的自动跳转链接，包含下面4中情况
+        data-href-android="android-download-link"    // Android包下载地址
+        data-href-ios="itunes-link"                  // itunes地址
+        data-href-qq-android="myapp-link"            // 应用宝推广地址
+        data-href-qq-ios="myapp-link"                // 应用宝推广地址
+        data-deeplink="deep-link"                    // 跳转App地址
+    >立即打开</a>
 </div>
 </script>
 <script>
