@@ -94,15 +94,15 @@ encodeURI编码测试
 
 废弃的 escape() 方法生成新的由十六进制转义序列替换的字符串. 使用 encodeURI 或 encodeURIComponent 代替.
 
-## PHP中的使用
-PHP 要使用 rawurlencode() 函数以真正符合 RFC 3986 的“百分号URL编码”，只是由于历史原因，之前先有了一个 urlencode() 函数用于实现 HTTP POST 中的类似的编码规则，故而只好用这么一个奇怪的名字。两者的区别在于前者会把空格编码为%20，而后者则会编码为+号。
-
 ## application/x-www-form-urlencoded类型
 当HTML表单中的数据被提交时，表单的域名与值被编码并通过HTTP的GET或者POST方法甚至更古远的email把请求发送给服务器。这里的编码方法采用了一个非常早期的通用的URI百分号编码方法，并且有很多小的修改如新行规范化以及把空格符的编码"%20"替换为"+" . 按这套方法编码的数据的MIME类型是application/x-www-form-urlencoded, 当前仍用于（虽然非常过时了）HTML与XForms规范中. 此外，CGI规范包括了web服务器如何解码这类数据、利用这类数据的内容。
 
 如果发送的是HTTP GET请求, application/x-www-form-urlencoded数据包含在所请求URI的查询成分中. 如果发送的是HTTP POST请求或通过email, 数据被放置在消息体中，媒体类型的名字被包含在消息的Content-Type头内部。
 
 即将`fixedEncodeURIComponent`的结果中`%20`替换为`+`即可，或使用jQuery中的`serialize`等相同功能的方法。
+
+## PHP中的使用
+PHP 要使用 rawurlencode() 函数以真正符合 RFC 3986 的“百分号URL编码”，只是由于历史原因，之前先有了一个 urlencode() 函数用于实现 HTTP POST 中的类似的编码规则，故而只好用这么一个奇怪的名字。两者的区别在于前者会把空格编码为%20，而后者则会编码为+号。
 
 ## 粗读[RFC3986](http://wiki.jabbercn.org/RFC3986)摘录
 
