@@ -24,7 +24,7 @@ If you prefer to use your own text editor, you can also <a href="https://faceboo
 
 [Create React App](http://github.com/facebookincubator/create-react-app) is the best way to starting building a new React single page application. It sets up your development environment so that you can use the latest JavaScript features, provides a nice developer experience, and optimizes your app for production.
 
-使用[Create React App工具](http://github.com/facebookincubator/create-react-app) 可以快捷的创建一个React单页面应用。这个工具会帮你设置好开发环境，方便你使用最新的JavaScript特性，提供一个良好的开发体验，并提供生产环境发布的优化工作。
+最好的方式是使用[Create React App工具](http://github.com/facebookincubator/create-react-app) 快捷的创建一个React单页面应用。这个工具会帮你设置好开发环境，方便你使用最新的JavaScript特性，提供一个良好的开发体验，并提供生产环境发布的优化工作。
 
 ```bash
 npm install -g create-react-app
