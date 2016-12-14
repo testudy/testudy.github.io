@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React：Hello World（Hello World）
+title: React 2 - Hello World（Hello World）
 tags: 原创 技术 翻译 React
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React：使用方法（Installation）
+title: React 1 - 使用方法（Installation）
 tags: 原创 技术 翻译 React
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React：JSX简介（Introducing JSX）
+title: React 3 - JSX简介（Introducing JSX）
 tags: 原创 技术 翻译 React
 ---
 
@@ -20,9 +20,9 @@ It is called JSX, and it is a syntax extension to JavaScript. We recommend using
 
 这种标记是JSX，JavaScript的一种语法扩展。建议在React使用这种语法编写UI代码，以让其更直观。JSX看着像一种模板语言，但可以使用JavaScript的全部特性。
 
-JSX produces React "elements". We will explore rendering them to the DOM in the [next section](/react/docs/rendering-elements.html). Below, you can find the basics of JSX necessary to get you started.
+JSX produces React "elements". We will explore rendering them to the DOM in the [next section](./react-4-rendering-elements.html). Below, you can find the basics of JSX necessary to get you started.
 
-JSX会转译为React的元素。[下一节](./rendering-elements.html)会介绍如何将JSX渲染到DOM中。这一节中首先介绍一下JSX的基本用法。
+JSX会转译为React的元素。[下一节](./react-4-rendering-elements.html)会介绍如何将JSX渲染到DOM中。这一节中首先介绍一下JSX的基本用法。
 
 ### 内嵌JavaScript表达式（Embedding Expressions in JSX）
 
