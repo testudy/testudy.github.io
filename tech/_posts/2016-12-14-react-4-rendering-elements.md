@@ -22,7 +22,7 @@ Unlike browser DOM elements, React elements are plain objects, and are cheap to 
 
 >**Note:**
 >
->One might confuse elements with a more widely known concept of "components". We will introduce components in the [next section](/react/docs/components-and-props.html). Elements are what components are "made of", and we encourage you to read this section before jumping ahead.
+>One might confuse elements with a more widely known concept of "components". We will introduce components in the [next section](./react-5-components-and-props.html). Elements are what components are "made of", and we encourage you to read this section before jumping ahead.
 
 > **备注：**
 > 
