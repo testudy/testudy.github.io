@@ -49,17 +49,17 @@ We recommend adding React to a small part of your application, such an individua
 
 While React [can be used](/react/docs/react-without-es6.html) without a build pipeline, we recommend setting it up so you can be more productive. A modern build pipeline typically consists of:
 
-虽然React可以不编译直接使用，但建议引入编译系统以提高生产效率。一个现代化的编译系统通常包含以下几部分：
-
 * A **package manager**, such as [Yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/). It lets you take advantage of a vast ecosystem of third-party packages, and easily install or update them.
-
-* 一个**包管理器**，比如[Yarn](https://yarnpkg.com/)或[npm](https://www.npmjs.com/)。以充分发挥丰富的第三方资源包的优势，便于安装和升级。
 
 * A **bundler**, such as [webpack](https://webpack.github.io/) or [Browserify](http://browserify.org/). It lets you write modular code and bundle it together into small packages to optimize load time.
 
-* 一个**打包器**，比如[webpack](https://webpack.github.io/)或[Browserify](http://browserify.org/)。便于代码组织模块化和优化打包管理。
-
 * A **compiler** such as [Babel](http://babeljs.io/). It lets you write modern JavaScript code that still works in older browsers.
+
+虽然React可以不编译直接使用，但建议引入编译系统以提高生产效率。一个现代化的编译系统通常包含以下几部分：
+
+* 一个**包管理器**，比如[Yarn](https://yarnpkg.com/)或[npm](https://www.npmjs.com/)。以充分发挥丰富的第三方资源包的优势，便于安装和升级。
+
+* 一个**打包器**，比如[webpack](https://webpack.github.io/)或[Browserify](http://browserify.org/)。便于代码组织模块化和优化打包管理。
 
 * 一个**编译器**，比如[Babel](http://babeljs.io/)。便于将最新的JavaSript特性使用到项目中，同时兼顾老版本浏览器的运行。
 
