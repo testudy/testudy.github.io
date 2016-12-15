@@ -4,6 +4,8 @@ title: React 2 - Hello World（Hello World）
 tags: 原创 技术 翻译 React
 ---
 
+[原文](https://facebook.github.io/react/docs/hello-world.html)
+
 The easiest way to get started with React is to use [this Hello World example code on CodePen](http://codepen.io/gaearon/pen/ZpvBNJ?editors=0010). You don't need to install anything; you can just open it in another tab and follow along as we go through examples. If you'd rather use a local development environment, check out the [Installation](/react/docs/installation.html) page.
 
 在CodePen上尝试[Hello World](http://codepen.io/gaearon/pen/ZpvBNJ?editors=0010)是体验React最便捷的方式。什么都不需要安装，只需要在另一个tab页面中打开并一步一步跟随示例即可。如果你更喜欢在本地开发环境，请参考[使用方法](/tech/2016/12/13/react-installation.html)中的操作。

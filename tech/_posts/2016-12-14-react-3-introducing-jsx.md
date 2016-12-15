@@ -4,6 +4,8 @@ title: React 3 - JSX简介（Introducing JSX）
 tags: 原创 技术 翻译 React
 ---
 
+[原文](https://facebook.github.io/react/docs/introducing-jsx.html)
+
 Consider this variable declaration:
 
 注意看下面这行变量声明：

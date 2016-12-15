@@ -4,6 +4,8 @@ title: React 5 - 组件和属性（Components and Props）
 tags: 原创 技术 翻译 React
 ---
 
+[原文](https://facebook.github.io/react/docs/components-and-props.html)
+
 Components let you split the UI into independent, reusable pieces, and think about each piece in isolation.
 
 可以将UI拆分成独立可重用的组件，以对每一个组件进行独立思考。

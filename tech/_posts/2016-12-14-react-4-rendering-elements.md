@@ -4,6 +4,8 @@ title: React 4 - 元素渲染（Rendering Elements）
 tags: 原创 技术 翻译 React
 ---
 
+[原文](https://facebook.github.io/react/docs/rendering-elements.html)
+
 Elements are the smallest building blocks of React apps.
 
 元素是React应用中最基础的组件。
