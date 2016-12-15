@@ -46,9 +46,9 @@ The above two components are equivalent from React's point of view.
 
 在React中上述两种形式的定义是完全等价的。
 
-Classes have some additional features that we will discuss in the [next sections](/react/docs/state-and-lifecycle.html). Until then, we will use functional components for their conciseness.
+Classes have some additional features that we will discuss in the [next sections](/tech/2016/12/15/react-6-state-and-lifecycle.html). Until then, we will use functional components for their conciseness.
 
-[下一节](state-and-lifecycle.html)将讨论类形式组件的一些其他特性。此时，先使用简明的函数形式定义。
+[下一节](/tech/2016/12/15/react-6-state-and-lifecycle.html)将讨论类形式组件的一些其他特性。此时，先使用简明的函数形式定义。
 
 ## 组件渲染（Rendering a Component）
 

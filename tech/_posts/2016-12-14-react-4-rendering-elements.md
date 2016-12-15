@@ -109,13 +109,13 @@ It calls `ReactDOM.render()` every second from a [`setInterval()`](https://devel
 
 >**Note:**
 >
->In practice, most React apps only call `ReactDOM.render()` once. In the next sections we will learn how such code gets encapsulated into [stateful components](/react/docs/state-and-lifecycle.html).
+>In practice, most React apps only call `ReactDOM.render()` once. In the next sections we will learn how such code gets encapsulated into [stateful components](/tech/2016/12/15/react-6-state-and-lifecycle.html).
 >
 >We recommend that you don't skip topics because they build on each other.
 
 > **备注：**
 >
-> 在具体实践中，大多数React应用只调用`ReactDOM.render()`一次。下一节中会学习如何将上述类型的代码封装在[状态化组件](./react-5-state-and-lifecycle.html)中。
+> 在具体实践中，大多数React应用只调用`ReactDOM.render()`一次。下一节中会学习如何将上述类型的代码封装在[状态化组件](/tech/2016/12/15/react-6-state-and-lifecycle.html)中。
 >
 > 建议不要跳过任何学习的主题，因为各个主题之间均存在关联性，互为基础。
 
