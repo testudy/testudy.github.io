@@ -8,7 +8,7 @@ tags: 原创 技术 翻译 React
 
 Elements are the smallest building blocks of React apps.
 
-元素是React应用中最基础的组件。
+元素是React应用中最基础的组成部分。
 
 An element describes what you want to see on the screen:
 
