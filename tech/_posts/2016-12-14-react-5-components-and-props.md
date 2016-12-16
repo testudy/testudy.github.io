@@ -338,6 +338,6 @@ React非常灵活，但其严格要求一条：
 
 **所有组件的行为必须符合纯函数的要求，在其内部禁止改变属性值。**
 
-Of course, application UIs are dynamic and change over time. In the [next section](/react/docs/state-and-lifecycle.html), we will introduce a new concept of "state". State allows React components to change their output over time in response to user actions, network responses, and anything else, without violating this rule.
+Of course, application UIs are dynamic and change over time. In the [next section](/tech/2016/12/15/react-6-state-and-lifecycle.html), we will introduce a new concept of "state". State allows React components to change their output over time in response to user actions, network responses, and anything else, without violating this rule.
 
-实际上，应用视图会随着时间动态变化。在[下一节](./state-and-lifecycle.html)会讲解一个新的概念“state”。在遵守纯函数要求的前提下，React组件通过state响应用户交互、网络返回和其他变化。
+实际上，应用视图会随着时间动态变化。在[下一节](/tech/2016/12/15/react-6-state-and-lifecycle.html)会讲解一个新的概念“state”。在遵守纯函数要求的前提下，React组件通过state响应用户交互、网络返回和其他变化。
