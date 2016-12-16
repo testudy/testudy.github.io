@@ -330,11 +330,13 @@ While `this.props` is set up by React itself and `this.state` has a special mean
 
 If you don't use something in `render()`, it shouldn't be in the state.
 
-如果字段不在`render()`方法中适用，则该字段严禁出现在state中。
+如果字段不在`render()`方法中使用，则该字段严禁出现在state中。
 
 We will tear down the timer in the `componentWillUnmount()` lifecycle hook:
 
-```js{2}
+需要在`componentWillUnmount()`生命周期方法中清除定时器：
+
+```js
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
@@ -342,9 +344,13 @@ We will tear down the timer in the `componentWillUnmount()` lifecycle hook:
 
 Finally, we will implement the `tick()` method that runs every second.
 
+最后，实现每秒钟自动更新状态值的`tick()`方法。
+
 It will use `this.setState()` to schedule updates to the component local state:
 
-```js{18-22}
+统一使用`this.setState()`来更新组件本地状态：
+
+```js
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -390,6 +396,8 @@ ReactDOM.render(
 
 Now the clock ticks every second.
 
+此时时钟实现了按秒更新。
+
 Let's quickly recap what's going on and the order in which the methods are called:
 
 1) When `<Clock />` is passed to `ReactDOM.render()`, React calls the constructor of the `Clock` component. Since `Clock` needs to display the current time, it initializes `this.state` with an object including the current time. We will later update this state.
@@ -402,13 +410,29 @@ Let's quickly recap what's going on and the order in which the methods are calle
 
 5) If the `Clock` component is ever removed from the DOM, React calls the `componentWillUnmount()` lifecycle hook so the timer is stopped.
 
-## Using State Correctly
+简单概述一下上面的代码在执行过程中方法被调用的次序：
+
+1）`ReactDOM.render()`接收到`<Clock />`参数的时候，`React`会实例化`Clock`组件，首先调用其构造函数。由于`Clock`会用到当前时间，用一个包含当前时间的对象初始化`this.state`。后续需要的时候会继续更新这个状态。
+
+2）React随后调用`Clock`组件的`render()`方法，计算要在屏幕上显示的内容，并将结果更新到DOM中。
+
+3）DOM中插入`Clock`组件的渲染结果之后，立刻调用`componentDidMount()`生命周期方法。在该方法内，浏览器创建一个定时器，每秒调用`tick()`方法一次。
+
+4）之后浏览器每秒调用一次`tick()`方法。每次`Clock`组件用包含当前时间的对象做参数调用`setState()`方法，React获悉状态变化并再次调用`render()`方法计算屏幕上显示的内容。这次调用时，`this.state.date`的值发生变化，计算结果中会包含更新后的时间，随后React更新DOM。
+
+5）当`Clock`组件从DOM中彻底删除之时，React调用`componentWillUnmount()`生命周期方法，清除定时器。
+
+## 正确的使用状态（Using State Correctly）
 
 There are three things you should know about `setState()`.
 
-### Do Not Modify State Directly
+关于`setState()`方法有3个基本注意事项。
+
+### 不要直接修改状态（Do Not Modify State Directly）
 
 For example, this will not re-render a component:
+
+下面的示例中不会重新渲染组件：
 
 ```js
 // Wrong
@@ -417,6 +441,8 @@ this.state.comment = 'Hello';
 
 Instead, use `setState()`:
 
+必须使用`setState()`方法修改状态：
+
 ```js
 // Correct
 this.setState({comment: 'Hello'});
@@ -424,13 +450,21 @@ this.setState({comment: 'Hello'});
 
 The only place where you can assign `this.state` is the constructor.
 
-### State Updates May Be Asynchronous
+构造函数是唯一一处可以直接对`this.state`直接复制的位置。
+
+### 状态更新可能是异步执行（State Updates May Be Asynchronous）
 
 React may batch multiple `setState()` calls into a single update for performance.
 
+React可能将多次`setState()`方法合并后调用更新一次以调高性能。
+
 Because `this.props` and `this.state` may be updated asynchronously, you should not rely on their values for calculating the next state.
 
+由于`this.props`和`this.state`可能是异步更新的，不要依赖其值进行计算。
+
 For example, this code may fail to update the counter:
+
+下面的示例中计数器可能会更新失败：
 
 ```js
 // Wrong
@@ -441,6 +475,8 @@ this.setState({
 
 To fix it, use a second form of `setState()` that accepts a function rather than an object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument:
 
+修复上面错误的方法是使用`setState()`方法的第二种参数形式——即用一个方法代替上面的对象。该方法接收两个参数，第一个参数是前一个状态（即此时未更新前的状态），第二个参数是实时更新后的属性：
+
 ```js
 // Correct
 this.setState((prevState, props) => ({
@@ -449,6 +485,8 @@ this.setState((prevState, props) => ({
 ```
 
 We used an [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) above, but it also works with regular functions:
+
+上面的代码示例使用了[剪头函数](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions)，也可以使用普通函数代替：
 
 ```js
 // Correct
@@ -459,13 +497,17 @@ this.setState(function(prevState, props) {
 });
 ```
 
-### State Updates are Merged
+### 状态更新后被合并到原状态中（State Updates are Merged）
 
 When you call `setState()`, React merges the object you provide into the current state.
 
+调用`setState()`方法后，React会将此时传入的状态对象合并到当前原状态中。
+
 For example, your state may contain several independent variables:
 
-```js{4,5}
+如下例，代码中可能包含多个相互独立的变量：
+
+```js
   constructor(props) {
     super(props);
     this.state = {
@@ -477,7 +519,9 @@ For example, your state may contain several independent variables:
 
 Then you can update them independently with separate `setState()` calls:
 
-```js{4,10}
+可以分别调用`setState()`方法独立更新各个状态：
+
+```js
   componentDidMount() {
     fetchPosts().then(response => {
       this.setState({
@@ -495,13 +539,21 @@ Then you can update them independently with separate `setState()` calls:
 
 The merging is shallow, so `this.setState({comments})` leaves `this.state.posts` intact, but completely replaces `this.state.comments`.
 
-## The Data Flows Down
+状态合并是浅合并，例如`this.setState({comments})会忽略`this.state.posts`状态，完整的替换掉`this.state.comments`状态。
+
+## 数据传递（The Data Flows Down）
 
 Neither parent nor child components can know if a certain component is stateful or stateless, and they shouldn't care whether it is defined as a function or a class.
 
+父子组件彼此之间不关心彼此是否存在状态，也不关心彼此使用函数形式还是类形式定义。
+
 This is why state is often called local or encapsulated. It is not accessible to any component other than the one that owns and sets it.
 
+因此状态被封装为本地状态，除自身外不可访问和修改设置（注意此处翻译存异，有可能另一种翻译是：除创建组件的对象之外其他对象不可访问）。
+
 A component may choose to pass its state down as props to its child components:
+
+父组件的状态可以通过子组件的属性传递给子组件：
 
 ```js
 <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
@@ -509,11 +561,15 @@ A component may choose to pass its state down as props to its child components:
 
 This also works for user-defined components:
 
+自定义的组件也可以这样使用：
+
 ```js
 <FormattedDate date={this.state.date} />
 ```
 
 The `FormattedDate` component would receive the `date` in its props and wouldn't know whether it came from the `Clock`'s state, the props, or was typed by hand:
+
+`FormattedDate`组件接收`date`属性，但其并不需要关心该属性来自哪里——可以来自`Clock`组件的状态，也可以来自于其属性，或者是硬编码也可以：
 
 ```js
 function FormattedDate(props) {
@@ -527,11 +583,17 @@ function FormattedDate(props) {
 
 This is commonly called a "top-down" or "unidirectional" data flow. Any state is always owned by some specific component, and any data or UI derived from that state can only affect components "below" them in the tree.
 
+这种数据传递的形式被称作“自上而下”或“单向”数据流。任何状态只被组件自身拥有，该状态相关的数据或UI只影响子树中的组件。
+
 If you imagine a component tree as a waterfall of props, each component's state is like an additional water source that joins it at an arbitrary point but also flows down.
+
+可以把组件树想象为一个瀑布，各个组件中的状态犹如新的水源可以随时注入瀑布，最终所有的水随着瀑布的方向向下流。
 
 To show that all components are truly isolated, we can create an `App` component that renders three `<Clock>`s:
 
-```js{4-6}
+所有的组件都是独立存在的，创建一个包含3个`<Clock />`的`App`组件如下所示：
+
+```js
 function App() {
   return (
     <div>
@@ -555,3 +617,5 @@ ReactDOM.render(
 Each `Clock` sets up its own timer and updates independently.
 
 In React apps, whether a component is stateful or stateless is considered an implementation detail of the component that may change over time. You can use stateless components inside stateful components, and vice versa.
+
+在React应用中，一个组件是否拥有状态由组件自身需求而定，可以随着时间相互变化。在无状态组件中可以包含有状态的组件，反之也可以。
