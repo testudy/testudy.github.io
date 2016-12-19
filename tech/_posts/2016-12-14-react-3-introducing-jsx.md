@@ -26,7 +26,7 @@ JSX produces React "elements". We will explore rendering them to the DOM in the 
 
 JSX会转译为React的元素。[下一节](./react-4-rendering-elements.html)会介绍如何将JSX渲染到DOM中。这一节中首先介绍一下JSX的基本用法。
 
-### 内嵌JavaScript表达式（Embedding Expressions in JSX）
+### 内嵌表达式（Embedding Expressions in JSX）
 
 You can embed any [JavaScript expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions) in JSX by wrapping it in curly braces.
 
