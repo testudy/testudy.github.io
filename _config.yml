@@ -16,7 +16,7 @@
 title: 补拙
 author: 胡继伟
 lang: zh-cmn-Hans
-email: hu_jiwei@foxmail.com
+# email: hu_jiwei@foxmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Test & Study
 baseurl: "" # the subpath of your site, e.g. /blog
