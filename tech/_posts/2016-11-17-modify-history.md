@@ -11,6 +11,7 @@ tags: 技术 原创
 
 ## 基础API
 `history`对象是BOM提供了的对浏览器历史记录的访问能力。常用的方法如下：
+
 ```javascript
 // 后退
 history.back();
@@ -51,6 +52,7 @@ HTML5引进了history.pushState()方法和history.replaceState()方法，允许�
 
 
 ## 示意代码
+
 ```javascript
 // 将要插入的页面路径转化为state对象
 function getStates(hrefs) {
