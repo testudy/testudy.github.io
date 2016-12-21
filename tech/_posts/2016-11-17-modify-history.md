@@ -11,7 +11,7 @@ tags: 技术 原创
 
 ## 基础API
 `history`对象是BOM提供了的对浏览器历史记录的访问能力。常用的方法如下：
-{% highlight javascript %}
+```javascript
 // 后退
 history.back();
 
@@ -37,22 +37,21 @@ history.state;
 // popstate事件只有在由pushState和replaceState方法创建的历史记录条目中前进和后退时才会触发，
 // window.onpopstate是popstate事件在window对象上的事件句柄。
 window.onpopstate = funcRef;
-{% endhighlight %}
+```
 
-HTML5引进了history.pushState()方法和history.replaceState()方法，允许逐条添加和修改历史记录条目，同时改变referrer的值。可以协同window.onpopstate事件一起工作。
+HTML5引进了history.pushState()方法和history.replaceState()方法，允许逐条添加和修改历史记录条目（需要遵循同源策略），同时改变referrer的值。可以协同window.onpopstate事件一起工作。
 
 
 ## 基本思路
-1. 将要插入历史记录的页面1 replaceState当前页面2；
-2. 将当前页面2 pushState为新的历史记录；
+1. 将要插入历史记录的页面1的URL replaceState当前页面2的URL；
+2. 将当前页面2的URL pushState为新的历史记录；
 3. 执行完步骤1和步骤2之后，当前的历史记录条目中添加了页面1；
-4. 在页面2中监听popstate事件，监听后退到页面1时，reload页面，更新为页面1的内容；
-5. 在页面1中监听popstate事件，监听前进到页面2时，reload页面，更新为页面2的内容。
+4. 在页面2中监听popstate事件，监听后退到页面1时（此时地址栏中的URL已经修改为页面1的URL，但页面2并没有unload，所以页面2中的脚本可以继续执行），reload页面，更新为页面1的内容；
+5. 在页面1中监听popstate事件，监听前进到页面2时（此时地址栏中的URL已经修改为页面2的URL，但页面1并没有unload，所以页面1中的脚本可以继续执行），reload页面，更新为页面2的内容。
 
 
 ## 示意代码
-{% highlight javascript %}
-
+```javascript
 // 将要插入的页面路径转化为state对象
 function getStates(hrefs) {
     var states = [];
@@ -97,8 +96,7 @@ function popstate(event) {
         location.replace(location.href);
     }
 }
-
-{% endhighlight %}
+```
 
 
 ## 参考资料：
