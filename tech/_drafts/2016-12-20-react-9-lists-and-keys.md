@@ -28,13 +28,17 @@ In React, transforming arrays into lists of [elements](/tech/2016/12/14/react-4-
 
 在React中，将数组转换为[元素](/tech/2016/12/14/react-4-rendering-elements.html)列表的方式和上述方法基本相同。
 
-### Rendering Multiple Components
+### 多组件渲染（Rendering Multiple Components）
 
-You can build collections of elements and [include them in JSX](/react/docs/introducing-jsx.html#embedding-expressions-in-jsx) using curly braces `{}`.
+You can build collections of elements and [include them in JSX](/tech/2016/12/14/react-3-introducing-jsx.html#embedding-expressions-in-jsx) using curly braces `{}`.
+
+可以创建元素集合，并用一对大括号`{}`[在JSX中直接将其引用](/tech/2016/12/14/react-3-introducing-jsx.html#embedding-expressions-in-jsx)即可。
 
 Below, we loop through the `numbers` array using the Javascript [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) function. We return an `<li>` element for each item. Finally, we assign the resulting array of elements to `listItems`:
 
-```javascript{2-4}
+下面的例子中，用JavaScript的[`map()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map)方法将`numbers`数组循环处理，将其中每个数字转换为`<li>`元素，并将其构成的结果数组赋值给`listItems`：
+
+```javascript
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li>{number}</li>
@@ -43,7 +47,9 @@ const listItems = numbers.map((number) =>
 
 We include the entire `listItems` array inside a `<ul>` element, and [render it to the DOM](/tech/2016/12/14/react-4-rendering-elements.html#rendering-an-element-into-the-dom):
 
-```javascript{2}
+将整个`listItems`数组包裹在`<ul>`元素中，并将其[渲染到DOM](/tech/2016/12/14/react-4-rendering-elements.html#rendering-an-element-into-the-dom)中：
+
+```javascript
 ReactDOM.render(
   <ul>{listItems}</ul>,
   document.getElementById('root')
@@ -52,7 +58,11 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/GjPyQr?editors=0011)
 
+[打开CodePen试一试](https://codepen.io/gaearon/pen/GjPyQr?editors=0011)
+
 This code displays a bullet list of numbers between 1 and 5.
+
+代码渲染出1到5构成的项目列表。
 
 ### Basic List Component
 
@@ -103,6 +113,8 @@ ReactDOM.render(
 ```
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/jrXYRR?editors=0011)
+
+[打开CodePen试一试](https://codepen.io/gaearon/pen/jrXYRR?editors=0011)
 
 ## Keys
 
@@ -210,6 +222,8 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/rthor/pen/QKzJKG?editors=0010)
 
+[打开CodePen试一试](https://codepen.io/rthor/pen/QKzJKG?editors=0010)
+
 A good rule of thumb is that elements inside the `map()` call need keys.
 
 ### Keys Must Only Be Unique Among Siblings
@@ -254,6 +268,8 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/NRZYGN?editors=0010)
 
+[打开CodePen试一试](https://codepen.io/gaearon/pen/NRZYGN?editors=0010)
+
 Keys serve as a hint to React but they don't get passed to your components. If you need the same value in your component, pass it explicitly as a prop with a different name:
 
 ```js{3,4}
@@ -286,7 +302,7 @@ function NumberList(props) {
 }
 ```
 
-JSX allows [embedding any expressions](/react/docs/introducing-jsx.html#embedding-expressions-in-jsx) in curly braces so we could inline the `map()` result:
+JSX allows [embedding any expressions](/tech/2016/12/14/react-3-introducing-jsx.html#embedding-expressions-in-jsx) in curly braces so we could inline the `map()` result:
 
 ```js{5-8}
 function NumberList(props) {
@@ -303,5 +319,7 @@ function NumberList(props) {
 ```
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/BLvYrB?editors=0010)
+
+[打开CodePen试一试](https://codepen.io/gaearon/pen/BLvYrB?editors=0010)
 
 Sometimes this results in clearer code, but this style can also be abused. Like in JavaScript, it is up to you to decide whether it is worth extracting a variable for readability. Keep in mind that if the `map()` body is too nested, it might be a good time to [extract a component](/react/docs/components-and-props.html#extracting-components).
