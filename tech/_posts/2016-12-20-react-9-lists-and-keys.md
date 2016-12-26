@@ -64,13 +64,17 @@ This code displays a bullet list of numbers between 1 and 5.
 
 代码渲染出1到5构成的项目列表。
 
-### Basic List Component
+### 基础列表组件（Basic List Component）
 
-Usually you would render lists inside a [component](/react/docs/components-and-props.html).
+Usually you would render lists inside a [component](/tech/2016/12/14/react-5-components-and-props.html).
+
+通常情况下列表的渲染会包含在一个[组件](/tech/2016/12/14/react-5-components-and-props.html)中。
 
 We can refactor the previous example into a component that accepts an array of `numbers` and outputs an unordered list of elements.
 
-```javascript{3-5,7,13}
+将前一个例子重构到一个组件中，接收一个`numbers`数组参数输入，并输出一个无序列表。
+
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((number) =>
@@ -90,9 +94,13 @@ ReactDOM.render(
 
 When you run this code, you'll be given a warning that a key should be provided for list items. A "key" is a special string attribute you need to include when creating lists of elements. We'll discuss why it's important in the next section.
 
+当运行上述代码的时候，将会收到一个警告，应该为列表元素提供一个键（编者按：CodeOpen中没有报警告，是因为其示例中使用的是min版本的React，换成非min版本的就可以看到）。“key”元素中一个特殊指定的字符串属性，是创建元素列表时必须包含的一部分。下一小结中将讨论它的重要性。
+
 Let's assign a `key` to our list items inside `numbers.map()` and fix the missing key issue.
 
-```javascript{4}
+为列表元素赋值一个`key`以修复忽略键引起的警告问题。
+
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((number) =>
@@ -116,7 +124,7 @@ ReactDOM.render(
 
 [打开CodePen试一试](https://codepen.io/gaearon/pen/jrXYRR?editors=0011)
 
-## Keys
+## 键（Keys）
 
 Keys help React identify which items have changed, are added, or are removed. Keys should be given to the elements inside the array to give the elements a stable identity:
 
@@ -156,7 +164,7 @@ We don't recommend using indexes for keys if the items can reorder, as that woul
 
 Keys only make sense in the context of the surrounding array.
 
-For example, if you [extract](/react/docs/components-and-props.html#extracting-components) a `ListItem` component, you should keep the key on the `<ListItem />` elements in the array rather than on the root `<li>` element in the `ListItem` itself.
+For example, if you [extract](/tech/2016/12/14/react-5-components-and-props.html#extracting-components) a `ListItem` component, you should keep the key on the `<ListItem />` elements in the array rather than on the root `<li>` element in the `ListItem` itself.
 
 **Example: Incorrect Key Usage**
 
@@ -322,4 +330,4 @@ function NumberList(props) {
 
 [打开CodePen试一试](https://codepen.io/gaearon/pen/BLvYrB?editors=0010)
 
-Sometimes this results in clearer code, but this style can also be abused. Like in JavaScript, it is up to you to decide whether it is worth extracting a variable for readability. Keep in mind that if the `map()` body is too nested, it might be a good time to [extract a component](/react/docs/components-and-props.html#extracting-components).
+Sometimes this results in clearer code, but this style can also be abused. Like in JavaScript, it is up to you to decide whether it is worth extracting a variable for readability. Keep in mind that if the `map()` body is too nested, it might be a good time to [extract a component](/tech/2016/12/14/react-5-components-and-props.html).
