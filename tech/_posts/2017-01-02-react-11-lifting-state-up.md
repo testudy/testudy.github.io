@@ -288,3 +288,8 @@ When you see something wrong in the UI, you can use [React Developer Tools](http
 当UI渲染存在错误的时候，可以借助[React Developer Tools](https://github.com/facebook/react-devtools)来对属性进行检查，可以方便的在树中上下移动直到找到跟状态相关的相应组件为止。方便在源码中跟踪bug：
 
 <img src="/tech/media/react-devtools-state.gif" alt="Monitoring State in React DevTools" width="100%">
+
+## 参考
+
+1. [MVC 架構演進 — Single Source of Truth](https://medium.com/@rayshih771012/mvc-架構演進-single-source-of-truth-2720f5a5facd)
+2. [Redux架构实践——Single Source of Truth](http://react-china.org/t/redux-single-source-of-truth/5564)
