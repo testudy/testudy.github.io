@@ -155,7 +155,6 @@ You can start seeing how your application will behave: set `filterText` to `"bal
 ## 第五步：添加反向数据流（Step 5: Add Inverse Data Flow）
 
 <p data-height="265" data-theme-id="0" data-slug-hash="JbYQvL" data-default-tab="js,result" data-user="snakajima" data-embed-version="2" data-pen-title="Thinking In React: Step 5" class="codepen">See the Pen <a href="http://codepen.io/snakajima/pen/JbYQvL/">Thinking In React: Step 5</a> on <a href="http://codepen.io">CodePen</a>.</p>
-<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 So far, we've built an app that renders correctly as a function of props and state flowing down the hierarchy. Now it's time to support data flowing the other way: the form components deep in the hierarchy need to update the state in `FilterableProductTable`.
 
@@ -170,3 +169,5 @@ Though this sounds complex, it's really just a few lines of code. And it's reall
 ## And That's It
 
 Hopefully, this gives you an idea of how to think about building components and applications with React. While it may be a little more typing than you're used to, remember that code is read far more than it's written, and it's extremely easy to read this modular, explicit code. As you start to build large libraries of components, you'll appreciate this explicitness and modularity, and with code reuse, your lines of code will start to shrink. :)
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
