@@ -100,7 +100,7 @@ React elements like `<Contacts />` and `<Chat />` are just objects, so you can p
 
 `<Contacts />`和`<Chat />`等React元素本质上也是对象，所以可以将其像其他数据一样作为属性使用。
 
-## Specialization
+## 特例（Specialization）
 
 Sometimes we think about components as being "special cases" of other components. For example, we might say that a `WelcomeDialog` is a special case of `Dialog`.
 
