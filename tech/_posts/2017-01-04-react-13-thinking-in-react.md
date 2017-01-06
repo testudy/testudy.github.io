@@ -117,7 +117,11 @@ There are two types of "model" data in React: props and state. It's important to
 
 To make your UI interactive, you need to be able to trigger changes to your underlying data model. React makes this easy with **state**.
 
+添加UI的交互行为，需要触发应用底层数据模型的更新。React中使用**状态**来简化实现。
+
 To build your app correctly, you first need to think of the minimal set of mutable state that your app needs. The key here is DRY: *Don't Repeat Yourself*. Figure out the absolute minimal representation of the state your application needs and compute everything else you need on-demand. For example, if you're building a TODO list, just keep an array of the TODO items around; don't keep a separate state variable for the count. Instead, when you want to render the TODO count, simply take the length of the TODO items array.
+
+正确的实现这一步，第一件事是思考应用所需要可变状态的最小集合。这件事的关键是DRY：不要自我重复。刨析应用中所需要的绝对最小集合的状态表示，并且其他所需的数据都可以据此计算出来。比如，如果要创建一个TODO列表，只保留一个TODO元素数组即可；不需要为元素数量保留一个单独的状态变量。当需要渲染TODO数量的时候，直接获取TODO数组的长度即可。
 
 Think of all of the pieces of data in our example application. We have:
 
@@ -126,11 +130,24 @@ Think of all of the pieces of data in our example application. We have:
   * The value of the checkbox
   * The filtered list of products
 
+思考本示例应用中所有的数据。应用有：
+
+  * 原始产品列表
+  * 用户输入的搜索文本
+  * 复选框的值
+  * 过滤后的产品列表
+
 Let's go through each one and figure out which one is state. Simply ask three questions about each piece of data:
 
   1. Is it passed in from a parent via props? If so, it probably isn't state.
   2. Does it remain unchanged over time? If so, it probably isn't state.
   3. Can you compute it based on any other state or props in your component? If so, it isn't state.
+
+仔细分析每一个数据，弄清楚哪一个是状态。简单的使用下面3个问题匹配每一个数据：
+
+  1. 该数据是否是由其父级属性传入的？如果是，则它可能不是状态。
+  2. 该数据是否永远不会发生变化？如果是，则它可能不是状态。
+  3. 该数据是否可以由其他状态或属性计算得出？如果是，则它不是状态。
 
 The original list of products is passed in as props, so that's not state. The search text and the checkbox seem to be state since they change over time and can't be computed from anything. And finally, the filtered list of products isn't state because it can be computed by combining the original list of products with the search text and value of the checkbox.
 
@@ -139,13 +156,22 @@ So finally, our state is:
   * The search text the user has entered
   * The value of the checkbox
 
+原始产品列表是由属性传入的，所以不是状态。搜索文本和复选框看着像状态，两者会根据用户的输入发生变化并且不能从其他数据计算得出。最后，过滤后的产品列表可以根据搜索文本和复选框的状态对原始产品列表计算得出，它也不是状态。
+
+  * 用户输入的搜索文本
+  * 复选框的值
+
 ## 第四步：标识需要更改的状态（Step 4: Identify Where Your State Should Live）
 
-<p data-height="600" data-theme-id="0" data-slug-hash="ORzEkG" data-default-tab="js" data-user="lacker" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/lacker/pen/ORzEkG/">Thinking In React: Step 4</a> by Kevin Lacker (<a href="http://codepen.io/lacker">@lacker</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+<p data-height="500" data-theme-id="0" data-slug-hash="ORzEkG" data-default-tab="js" data-user="lacker" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/lacker/pen/ORzEkG/">Thinking In React: Step 4</a> by Kevin Lacker (<a href="http://codepen.io/lacker">@lacker</a>) on <a href="http://codepen.io">CodePen</a>.</p>
 
 OK, so we've identified what the minimal set of app state is. Next, we need to identify which component mutates, or *owns*, this state.
 
+现在，已经标记出了应用所需的状态最小集合。接下来，需要确定是哪个组件可变，或者哪个组件*拥有*这些状态。
+
 Remember: React is all about one-way data flow down the component hierarchy. It may not be immediately clear which component should own what state. **This is often the most challenging part for newcomers to understand,** so follow these steps to figure it out:
+
+切记：React中整个相关的单向数据流向下贯穿组件层次。有可能不能立即判断出状态属于哪个组件。**这常常是新手最难理解的一部分**，试着按下面的步骤分析操作：
 
 For each piece of state in your application:
 
@@ -154,11 +180,24 @@ For each piece of state in your application:
   * Either the common owner or another component higher up in the hierarchy should own the state.
   * If you can't find a component where it makes sense to own the state, create a new component simply for holding the state and add it somewhere in the hierarchy above the common owner component.
 
+对于应用中的每一个状态：
+
+  * 标识出涉及该状态渲染的组件。
+  * 找出公共父级组件（在组件层次中包含所有需要该状态的组件的父级组件）。
+  * 此公共父级组件或祖先组件拥有该状态。
+  * 如果不能找到一个拥有该状态的合适组件，可以创建一个新的组件用来保持该状态，将其添加到公共父级组件的上层即可。
+
 Let's run through this strategy for our application:
 
   * `ProductTable` needs to filter the product list based on state and `SearchBar` needs to display the search text and checked state.
   * The common owner component is `FilterableProductTable`.
   * It conceptually makes sense for the filter text and checked value to live in `FilterableProductTable`
+
+在应用中运用一下这个策略：
+
+  * `ProductTable`依赖于上述状态过滤产品列表，`SearchBar`依赖于这些状态显示搜索文本和复选框状态。
+  * 公共的父级组件是`FilterableProductTable`。
+  * 从概念上讲`FilterableProductTable`拥有搜索文本和复选框状态是合理的。
 
 Cool, so we've decided that our state lives in `FilterableProductTable`. First, add an instance property `this.state = {filterText: '', inStockOnly: false}` to `FilterableProductTable`'s `constructor` to reflect the initial state of your application. Then, pass `filterText` and `inStockOnly` to `ProductTable` and `SearchBar` as a prop. Finally, use these props to filter the rows in `ProductTable` and set the values of the form fields in `SearchBar`.
 
