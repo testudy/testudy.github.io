@@ -201,24 +201,40 @@ Let's run through this strategy for our application:
 
 Cool, so we've decided that our state lives in `FilterableProductTable`. First, add an instance property `this.state = {filterText: '', inStockOnly: false}` to `FilterableProductTable`'s `constructor` to reflect the initial state of your application. Then, pass `filterText` and `inStockOnly` to `ProductTable` and `SearchBar` as a prop. Finally, use these props to filter the rows in `ProductTable` and set the values of the form fields in `SearchBar`.
 
+现在已经决定将状态放置在`FilterableProductTable`中。首先在`FilterableProductTable`的`构造函数`中添加一个实例属性`this.state = {filterText: '', inStockOnly: false}`，作为应用的初始状态。然后，将`filterText`和`inStockOnly`作为`ProductTable`和`SearchBar`的属性传入。最终，实现在`ProductTable`中通过这些属性过滤行和在`SearchBar`中设置表单字段值。
+
 You can start seeing how your application will behave: set `filterText` to `"ball"` and refresh your app. You'll see that the data table is updated correctly.
+
+可以试试应用现在的表现：将`filterText`设置为`"ball"`后刷新应用。会看到数据表格将正确更新。
 
 ## 第五步：添加反向数据流（Step 5: Add Inverse Data Flow）
 
-<p data-height="265" data-theme-id="0" data-slug-hash="JbYQvL" data-default-tab="js,result" data-user="snakajima" data-embed-version="2" data-pen-title="Thinking In React: Step 5" class="codepen">See the Pen <a href="http://codepen.io/snakajima/pen/JbYQvL/">Thinking In React: Step 5</a> on <a href="http://codepen.io">CodePen</a>.</p>
+<p data-height="500" data-theme-id="0" data-slug-hash="JbYQvL" data-default-tab="js,result" data-user="snakajima" data-embed-version="2" data-pen-title="Thinking In React: Step 5" class="codepen">See the Pen <a href="http://codepen.io/snakajima/pen/JbYQvL/">Thinking In React: Step 5</a> on <a href="http://codepen.io">CodePen</a>.</p>
 
 So far, we've built an app that renders correctly as a function of props and state flowing down the hierarchy. Now it's time to support data flowing the other way: the form components deep in the hierarchy need to update the state in `FilterableProductTable`.
 
+目前为止，构建的应用已经具备了正确渲染属性和状态沿着层次结构向下传播的功能。接下来要实现数据流传播的另一个方向：层次结构深层的表单组件需要更新`FilterableProductTable`中的状态。
+
 React makes this data flow explicit to make it easy to understand how your program works, but it does require a little more typing than traditional two-way data binding.
+
+React中明确的数据流向使得理解应用的工作逻辑很容易，但实现传统的数据双向绑定需要多敲一些代码。
 
 If you try to type or check the box in the current version of the example, you'll see that React ignores your input. This is intentional, as we've set the `value` prop of the `input` to always be equal to the `state` passed in from `FilterableProductTable`.
 
+如果尝试在当前版本中的例子中输入或勾选复选框，React会忽略所有输入。这是有意为之，`input`的`value`属性始终等于从`FilterableProductTable`中传入的`状态`。
+
 Let's think about what we want to happen. We want to make sure that whenever the user changes the form, we update the state to reflect the user input. Since components should only update their own state, `FilterableProductTable` will pass a callback to `SearchBar` that will fire whenever the state should be updated. We can use the `onChange` event on the inputs to be notified of it. And the callback passed by `FilterableProductTable` will call `setState()`, and the app will be updated.
+
+想想我们期望程序的表现。我们期望当用户改变表单输入的时候，根据用户输入同步更新状态。由于组件仅能更新自身的状态，`FilterableProductTable`将传给`SearchBar`一个回调函数以响应状态的更新。可以在输入框上使用`onChange`事件接收通知，随后该回调函数将调用`setState()`方法，应用将完成更新。
 
 Though this sounds complex, it's really just a few lines of code. And it's really explicit how your data is flowing throughout the app.
 
-## And That's It
+尽管挺起来有些复杂，但真的只需要简单的几行代码即可实现。同时清晰的表达数据在应用中的流动。
+
+## 就这么简单（And That's It）
 
 Hopefully, this gives you an idea of how to think about building components and applications with React. While it may be a little more typing than you're used to, remember that code is read far more than it's written, and it's extremely easy to read this modular, explicit code. As you start to build large libraries of components, you'll appreciate this explicitness and modularity, and with code reuse, your lines of code will start to shrink. :)
+
+非常希望，这篇文章能给你一些使用React构建组件和应用的想法。有可能这种写法会比你通常的写法多几行代码，但切记读代码远远多于写代码，模块化、结构清晰的代码最利于阅读。当创建一个大组件库的时候，你将感激模块化、结构清晰和可以重用的代码，同时你的代码行数会慢慢减少。:)
 
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
