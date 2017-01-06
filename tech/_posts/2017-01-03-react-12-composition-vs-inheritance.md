@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React 12 - 组合对比继承（Composition vs Inheritance）
+title: React 12 - 组合和继承对比（Composition vs Inheritance）
 tags: 原创 技术 翻译 React
 ---
 
