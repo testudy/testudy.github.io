@@ -82,7 +82,47 @@ li {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
+  position: relative;
   font-weight: $base-font-weight;
+}
+
+h1:hover:before,
+h2:hover:before,
+h3:hover:before,
+h4:hover:before,
+h5:hover:before,
+h6:hover:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  color: $grey-color-light;
+  -webkit-transform: translateX(calc(-100% - 12px));
+  transform: translateX(calc(-100% - 12px));
+}
+
+h1:hover:before {
+  content: '#';
+}
+
+h2:hover:before {
+  content: '##';
+}
+
+h3:hover:before {
+  content: '###';
+}
+
+h4:hover:before {
+  content: '####';
+}
+
+h5:hover:before {
+  content: '#####';
+}
+
+h6:hover:before {
+  content: '######';
 }
 
 
