@@ -269,6 +269,7 @@ Redux工作由[社区赞助](https://www.patreon.com/reactdx)。
 * [Ximedes](https://www.ximedes.com/)
 
 [See the full list of Redux patrons.](PATRONS.md)
+
 [Redux赞助商清单](https://github.com/reactjs/redux/blob/master/PATRONS.md)
 
 ### 许可（License）
