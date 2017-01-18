@@ -64,18 +64,25 @@ It is tiny (2kB, including dependencies).
 >**也读一下为什么有可能你并不需要Redux：**  
 >**[“你可能并不需要Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
-### Developer Experience
+### 开发缘由（Developer Experience）
 
 I wrote Redux while working on my React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). My goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
 
-### Influences
+开发Redux是我在React欧洲工作的时候讨论一个叫做[“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs)的问题。目标是创建一个最小API集合的状态管理库，并且完全可预测程序执行的行为，同时实现日志记录，热加载，时间旅行，通用应用，记录和重演，同时避免对开发者造成额外的学习和工作成本。
+
+### 影响（Influences）
 
 Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
 Whether you have used them or not, Redux only takes a few minutes to get started with.
 
-### Installation
+Redux是[Flux](http://facebook.github.io/flux/)思想的发展，同时避免了其复杂性，并吸取了[Elm](https://github.com/evancz/elm-architecture-tutorial/)的解决思路。  
+无论是否使用过Redux，只需要几分钟即可以快速上手。
+
+### 安装（Installation）
 
 To install the stable version:
+
+正式版本安装：
 
 ```
 npm install --save redux
@@ -83,13 +90,23 @@ npm install --save redux
 
 This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
 
+上面方法假设使用[npm](https://www.npmjs.com/)做包管理器。
+
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
+
+如果不使用npm，可以[从unpkg访问文件](https://unpkg.com/redux/)，并完成下载，或者使用熟悉的包管理器访问。
 
 Most commonly people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
 
+通常情况下将Redux作为一组[CommonJS](http://webpack.github.io/docs/commonjs.html)模块的集合，可以在[Webpack](http://webpack.github.io)，[Browserify](http://browserify.org/)或Node环境中将其引入。同时也对新式的[Rollup](http://rollupjs.org)提供支持。
+
 If you don't use a module bundler, it's also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://unpkg.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reactjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
 
+可以在不使用模块管理器的情况下直接引用`redux`。在`npm`包的[`dist` folder](https://unpkg.com/redux/dist/)目录中包含预编译生产和开发环境的[UMD](https://github.com/umdjs/umd)构建版本。可以将其直接引用，同时更好的与大多数主流的JavaScritp模块加载器兼容。比如，在页面中直接使用[`<script>` tag](https://unpkg.com/redux/dist/redux.js)引用，也可以[使用Bower安装](https://github.com/reactjs/redux/pull/1181#issuecomment-167361975)。UMD版本会创建一个`window.Redux`的全局变量。
+
 The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](http://caniuse.com/#feat=es5). You don't need to use Babel or a module bundler to [get started with Redux](https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html).
+
+Redux源码使用ES2015的语法，但已经预编译好了ES5语法的CommonJS和UMD版本可以运行在[任何现代浏览器](http://caniuse.com/#feat=es5)中。不需要引用Babel或打包器就可以[直接开始Redux学习](https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html)。
 
 #### Complementary Packages
 
