@@ -21,7 +21,7 @@ It helps you write applications that behave consistently, run in different envir
 You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
 It is tiny (2kB, including dependencies).
 
-可在包含依赖的情况下，它是一个只有2KB的微型库，可以和[React](https://facebook.github.io/react/)或其他视图层库配合使用。
+在包含依赖的情况下，Redux是一个只有2KB的微型库，可以和[React](https://facebook.github.io/react/)或其他视图层库配合使用。
 
 [![build status](https://img.shields.io/travis/reactjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reactjs/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
@@ -68,7 +68,7 @@ It is tiny (2kB, including dependencies).
 
 I wrote Redux while working on my React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). My goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
 
-开发Redux是我在React欧洲工作的时候讨论一个叫做[“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs)的问题。目标是创建一个最小API集合的状态管理库，并且完全可预测程序执行的行为，同时实现日志记录，热加载，时间旅行，通用应用，记录和重演，同时避免对开发者造成额外的学习和工作成本。
+Redux的开发源自我在React欧洲工作时对[“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs)问题的讨论。目标是创建一个最小API集合的状态管理库，并且可以完全预测程序执行的行为，实现日志记录，热加载，时间旅行，通用应用，记录和重演，同时避免对开发者造成额外的学习和工作成本。
 
 ### 影响（Influences）
 
@@ -94,7 +94,7 @@ This assumes you are using [npm](https://www.npmjs.com/) as your package manager
 
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
-如果不使用npm，可以[从unpkg访问文件](https://unpkg.com/redux/)，并完成下载，或者使用熟悉的包管理器访问。
+如果不使用npm，可以[从unpkg访问文件](https://unpkg.com/redux/)下载，或者使用熟悉的包管理器访问。
 
 Most commonly people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
 
@@ -108,9 +108,11 @@ The Redux source code is written in ES2015 but we precompile both CommonJS and U
 
 Redux源码使用ES2015的语法，但已经预编译好了ES5语法的CommonJS和UMD版本可以运行在[任何现代浏览器](http://caniuse.com/#feat=es5)中。不需要引用Babel或打包器就可以[直接开始Redux学习](https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html)。
 
-#### Complementary Packages
+#### 配套包（Complementary Packages）
 
 Most likely, you'll also need [the React bindings](https://github.com/reactjs/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
+
+大多数情况下，需要[绑定React](https://github.com/reactjs/react-redux)和[开发者工具箱](https://github.com/gaearon/redux-devtools)一起使用。
 
 ```
 npm install --save react-redux
@@ -119,13 +121,21 @@ npm install --save-dev redux-devtools
 
 Note that unlike Redux itself, many packages in the Redux ecosystem don't provide UMD builds, so we recommend using CommonJS module bundlers like [Webpack](http://webpack.github.io) and [Browserify](http://browserify.org/) for the most comfortable development experience.
 
-### The Gist
+需要提醒的是，Redux生态中的大多数库并不提供UMD构建版本，建议使用[Webpack](http://webpack.github.io)和[Browserify](http://browserify.org/)等CommonJS类的模块打包器以获得更好的开发体验。
+
+### 核心原则（The Gist）
 
 The whole state of your app is stored in an object tree inside a single *store*.  
 The only way to change the state tree is to emit an *action*, an object describing what happened.  
 To specify how the actions transform the state tree, you write pure *reducers*.
 
+应用的整个状态树必须被存储在一个单例对象*store*中。  
+更新状态树的唯一方法是派发一个*action*对象来描述发生的情况。  
+特别需要指出的是，用来处理状态树更新的*reducers*函数必须是纯函数。
+
 That's it!
+
+这就是Redux的核心原则！
 
 ```js
 import { createStore } from 'redux'
@@ -177,13 +187,21 @@ store.dispatch({ type: 'DECREMENT' })
 
 Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. Then you write a special function called a *reducer* to decide how every action transforms the entire application's state.
 
+在Redux中禁止直接修改状态，需要用一个简单的*actions*对象来描述修改。最后在*reducer*方法中如何处理整个程序的状态。
+
 If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. Instead, there is just a single store with a single root reducing function. As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. This is exactly like how there is just one root component in a React app, but it is composed out of many small components.
+
+如果了解Flux，需要理解Redex和Flux的一个重要区别。Redux没有Dispatcher，也不支持多个store。在Redux中，只包含根reduce方法中处理的一个store对象单例。当你的应用复杂化的同时，不需要增加新的store对象，只需要将根reducer拆分为更小的reducer来独立处理状态树的不同部分。类似于React应用中只有一个根组件，但是其由更多的小组件组成。
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
-### Learn Redux from Its Creator
+在计数器应用中使用这种结构模式显得过于复杂，但当应用扩展到更大、更复杂的应用时将发现其优势。可以配合强大的开发者工具，以用来追踪action触发的每一次修改。可以记录用户会话，并通过重播每一个action重现操作场景。
+
+### 跟着作者学Redux（Learn Redux from Its Creator）
 
 [Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) is a video course consisting of 30 videos narrated by Dan Abramov, author of Redux. It is designed to complement the “Basics” part of the docs while bringing additional insights about immutability, testing, Redux best practices, and using Redux with React. **This course is free and will always be.**
+
+[Redux入门](https://egghead.io/series/getting-started-with-redux)是由Redux作者Dan Abramov创建的30集视频教程。该教程包含完整的文档“基础”部分和不可变数据、测试、Redux最佳实践和在React中如何使用Redux。**该系列课程将永远免费**。
 
 >[“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
 >Sandrino Di Mattia
@@ -202,9 +220,15 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 So, what are you waiting for?
 
+开始学习吧！
+
 #### [Watch the 30 Free Videos!](https://egghead.io/series/getting-started-with-redux)
 
+#### [免费观看学习30个视频！](https://egghead.io/series/getting-started-with-redux)
+
 If you enjoyed my course, consider supporting Egghead by [buying a subscription](https://egghead.io/pricing). Subscribers have access to the source code for the example in every one of my videos, as well as to tons of advanced lessons on other topics, including JavaScript in depth, React, Angular, and more. Many [Egghead instructors](https://egghead.io/instructors) are also open source library authors, so buying a subscription is a nice way to thank them for the work that they've done.
+
+如果喜欢我的课程，可以考虑[付费订阅](https://egghead.io/pricing)Egghead来支持我。订阅者可以访问每一个视频中的示例源码，同时可以获得大量的其他主题的高级课程，包括深入JavaScript，React，Angular等等。很多[Egghead讲师](https://egghead.io/instructors)同时也是开源代码库的作者，付费订阅是对他们工作付出的一种良好方法。
 
 ### 文档（Documentation）
 
@@ -235,7 +259,7 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
-对于NPM新手，项目启动运行比较困难，或者不确定上面的要点要写在什么位置，签出[入门Redux示例](https://github.com/jackielii/simplest-redux-example)基于React和Browserify开始Redux学习。
+对于NPM新手，启动项目会比较困难，或者不确定上面的要点要写在什么位置，签出[入门Redux示例](https://github.com/jackielii/simplest-redux-example)基于React和Browserify开始Redux学习。
 
 ### 讨论（Discussion）
 
