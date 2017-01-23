@@ -4,6 +4,8 @@ title: Redux 2 - 入门：核心概念（Core Concepts）
 tags: 原创 技术 翻译 Redux
 ---
 
+[原文](https://github.com/reactjs/redux/blob/master/docs/introduction/CoreConcepts.md)
+
 Redux itself is very simple.
 
 Redux本身非常简单。

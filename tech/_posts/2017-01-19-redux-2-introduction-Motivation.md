@@ -4,6 +4,8 @@ title: Redux 2 - 入门：动机（Motivation）
 tags: 原创 技术 翻译 Redux
 ---
 
+[原文](https://github.com/reactjs/redux/blob/master/docs/introduction/Motivation.md)
+
 As the requirements for JavaScript single-page applications have become increasingly complicated, **our code must manage more state than ever before**. This state can include server responses and cached data, as well as locally created data that has not yet been persisted to the server. UI state is also increasing in complexity, as we need to manage active routes, selected tabs, spinners, pagination controls, and so on.
 
 随着JavaScript的单页应用的要求变得越来越复杂，**我们的代码必须比以往管理更多的状态**。其中既包含服务器响应和缓存数据，也包括由本地创建尚未持久化到服务器端的数据。同时UI状态也越发复杂，我们必须管理路由激活，选项卡选择，进度条，分页控件，等等。
