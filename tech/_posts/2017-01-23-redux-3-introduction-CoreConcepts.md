@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Redux 2 - 入门：核心概念（Core Concepts）
+title: Redux 3 - 入门：核心概念（Core Concepts）
 tags: 原创 技术 翻译 Redux
 ---
 
