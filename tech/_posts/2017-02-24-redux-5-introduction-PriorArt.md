@@ -65,19 +65,31 @@ Immutable以及相似的库于Redux不冲突，可以自由的将他们组合在
 
 Note that, even if your immutable library supports cursors, you shouldn't use them in a Redux app. The whole state tree should be considered read-only, and you should use Redux for updating the state, and subscribing to the updates. Therefore writing via cursor doesn't make sense for Redux. **If your only use case for cursors is decoupling the state tree from the UI tree and gradually refining the cursors, you should look at selectors instead.** Selectors are composable getter functions. See [reselect](http://github.com/faassen/reselect) for a really great and concise implementation of composable selectors.
 
+需要注意的是，即使所选用的不可变库支持游标，在Redux应用中也禁止使用该特性。整个状态树永远是只读状态，应该使用Redux进行状态的更新，并在其中订阅相关的更新。因此，在Redux中通过游标写入没有任何意义。**如果只是通过逐步细化游标在状态树和UI树之间解耦，应该使用选择器代替。**选择器是一组Getter方法的组合。[reselect](http://github.com/faassen/reselect)是一个强大并且实现简洁的选择器组合库。
+
 ### Baobab
 
 [Baobab](https://github.com/Yomguithereal/baobab) is another popular library implementing immutable API for updating plain JavaScript objects. While you can use it with Redux, there is little benefit in using them together.
 
+[Baobab](https://github.com/Yomguithereal/baobab)是另一个流行的JavaScript不可变数据类型库，拥有一组更新普通JavaScript对象的API。但将其和Redux一起使用，几乎没有任何益处。
+
 Most of the functionality Baobab provides is related to updating the data with cursors, but Redux enforces that the only way to update the data is to dispatch an action. Therefore they solve the same problem differently, and don't complement each other.
 
+Baobab提供的大多数功能是数据游标相关的数据更新，但是Redux强制只能通过Action来更新数据。所以，这是针对同一个问题的不同解决思路，两者之间没有互补的关系。
+
 Unlike Immutable, Baobab doesn't yet implement any special efficient data structures under the hood, so you don't really win anything from using it together with Redux. It's easier to just use plain objects in this case.
+
+跟Immutable不同，Baobab底层并没有一个特殊高效的数据结构实现，所以将其和Redux一起使用不会获得任何好处。在这种情况下，用一个简单的JavaScript对象更简单一些。
 
 ### RxJS
 
 [RxJS](https://github.com/ReactiveX/RxJS) is a superb way to manage the complexity of asynchronous apps. In fact [there is an effort to create a library that models human-computer interaction as interdependent observables](http://cycle.js.org).
 
+[RxJS](https://github.com/ReactiveX/RxJS)是一个非常优秀的用来管理App中的复杂异步数据的实现方式。实际上，[这是一个致力于创建可观察人机交互模型的库](http://cycle.js.org)。
+
 Does it make sense to use Redux together with RxJS? Sure! They work great together. For example, it is easy to expose a Redux store as an observable:
+
+Redux和RxJS一起使用是否会取得良好的效果吗？当然是。这两者在一起工作非常友好。比如，使用RxJS可以很方便的将Redux store封装为一个可观察对象：
 
 ```js
 function toObservable(store) {
@@ -93,6 +105,12 @@ function toObservable(store) {
 
 Similarly, you can compose different asynchronous streams to turn them into actions before feeding them to `store.dispatch()`.
 
+类似的，也可以将不同的异步流整合到Action中，在将其`store.dispatch()`。
+
 The question is: do you really need Redux if you already use Rx? Maybe not. It's not hard to [re-implement Redux in Rx](https://github.com/jas-chen/rx-redux). Some say it's a two-liner using Rx `.scan()` method. It may very well be!
 
+有一个问题是：假如你正在使用Rx，那么你是否还有必要使用Redux？也许不，[用Rx重新实现Redux](https://github.com/jas-chen/rx-redux)并不是一件难事。有人说用两行Rx代码`.scan()`即可实现，这完全可能。
+
 If you're in doubt, check out the Redux source code (there isn't much going on there), as well as its ecosystem (for example, [the developer tools](https://github.com/gaearon/redux-devtools)). If you don't care too much about it and want to go with the reactive data flow all the way, you might want to explore something like [Cycle](http://cycle.js.org) instead, or even combine it with Redux. Let us know how it goes!
+
+对于Redux，如果你心中还有疑虑，建议通读其源码（这里不会进行更深入的讲解），和其系统内代码（比如[Redux开发工具](https://github.com/gaearon/redux-devtools)）。如果你不关心这么多，只是想获取灵活的数据，可以看看[Cycle](http://cycle.js.org)，或者将其和Redux一起使用。接下来一起看看怎么用Redux。
