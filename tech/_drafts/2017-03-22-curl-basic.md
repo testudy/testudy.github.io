@@ -14,6 +14,9 @@ tags: 技术 原创
 
 突然意识到，cURL的用途如此之广，学会、逐步掌握这个工具对以后的工作会很有帮助。这里只把自己常用和将要常用的HTTP方面的功能记录如下，方便以后查阅。
 
+今天初步的学习目标是：
+> 掌握自定义首部，实现`user-agent`和`referer`的自定义。
+
 ## 参考
 1. [cURL官网](https://curl.haxx.se/)
 2. [Man Page](https://curl.haxx.se/docs/manpage.html)
