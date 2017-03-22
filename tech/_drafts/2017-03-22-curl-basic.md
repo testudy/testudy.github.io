@@ -47,14 +47,14 @@ HTTP服务器正常情况下会返回一行状态码，响应首部，通常情�
 常用的基础参数和其意义如下：
 
 ```shell
-# 查看详细信息，-v(--verbose)
-curl -v testudy.cc
+# 查看详细信息，--verbose(-v)
+curl --verbose testudy.cc
 
 # 追踪数据接收，--trace --trace-ascii --trace-time
 curl --trace ./index.txt --trace-time testudy.cc
 
-# 存储响应报文，-o
-curl -o index.html testudy.cc
+# 存储响应报文，--output(-o)
+curl --output index.html testudy.cc
 ```
 
 ### URL相关
@@ -64,9 +64,9 @@ curl -o index.html testudy.cc
 # 如下例：将testudy.cc解析到127.0.0.1（特别注意，由于4000不是默认端口号，需要特别指定）
 curl --resolve testudy.cc:4000:127.0.0.1 http://testudy.cc:4000/tech/2017/03/22/curl-basic.html
 
-## 指定用户名和密码 -u，或者uri协议
+## 指定用户名和密码 --user(-u)，或者uri协议
 curl http://user:password@testudy.cc/
-curl -u user:password http://testudy.cc/
+curl --user user:password http://testudy.cc/
 ```
 
 ### 请求方法
@@ -74,17 +74,16 @@ curl -u user:password http://testudy.cc/
 curl默认使用的`GET`请求方法
 
 ```shell
-# 默认GET方法，显示中包含响应首部，-i
-curl -i testudy.cc
+# 默认GET方法，显示中包含响应首部，--include(-i)
+curl --include testudy.cc
 
-# 仅显示响应首部，-I（大写i）或--head，此时是HEAD方法
+# 仅显示响应首部，--head(-I，大写i)，此时是HEAD方法
 curl --head testudy.cc
-curl -I testudy.cc
 
-# 使用--data选项，则此时是POST方法
+# 使用--data(-d)选项，则此时是POST方法
 curl --data "birthyear=1905&press=%20OK%20" http://www.hotmail.com/when/junk.cgi
 
-# 使用--request（-X），将请求方法修改为PROPFIND
+# 使用--request(-X)，将请求方法修改为PROPFIND
 curl --request PROPFIND url.com
 ```
 
@@ -102,21 +101,21 @@ curl --data-urlencode "birthyear=1905&press= OK " http://www.hotmail.com/when/ju
 ### HTTP上传
 
 ```shell
-# PUT提交
+# PUT提交，--upload-file(-T)
 curl --upload-file uploadfile http://www.example.com/receive.cgi
 ```
 
 ### HTTP首部设置
 
 ```shell
-# Referer 
+# Referer，--referer(-e)
 curl --referer http://www.example.come http://www.example.com
 
 # User Agent
-# 模拟Window 2000上的IE5 
+# 模拟Window 2000上的IE5，--user-agent(-A)
 curl --user-agent "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)" testudy.cc
 
-# 使用--header可以添加一个自定义首部
+# 使用--header(-H)可以添加一个自定义首部
 curl --header "Destination: http://nowhere" http://example.com
 
 # 设置一个空Host首部，以在请求中删除Host首部
@@ -126,20 +125,21 @@ curl --header "Host:" http://www.example.com
 ### 支持Location首部
 
 ```shell
-# 支持302跳转，--location（-L）
+# 支持302跳转，--location(-L)
 # 下例跳转到www.jdwl.com
 curl --location www.jd-ex.com
 ```
 
 ### Cookie设置
 ```shell
-# 在request中添加cookie首部
+# 在request中添加cookie首部，--cookie(-b)
 curl --cookie "name=Daniel" http://www.example.com
 
-# 输出响应中所有首部信息，Set-Cookie中即是Cookie信息
+# 输出响应中所有首部信息，--dump-header(-D)，Set-Cookie中即是Cookie信息
 curl --dump-header headers_and_cookies http://www.example.com
 
-# 请求中读入Cookie，--cookie (-b)，响应中写入Cookie， --cookie-jar (-c) 
+# 请求中读入Cookie，--cookie(-b)
+# 响应中写入Cookie，--cookie-jar(-c) 
 # 注意cookies.txt和newcookies.txt文件要预先存在
 curl --cookie cookies.txt --cookie-jar newcookies.txt  http://www.example.com
 ```
