@@ -74,12 +74,18 @@ curl -u user:password http://testudy.cc/
 curl默认使用的`GET`请求方法
 
 ```shell
-# 显示中包含响应首部，-i
+# 默认GET方法，显示中包含响应首部，-i
 curl -i testudy.cc
 
-# 仅显示响应首部，-I（大写i）或--head
+# 仅显示响应首部，-I（大写i）或--head，此时是HEAD方法
 curl --head testudy.cc
 curl -I testudy.cc
+
+# 使用--data选项，则此时是POST方法
+curl --data "birthyear=1905&press=%20OK%20" http://www.hotmail.com/when/junk.cgi
+
+# 使用--request（-X），将请求方法修改为PROPFIND
+curl --request PROPFIND url.com
 ```
 
 ### Form表单
@@ -109,6 +115,12 @@ curl --referer http://www.example.come http://www.example.com
 # User Agent
 # 模拟Window 2000上的IE5 
 curl --user-agent "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)" testudy.cc
+
+# 使用--header可以添加一个自定义首部
+curl --header "Destination: http://nowhere" http://example.com
+
+# 设置一个空Host首部，以在请求中删除Host首部
+curl --header "Host:" http://www.example.com
 ```
 
 ### 支持Location首部
@@ -130,6 +142,12 @@ curl --dump-header headers_and_cookies http://www.example.com
 # 请求中读入Cookie，--cookie (-b)，响应中写入Cookie， --cookie-jar (-c) 
 # 注意cookies.txt和newcookies.txt文件要预先存在
 curl --cookie cookies.txt --cookie-jar newcookies.txt  http://www.example.com
+```
+
+### HTTPS
+```
+# 直接请求HTTPS资源即可，curl客户端会完成加密和解密
+curl https://www.example.com
 ```
 
 
