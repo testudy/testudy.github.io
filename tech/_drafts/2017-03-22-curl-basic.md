@@ -26,6 +26,7 @@ tags: 技术 原创
 
 ## 相关知识点
 
+> 掌握自定义首部，实现`user-agent`和`referer`的自定义。
 
 ## 参考
 1. [cURL官网](https://curl.haxx.se/)
