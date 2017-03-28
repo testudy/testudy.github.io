@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 基于React的WebApp程序开发编码规范
+title: 基于React的WebApp程序开发编码规范（试用版）
 tags: 原创 技术 规范 React
 ---
 
