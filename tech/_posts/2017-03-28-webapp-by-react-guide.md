@@ -34,6 +34,29 @@ tags: 原创 技术 规范 React
 > Airbnb的规范足够通用，翻译也足够优秀，暂时直接引用。后续再进一步翻译和整理。  
 > 建议以英文为主，中文翻译为辅（总难免翻译和原文不同步的问题）。
 
+## 基于Airbnb规范的ESLint配置调整
+```json
+"eslintConfig": {
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "globals": {
+    "window": false,
+    "document": false
+  },
+  "rules": {
+    "indent": ["error", 4],
+    "react/jsx-indent": [2, 4],
+    "react/jsx-indent-props": [2, 4]
+  }
+},
+```
+
+## 脚手架
+在[create-react-app](https://github.com/facebookincubator/create-react-app/)简单调整的初始版本[react-startup脚手架](https://github.com/testudy/react-startup)，调整细节：
+
+1. 添加less的支持；
+2. 修改本地代理的bug。
+
 ## 后续
 更详细的文件目录、组件开发等问题的规范，在初期来不及了，后续详细约束。
 
