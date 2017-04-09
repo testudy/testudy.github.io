@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Redux 11 - 基础：数据流动（Data Flow）
+title: Redux 11 - 基础：数据流（Data Flow）
 tags: 原创 技术 翻译 Redux
 ---
 
