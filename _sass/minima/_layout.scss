@@ -103,7 +103,8 @@
 }
 
 .contact-list,
-.social-media-list {
+.social-media-list,
+.site-info {
   list-style: none;
   margin-left: 0;
 }
@@ -246,6 +247,7 @@
 }
 .pull-right {
     float: right;
+    text-align: right;
 }
 
 .video-player {
