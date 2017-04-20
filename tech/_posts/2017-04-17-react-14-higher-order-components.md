@@ -269,11 +269,15 @@ You may have noticed similarities between HOCs and a pattern called **container 
 
 你可能已经注意到高阶组件和**容器组件**这两者很相似。容器组件是分割高级别和低级别关注点的一种策略。容器处理订阅和状态，并通过属性传递给UI组件。容器是高阶组件实现的一部分。可以看做高阶组件是参数化的容器组件。
 
-## Convention: Pass Unrelated Props Through to the Wrapped Component
+## 约定：传递高阶组件不相关的子组件固有属性（Convention: Pass Unrelated Props Through to the Wrapped Component）
 
 HOCs add features to a component. They shouldn't drastically alter its contract. It's expected that the component returned from an HOC has a similar interface to the wrapped component.
 
+高阶组件在为子组件添加特性的同事，要保持子组件的接口不受影响。高阶组件应该返回一个兼容子组件接口的新组件。
+
 HOCs should pass through props that are unrelated to its specific concern. Most HOCs contain a render method that looks something like this:
+
+高阶组件应该将子组件的固有属性传递过去，大多数高阶组件包含如下所示的render方法：
 
 ```js
 render() {
@@ -297,9 +301,13 @@ render() {
 
 This convention helps ensure that HOCs are as flexible and reusable as possible.
 
-## Convention: Maximizing Composability
+这个约定是为了保证高阶组件的适用性和重用性。
+
+## 约定：尽可能保持可组合性（Convention: Maximizing Composability）
 
 Not all HOCs look the same. Sometimes they accept only a single argument, the wrapped component:
+
+高阶组件的形式比较多。有时只接收一个单一的参数，即需要被包装的组件：
 
 ```js
 const NavbarWithRouter = withRouter(Navbar);
@@ -307,11 +315,15 @@ const NavbarWithRouter = withRouter(Navbar);
 
 Usually, HOCs accept additional arguments. In this example from Relay, a config object is used to specify a component's data dependencies:
 
+通常情况下下，高阶组件会接收一个附加参数。比如在Relay中，config对象用来定制组件的数据依赖：
+
 ```js
 const CommentWithRelay = Relay.createContainer(Comment, config);
 ```
 
 The most common signature for HOCs looks like this:
+
+高阶组件最常见的函数签名如下所示：
 
 ```js
 // React Redux's `connect`
@@ -319,6 +331,8 @@ const ConnectedComment = connect(commentSelector, commentActions)(Comment);
 ```
 
 *What?!* If you break it apart, it's easier to see what's going on.
+
+*啊哈？！*如果将其拆分成两部分，就比较容易理解了。
 
 ```js
 // connect is a function that returns another function
@@ -329,7 +343,11 @@ const ConnectedComment = enhance(CommentList);
 ```
 In other words, `connect` is a higher-order function that returns a higher-order component!
 
+换句话说就是，`connect`是一个高阶函数，并返回一个高阶组件！
+
 This form may seem confusing or unnecessary, but it has a useful property. Single-argument HOCs like the one returned by the `connect` function have the signature `Component => Component`. Functions whose output type is the same as its input type are really easy to compose together.
+
+这种形式初看起来令人困惑，或者说并不必须，但也可能是个有用的特性。单参数的高阶组件等效于签名是`Component => Component`的`connect`方法，输出类型和输入类型相同的组件很容易相互组合。
 
 ```js
 // Instead of doing this...
@@ -347,13 +365,21 @@ const EnhancedComponent = enhance(WrappedComponent)
 
 (This same property also allows `connect` and other enhancer-style HOCs to be used as decorators, an experimental JavaScript proposal.)
 
+（在代码中`connect`和其他增强型的高阶组件也可以使用Decorator语法，JavaScript规范实验建议。）
+
 The `compose` utility function is provided by many third-party libraries including lodash (as [`lodash.flowRight`](https://lodash.com/docs/#flowRight)), [Redux](http://redux.js.org/docs/api/compose.html), and [Ramda](http://ramdajs.com/docs/#compose).
 
-## Convention: Wrap the Display Name for Easy Debugging
+很多第三方工具库都提供了`compose`工具方法（比如[`lodash.flowRight`](https://lodash.com/docs/#flowRight)），[Redux](http://redux.js.org/docs/api/compose.html)，和[Ramda](http://ramdajs.com/docs/#compose)。
+
+## 约定：将组件显示名字包装起来以便于调试（Convention: Wrap the Display Name for Easy Debugging）
 
 The container components created by HOCs show up in the [React Developer Tools](https://github.com/facebook/react-devtools) like any other component. To ease debugging, choose a display name that communicates that it's the result of an HOC.
 
+由高阶组件创建的容器组件跟普通组件一样也会显示在[React Developer Tools](https://github.com/facebook/react-devtools)中。为了便于调试，最好在名字中标识其相关创建的高阶组件信息。
+
 The most common technique is to wrap the display name of the wrapped component. So if your higher-order component is named `withSubscription`, and the wrapped component's display name is `CommentList`, use the display name `WithSubscription(CommentList)`:
+
+最常见的方式是将子组件名字包裹起来。比如，高阶组件的名字叫做`withSubscription`，被包裹的子组件叫做`CommentList`，则显示名字为`WithSubscription(CommentList)`：
 
 ```js
 function withSubscription(WrappedComponent) {
@@ -368,15 +394,21 @@ function getDisplayName(WrappedComponent) {
 ```
 
 
-## Caveats
+## 提醒（Caveats）
 
 Higher-order components come with a few caveats that aren't immediately obvious if you're new to React.
 
-### Don't Use HOCs Inside the render Method
+对于React新手来说，下列相关高阶组件的提醒可能不那么容易理解。
+
+### 不要在render方法内部使用高阶组件（Don't Use HOCs Inside the render Method）
 
 React's diffing algorithm (called reconciliation) uses component identity to determine whether it should update the existing subtree or throw it away and mount a new one. If the component returned from `render` is identical (`===`) to the component from the previous render, React recursively updates the subtree by diffing it with the new one. If they're not equal, the previous subtree is unmounted completely.
 
+React的差分算法（叫做Reconciliation）根据组件标识来决定是应该更新其现存的子树，还是更替自身。如果组件`render`方法的返回值跟之前的返回值相同，则将两者的子树递归对比更新。如果不相同，之前的子树被新子树完全替换。
+
 Normally, you shouldn't need to think about this. But it matters for HOCs because it means you can't apply an HOC to a component within the render method of a component:
+
+一般情况下，不需要考虑这个细节。但在高阶组件中，这决定了不能在render方法中使用高阶组件：
 
 ```js
 render() {
@@ -390,15 +422,25 @@ render() {
 
 The problem here isn't just about performance — remounting a component causes the state of that component and all of its children to be lost.
 
+这个问题不只关乎性能——更替一个组件会导致自身及其所有的子元素状态都会丢失。
+
 Instead, apply HOCs outside the component definition so that the resulting component is created only once. Then, its identity will be consistent across renders. This is usually what you want, anyway.
 
+为了避免这个问题，将使用高阶组件的定义在组件外部，这样渲染结果中，该组件只会被渲染一次。随后在先后渲染中会保持同一个标识。这是通常情况下的使用方式。
+
 In those rare cases where you need to apply an HOC dynamically, you can also do it inside a component's lifecycle methods or its constructor.
+
+当然，在某些需要动态选择需要使用的高阶组件的情况下，可以在生命周期方法或其构造函数中使用高阶组件。
 
 ### Static Methods Must Be Copied Over
 
 Sometimes it's useful to define a static method on a React component. For example, Relay containers expose a static method `getFragment` to facilitate the composition of GraphQL fragments.
 
+在某些情况下，在React组件中定义静态方法非常有用。比如，Relay容器暴露了`getFragment`这个静态方法，以便于构造GraphQL片段。
+
 When you apply an HOC to a component, though, the original component is wrapped with a container component. That means the new component does not have any of the static methods of the original component.
+
+高阶组件对子组件包装之后会返回一个容器组件，这意味着新组件不包含任何子组件中包含的静态方法。
 
 ```js
 // Define a static method
@@ -412,6 +454,8 @@ typeof EnhancedComponent.staticMethod === 'undefined' // true
 
 To solve this, you could copy the methods onto the container before returning it:
 
+为了解决这个问题，应该将静态方法拷贝到容器组件之后，再将其返回：
+
 ```js
 function enhance(WrappedComponent) {
   class Enhance extends React.Component {/*...*/}
@@ -423,6 +467,8 @@ function enhance(WrappedComponent) {
 
 However, this requires you to know exactly which methods need to be copied. You can use [hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics) to automatically copy all non-React static methods:
 
+但是，这要求你清楚所有需要拷贝的方法。可以使用[hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics)来自动的拷贝所有非React的静态方法：
+
 ```js
 import hoistNonReactStatic from 'hoist-non-react-statics';
 function enhance(WrappedComponent) {
@@ -433,6 +479,8 @@ function enhance(WrappedComponent) {
 ```
 
 Another possible solution is to export the static method separately from the component itself.
+
+另一个解决方案是将组件自身和静态方法分别导出。
 
 ```js
 // Instead of...
@@ -446,13 +494,19 @@ export { someFunction };
 import MyComponent, { someFunction } from './MyComponent.js';
 ```
 
-### Refs Aren't Passed Through
+### Ref相关属性不能被传递（Refs Aren't Passed Through）
 
 While the convention for higher-order components is to pass through all props to the wrapped component, it's not possible to pass through refs. That's because `ref` is not really a prop — like `key`, it's handled specially by React. If you add a ref to an element whose component is the result of an HOC, the ref refers to an instance of the outermost container component, not the wrapped component.
 
+在高阶组件中，虽然通常情况下会将所有的属性传递给被包装的子组件，但Ref相关属性并不会进行传递。原因是`ref`并不是一个通常的属性——比如`key`，这些属性是React内部使用的。如果在高阶组件创建的组件中使用Ref相关属性，则这些属性会跟外层的容器组件建立关联，而不是内部被包装的组件。
+
 If you find yourself facing this problem, the ideal solution is to figure out how to avoid using `ref` at all. Occasionally, users who are new to the React paradigm rely on refs in situations where a prop would work better.
 
+如果发现正在受这个问题的困扰，理想的方法是找出避免使用`ref`的根本办法。某些情况下，参考React文档的范例，Prop比Ref工作的更好。
+
 That said, there are times when refs are a necessary escape hatch — React wouldn't support them otherwise. Focusing an input field is an example where you may want imperative control of a component. In that case, one solution is to pass a ref callback as a normal prop, by giving it a different name:
+
+这就是说：当需要使用Ref的时候——React却不支持。比如，当你需要控制一个输入组件的时候，可以传递一个回调函数作为普通属性，以为其提供不同的名字：
 
 ```js
 function Field({ inputRef, ...rest }) {
@@ -475,3 +529,5 @@ this.inputEl.focus();
 ```
 
 This is not a perfect solution by any means. We prefer that refs remain a library concern, rather than require you to manually handle them. We are exploring ways to solve this problem so that using an HOC is unobservable.
+
+但是这并是一个良好的解决办法。我们正在思考是否需要提供一个库来解决这个问题，以避免手工处理这些问题，最终我们期望高阶组件的使用完全透明化。
