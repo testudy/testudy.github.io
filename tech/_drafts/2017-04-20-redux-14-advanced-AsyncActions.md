@@ -50,6 +50,8 @@ Each of these two moments usually require a change in the application state; to 
 
 You may use a dedicated `status` field in your actions:
 
+可以在Action中定义一个专用的`status`字段来区分不同的Action：
+
 ```js
 { type: 'FETCH_POSTS' }
 { type: 'FETCH_POSTS', status: 'error', error: 'Oops' }
@@ -58,6 +60,8 @@ You may use a dedicated `status` field in your actions:
 
 Or you can define separate types for them:
 
+或定义不同的Action类型：
+
 ```js
 { type: 'FETCH_POSTS_REQUEST' }
 { type: 'FETCH_POSTS_FAILURE', error: 'Oops' }
@@ -65,6 +69,8 @@ Or you can define separate types for them:
 ```
 
 Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
+
+这两种Action形式的选择取决于你，但在团队内部应该有一个统一的约定。
 
 Whatever convention you choose, stick with it throughout the application.  
 We'll use separate types in this tutorial.
