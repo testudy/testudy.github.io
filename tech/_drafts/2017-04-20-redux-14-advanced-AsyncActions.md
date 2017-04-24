@@ -70,12 +70,14 @@ Or you can define separate types for them:
 
 Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
 
-这两种Action形式的选择取决于你，但在团队内部应该有一个统一的约定。
+选择哪种Action的形式取决于你，但在团队内部应该有一个统一的约定。多个类型在使用中会带来可能的错误，但如果使用[redux-actions](https://github.com/acdlite/redux-actions)之类的帮助库来生成Action Creator和Reducer可以在一定程度上避免这个问题。
 
 Whatever convention you choose, stick with it throughout the application.  
 We'll use separate types in this tutorial.
 
-## Synchronous Action Creators
+无论选择哪种类型，在同一个应用中要保持一致，下面的教程中会使用单独的Action类型。
+
+## 异步Action Creator（Synchronous Action Creators）
 
 Let's start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a subreddit to display:
 
