@@ -155,7 +155,7 @@ This is all we need to know for now. The particular mechanism to dispatch these 
 
 目前为止我们了解这些就可以了。稍后会在网络请求中将相关的Action串联起来。
 
->##### 注意请求错误的处理（Note on Error Handling）
+>##### 备注请求错误的处理（Note on Error Handling）
 >
 >In a real app, you'd also want to dispatch an action on request failure. We won't implement error handling in this tutorial, but the [real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world) shows one of the possible approaches.
 >
@@ -219,7 +219,7 @@ There are a few important bits here:
 
 * 对待每一个数据条目，需要分别存储加载指示器状态`isFetching`，数据状态`didInvalidate`，最新更新事件状态`lastUpdated`，和本身的数据`items`。在真实场景中，还需要存储分页相关状态`fetchedPageCount`和`nextPageUrl`等。
 
->##### 实体嵌套提醒（Note on Nested Entities）
+>##### 备注实体的嵌套（Note on Nested Entities）
 >
 >In this example, we store the received items together with the pagination information. However, this approach won't work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
 >
@@ -272,13 +272,17 @@ There are a few important bits here:
 >
 > 在本教程中，不会使用实体的格式化，但在大多数动态应用中，需要注意这个细节。
 
-## Handling Actions
+## Action处理（Handling Actions）
 
 Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
 
->##### Note on Reducer Composition
+在进行网络请求和Action派发之前，下面需要先进行Reducer的定义。
 
+>##### 备注Reducer的组合（Note on Reducer Composition）
+>
 > Here, we assume that you understand reducer composition with [`combineReducers()`](https://github.com/reactjs/redux/blob/master/docs/api/combineReducers.md), as described in the [Splitting Reducers](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers) section on the [basics guide](https://github.com/reactjs/redux/blob/master/docs/basics/README.md). If you don't, please [read it first](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers).
+>
+> 继续编码之前，假设你已经理解[`combineReducers()`](https://github.com/reactjs/redux/blob/master/docs/api/combineReducers.md)，在[基础教程](https://github.com/reactjs/redux/blob/master/docs/basics/README.md)的[Reducers拆分](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers)小节中详细讲解过。如果你还不了解这个知识点，需要[首先学习](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers)一下。
 
 #### `reducers.js`
 
@@ -348,7 +352,11 @@ export default rootReducer
 
 In this code, there are two interesting parts:
 
+这段代码中，有两个需要注意的细节：
+
 * We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a concise way. This:
+
+  在`Object.assign()`中使用ES6的计算属性语法更新`state[action.subreddit]`，让代码更简洁：
 
   ```js
   return Object.assign({}, state, {
@@ -357,6 +365,8 @@ In this code, there are two interesting parts:
   ```
   is equivalent to this:
 
+  等效于：
+
   ```js
   let nextState = {}
   nextState[action.subreddit] = posts(state[action.subreddit], action)
@@ -364,15 +374,25 @@ In this code, there are two interesting parts:
   ```
 * We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we're delegating updating items inside an object to a `posts` reducer. The [real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
 
+  抽象出`posts(state, action)`方法来管理指定的发布列表状态。这也是[Reducer组合](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#splitting-reducers)的一部分！可以根据我们的选择，将Reducer拆分为更小的Reducer，在这个例子中，将列表的更新委托给`posts`Reducer。在[real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world)的代码中，使用了参数化Reducer工厂的方式。
+
 Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
 
-## Async Action Creators
+Reducer只是一个方法而已，可以将方法任意组合或使用高阶方法，开心就好。
 
-Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard way to do it with Redux is to use the [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). It comes in a separate package called `redux-thunk`. We'll explain how middleware works in general [later](Middleware.md); for now, there is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead of an action object. This way, the action creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
+## 异步Action Creator（Async Action Creators）
+
+Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard way to do it with Redux is to use the [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). It comes in a separate package called `redux-thunk`. We'll explain how middleware works in general [later](https://github.com/reactjs/redux/blob/master/docs/advanced/Middleware.md); for now, there is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead of an action object. This way, the action creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
+
+但是最终，应该如何在网络请求中使用[之前定义](#synchronous-action-creators)的同步版本的Action Creator呢？Redux中标准的做法是使用[Redux Thunk中间件](https://github.com/gaearon/redux-thunk)。这个中间件被拆分为一个单独的`redux-thunk`项目。[后面的章节](https://github.com/reactjs/redux/blob/master/docs/advanced/Middleware.md)中我们会简介中间件的感念和使用；目前需要了解的重点是：通过使用这个中间件，Action Creator返回的是一个函数，而不是原来的Action对象。这样来看，Action Creator就变为了一个[thunk](https://en.wikipedia.org/wiki/Thunk)（编者按：[阮一峰老师的解释](http://www.ruanyifeng.com/blog/2015/05/thunk.html)）。
 
 When an action creator returns a function, that function will get executed by the Redux Thunk middleware. This function doesn't need to be pure; it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions—like those synchronous actions we defined earlier.
 
+Action Creator返回的函数，会在Redux Thunk中间件中执行。这个函数可以不是纯函数；可以执行一些具有副作用的操作，包括异步API的调用等。之前定义的同步Action可以在这个函数中派发。
+
 We can still define these special thunk action creators inside our `actions.js` file:
+
+特殊的Thunk Action Creator也可以定义在`actions.js`文件中：
 
 #### `actions.js`
 
@@ -441,25 +461,33 @@ export function fetchPosts(subreddit) {
 }
 ```
 
->##### Note on `fetch`
-
+>##### 备注`fetch`（Note on `fetch`）
+>
 >We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
-
+>
+> 上面的代码中使用了[`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。用来替代`XMLHttpRequest`的使用。目前大多数浏览器还不原生支持，建议使用[`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch)库来替代：
+>
 >```js
 // Do this in every file where you use `fetch`
 >import fetch from 'isomorphic-fetch'
 >```
-
+>
 >Internally, it uses [`whatwg-fetch` polyfill](https://github.com/github/fetch) on the client, and [`node-fetch`](https://github.com/bitinn/node-fetch) on the server, so you won't need to change API calls if you change your app to be [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
-
+>
+> 在`isomorphic-fetch`内部，客户端会调用[`whatwg-fetch` polyfill](https://github.com/github/fetch)，服务器端则调用[`node-fetch`](https://github.com/bitinn/node-fetch)，在[通用应用中](https://medium.com/@mjackson/universal-javascript-4761051b7ae9)可以共用代码。
+>
 >Be aware that any `fetch` polyfill assumes a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill is already present. The easiest way to ensure you have a Promise polyfill is to enable Babel's ES6 polyfill in your entry point before any other code runs:
-
+>
+> 需要注意的是任何`fetch`垫片，假设[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)垫片已经存在。最简单的启用Promise垫片的方法是在入口文件的所有代码之前引入下面代码：
+>
 >```js
 >// Do this once before any other code in your app
 >import 'babel-polyfill'
 >```
 
 How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](https://github.com/reactjs/redux/blob/master/docs/api/applyMiddleware.md) store enhancer from Redux, as shown below:
+
+如何将Redux Thunk中间件引入进来呢？可以在Redux中使用[`applyMiddleware()`](https://github.com/reactjs/redux/blob/master/docs/api/applyMiddleware.md)来增强Store对象，如下所示：
 
 #### `index.js`
 
@@ -487,6 +515,8 @@ store.dispatch(fetchPosts('reactjs')).then(() =>
 ```
 
 The nice thing about thunks is that they can dispatch results of each other:
+
+Thunks的结果可以完美的在彼此中派发：
 
 #### `actions.js`
 
@@ -553,6 +583,8 @@ export function fetchPostsIfNeeded(subreddit) {
 
 This lets us write more sophisticated async control flow gradually, while the consuming code can stay pretty much the same:
 
+在此基础上可以构建更复杂的异步控制流，涉及到的原业务代码不用更改：
+
 #### `index.js`
 
 ```js
@@ -561,11 +593,14 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 )
 ```
 
->##### Note about Server Rendering
-
+>##### 备注服务器端渲染（Note about Server Rendering）
+>
 >Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
+>
+> 异步Action Creator也便于在服务器端渲染。创建一个Store单例，派发一个简单的异步Action Creator来获取应用需要的数据，完全返回数据后进行渲染输出即可。然后将服务器端的Store合并到客户端Store中。
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) isn't the only way to orchestrate asynchronous actions in Redux:
+
 - You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions.
 - You can use [redux-observable](https://github.com/redux-observable/redux-observable) to dispatch Observables.
 - You can use the [redux-saga](https://github.com/yelouafi/redux-saga/) middleware to build more complex asynchronous actions.
@@ -574,10 +609,24 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
 
-## Connecting to UI
+除[Thunk中间件](https://github.com/gaearon/redux-thunk)之外还有其他方式可以用来处理相同的工作：
 
-Dispatching async actions is no different from dispatching synchronous actions, so we won't discuss this in detail. See [Usage with React](https://github.com/reactjs/redux/blob/master/docs/basics/UsageWithReact.md) for an introduction into using Redux from React components. See [Example: Reddit API](ExampleRedditAPI.md) for the complete source code discussed in this example.
+- 可以使用[redux-promise](https://github.com/acdlite/redux-promise)或[redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware)来返回Promise以代替函数；
+- 可以使用[redux-observable](https://github.com/redux-observable/redux-observable)派发可观察对象；
+- 可以使用[redux-saga](https://github.com/yelouafi/redux-saga/)中间件来构建更复杂的异步Action；
+- 可以使用[redux-pack](https://github.com/lelandrichardson/redux-pack)中间件来派发一个基于Promise的异步Action；
+- 也可以像[real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world)示例中那样自定义一个中间件来描述API调用。
 
-## Next Steps
+选择一个你喜欢的方案，无论是不是中间件，遵循其约定和规范。
 
-Read [Async Flow](AsyncFlow.md) to recap how async actions fit into the Redux flow.
+## 和UI连接（Connecting to UI）
+
+Dispatching async actions is no different from dispatching synchronous actions, so we won't discuss this in detail. See [Usage with React](https://github.com/reactjs/redux/blob/master/docs/basics/UsageWithReact.md) for an introduction into using Redux from React components. See [Example: Reddit API](https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md) for the complete source code discussed in this example.
+
+派发异步Action和同步Action没有任何区别，在这里不再进行讨论。可以从[和React一起使用](https://github.com/reactjs/redux/blob/master/docs/basics/UsageWithReact.md)中学习如何在React组件中使用Redux。查看[示例：Reddit API](https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md)的全部源码。
+
+## 下一步（Next Steps）
+
+Read [Async Flow](https://github.com/reactjs/redux/blob/master/docs/advanced/AsyncFlow.md) to recap how async actions fit into the Redux flow.
+
+学习[异步流](https://github.com/reactjs/redux/blob/master/docs/advanced/AsyncFlow.md)，将其整合到Redux流中。
