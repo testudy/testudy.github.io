@@ -70,16 +70,18 @@ Or you can define separate types for them:
 
 Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
 
-选择哪种Action的形式取决于你，但在团队内部应该有一个统一的约定。多个类型在使用中会带来可能的错误，但如果使用[redux-actions](https://github.com/acdlite/redux-actions)之类的帮助库来生成Action Creator和Reducer可以在一定程度上避免这个问题。
+选择哪种Action的形式取决于你，但在团队内部应该有一个统一的约定。使用多个类型在项目中可能会带来一些错误，但如果使用[redux-actions](https://github.com/acdlite/redux-actions)之类的帮助库来生成Action Creator和Reducer可以在一定程度上避免这个问题。
 
 Whatever convention you choose, stick with it throughout the application.  
 We'll use separate types in this tutorial.
 
 无论选择哪种类型，在同一个应用中要保持一致，下面的教程中会使用单独的Action类型。
 
-## 异步Action Creator（Synchronous Action Creators）
+## 同步Action Creator（Synchronous Action Creators）
 
 Let's start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a subreddit to display:
+
+首先定义几个同步Action类型和几个需要在示例代码中使用的相关Action Creator。下面的代码是，用户选择一个需要展示的订阅主题：
 
 #### `actions.js`
 
@@ -96,6 +98,8 @@ export function selectSubreddit(subreddit) {
 
 They can also press a “refresh” button to update it:
 
+也可以通过一个“刷新”按钮来进行更新操作：
+
 ```js
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
@@ -109,7 +113,11 @@ export function invalidateSubreddit(subreddit) {
 
 These were the actions governed by the user interaction. We will also have another kind of action, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.
 
+上面定义的是跟用户操作相关的Action，此外还需要定义一些其他类型的Action，比如网络请求相关的Action。现在先将它们定义下来，后面再演示如何进行使用。
+
 When it's time to fetch the posts for some subreddit, we will dispatch a `REQUEST_POSTS` action:
+
+当获取订阅相关的信息时，会派发如下这个`REQUEST_POSTS`Action：
 
 ```js
 export const REQUEST_POSTS = 'REQUEST_POSTS'
@@ -124,7 +132,11 @@ function requestPosts(subreddit) {
 
 It is important for it to be separate from `SELECT_SUBREDDIT` or `INVALIDATE_SUBREDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular subreddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it's not wise to couple fetching to some particular UI event early on.
 
+将`SELECT_SUBREDDIT`和`INVALIDATE_SUBREDDIT`两种类型区分非常重要。目前来看，这两个Action会先后发生，但是当应用逐渐更复杂的时候，数据获取会依赖于其他的用户行为（比如，预先获取最流行的订阅主题，或定时刷新过期的数据）。路由的变化的时候也可能需要获取数据，所以建议尽早将UI事件和数据获取分开：
+
 Finally, when the network request comes through, we will dispatch `RECEIVE_POSTS`:
+
+当最终网络请求完成的时候，需要派发一个`RECEIVE_POSTS`Action：
 
 ```js
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -141,19 +153,31 @@ function receivePosts(subreddit, json) {
 
 This is all we need to know for now. The particular mechanism to dispatch these actions together with network requests will be discussed later.
 
->##### Note on Error Handling
+目前为止我们了解这些就可以了。稍后会在网络请求中将相关的Action串联起来。
 
+>##### 注意请求错误的处理（Note on Error Handling）
+>
 >In a real app, you'd also want to dispatch an action on request failure. We won't implement error handling in this tutorial, but the [real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world) shows one of the possible approaches.
+>
+> 在应用的实际使用中，网络请求出错时需要派发一个Action来处理。本教程中不会实现错误的处理，可以参考[real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world)这个示例来进行错误的处理。
 
-## Designing the State Shape
+## State结构设计（Designing the State Shape）
 
 Just like in the basic tutorial, you'll need to [design the shape of your application's state](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
 
+跟基础教程中一样，在开始编码实现之前首先需要[设计应用程序的State结构](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#designing-the-state-shape)。尤其对于异步代码来说，涉及更多的状态，更需将其考虑充分。
+
 This part is often confusing to beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.
+
+初学者经常对这一部分产生疑惑，很难快速清晰的描述异步应用中需要用到的各种状态，以及如何将其组织在同一颗树中。
 
 We'll start with the most common use case: lists. Web applications often show lists of things. For example, a list of posts, or a list of friends. You'll need to figure out what sorts of lists your app can show. You want to store them separately in the state, because this way you can cache them and only fetch again if necessary.
 
+下面从最常用的案例——列表入手。Web应用大多数用来展示一组列表数据。比如，一组博文，或者一组联系人。所以，需要搞清楚应用程序中需要展示的列表类型，将它们分别存储在State中，方便后续的缓存和按需获取。
+
 Here's what the state shape for our “Reddit headlines” app might look like:
+
+“Reddit headlines”应用的State结构如下所示：
 
 ```js
 {
@@ -189,12 +213,22 @@ There are a few important bits here:
 
 * For every list of items, you'll want to store `isFetching` to show a spinner, `didInvalidate` so you can later toggle it when the data is stale, `lastUpdated` so you know when it was fetched the last time, and the `items` themselves. In a real app, you'll also want to store pagination state like `fetchedPageCount` and `nextPageUrl`.
 
->##### Note on Nested Entities
+这里有几个重要的细节：
 
+* 每个订阅主题信息分别存储以便于独立缓存。当用户在不同主题直接切换的时候，用户可以马上看到更新，并不需要每次刷新数据，只在我们需要的时候刷新即可。不要担心所有的数据存储的内存占用问题：除非你需要处理上万条数据，并且你的目标用户不关闭当前页面，否则你不要关心内存的清理问题。
+
+* 对待每一个数据条目，需要分别存储加载指示器状态`isFetching`，数据状态`didInvalidate`，最新更新事件状态`lastUpdated`，和本身的数据`items`。在真实场景中，还需要存储分页相关状态`fetchedPageCount`和`nextPageUrl`等。
+
+>##### 实体嵌套提醒（Note on Nested Entities）
+>
 >In this example, we store the received items together with the pagination information. However, this approach won't work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
-
+>
+> 在这个例子中，接收到的数据根据分页信息存储。当出现实体嵌套或者用户编辑信息的时候，这样的数据组织方式并不友好。想象一下，用户要编辑一条获取到的博文，但这篇博文被复制在状态树的多个不同位置。这对代码实现来说会非常痛苦。
+>
 >If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world) shows this approach, together with [normalizr](https://github.com/paularmstrong/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
-
+>
+> 如果存在实体嵌套，或者需要用户编辑接收到的实体，那么应该保持状态的存储符合基本的[数据库范式（编者按）](https://zh.wikipedia.org/wiki/数据库规范化)。在分页中仅仅通过ID来关联。这样，数据将保持同步更新。在[real world example](https://github.com/reactjs/redux/blob/master/docs/introduction/Examples.md#real-world)示例中，通过[normalizr](https://github.com/paularmstrong/normalizr)将数据格式化。根据这个建议，状态的组织结构看起来如下所示：
+>
 >```js
 > {
 >   selectedSubreddit: 'frontend',
@@ -233,8 +267,10 @@ There are a few important bits here:
 >   }
 > }
 >```
-
+>
 >In this guide, we won't normalize entities, but it's something you should consider for a more dynamic application.
+>
+> 在本教程中，不会使用实体的格式化，但在大多数动态应用中，需要注意这个细节。
 
 ## Handling Actions
 
