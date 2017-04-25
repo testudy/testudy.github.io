@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Redux 12 - 基础：在React中使用（Usage with React）
+title: Redux 12 - 基础：和React一起使用（Usage with React）
 tags: 原创 技术 翻译 Redux
 ---
 
