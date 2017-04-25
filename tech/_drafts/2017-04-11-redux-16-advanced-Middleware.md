@@ -1,40 +1,68 @@
-# Middleware
+---
+layout: post
+title: Redux 16 - 进阶：中间件（Middleware）
+tags: 原创 技术 翻译 Redux
+---
 
-You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
+[原文](https://github.com/reactjs/redux/blob/master/docs/advanced/Middleware.md)
+
+You've seen middleware in action in the [Async Actions](https://github.com/reactjs/redux/blob/master/docs/advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
+
+在[异步Actions](/tech/2017/04/25/redux-14-advanced-AsyncActions.html)示例中已经使用过中间件。如果你使用过[Express](http://expressjs.com/)和[Koa](http://koajs.com/)之类的服务器端框架，就应该了解和*中间件*相似的概念。在这些框架中，可以编写一些中间件放置在框架请求接收和生成响应之间。比如，Express和Koa的中间件可以实现添加CORS首部，日志，压缩等其他功能。中间件最好的特性是可以链式操作。可以在一个简单的项目中使用不同的多个相互独立的第三方中间件。
 
 Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
+Redux中间件的概念跟Express和Koa的中间件类似，但解决的问题有所差异。**Redux在Action派发和Reducer接收之间为第三方扩展提供了一个时间点。**使用Redux的中间件可以实现日志记录，崩溃上报，异步API的使用，路由等其他功能。
+
 This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
 
-## Understanding Middleware
+这篇文章会尝试对中间件进行一个深入的介绍以帮助你掌握这个概念，并在最后提供了[一些实际的示例](#seven-examples)来展示中间件的强大作用。可以把文中的概念部分跟后面的示例对照着看，仔细揣摩。
+
+## 理解中间件（Understanding Middleware）
 
 While middleware can be used for a variety of things, including asynchronous API calls, it's really important that you understand where it comes from. We'll guide you through the thought process leading to middleware, by using logging and crash reporting as examples.
 
-### Problem: Logging
+中间件可以用来解决很多问题，比如异步API调用，理解中间件的原理对中间件的使用非常重要。下面会以日志记录和崩溃上报为例来逐步学习。
+
+### 问题：日志记录（Problem: Logging）
 
 One of the benefits of Redux is that it makes state changes predictable and transparent. Every time an action is dispatched, the new state is computed and saved. The state cannot change by itself, it can only change as a consequence of a specific action.
 
+Redux的优势之一是状态的变化都是可预测并且透明的。每次Action的派发，会计算并保存一个新的状态。状态本身不能改变自己，它的改变一定是由一个特定的Action触发的。
+
 Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
 
-<img src='http://i.imgur.com/BjGBlES.png' width='70%'>
+如果把应用中每次发生的Action和相应计算后的状态都记录起来，那么当程序出错的时候，只需回顾日志，并把相应的导致状态出错的Action找出来即可。
+
+<img src='/tech/media/redux-middleware-logging.png' width='70%'>
 
 How do we approach this with Redux?
 
-### Attempt #1: Logging Manually
+在Redux中应该怎么做呢？
 
-The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It's not really a solution, but just a first step towards understanding the problem.
+### 尝试#1：手动记录（Attempt #1: Logging Manually）
 
->##### Note
+The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](https://github.com/reactjs/redux/blob/master/docs/api/Store.md#dispatch). It's not really a solution, but just a first step towards understanding the problem.
 
+最简单的方式是每次调用[`store.dispatch(action)`](https://github.com/reactjs/redux/blob/master/docs/api/Store.md#dispatch)手工记录。这个办法在项目中很难使用，但可以帮助我们更进一步理解这个问题。
+
+>##### 备注（Note）
+>
 >If you're using [react-redux](https://github.com/gaearon/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
+>
+> 如果你正在使用[react-redux](https://github.com/gaearon/react-redux)之类的绑定库，在组件中并不能直接访问store实例。在接下来几段的讲解中，假设store是明确传递的。
 
 Say, you call this when creating a todo:
+
+现在，创建一个Todo：
 
 ```js
 store.dispatch(addTodo('Use Redux'))
 ```
 
 To log the action and state, you can change it to something like this:
+
+为了记录这个Action和相应的State，可以将代码做如下更改：
 
 ```js
 let action = addTodo('Use Redux')
@@ -46,9 +74,13 @@ console.log('next state', store.getState())
 
 This produces the desired effect, but you wouldn't want to do it every time.
 
-### Attempt #2: Wrapping Dispatch
+这样做可以实现需求，但你并不想每次都这样做。
+
+### 尝试#2：包装Dispatch方法（Attempt #2: Wrapping Dispatch）
 
 You can extract logging into a function:
+
+可以将日志记录提取到一个单独的方法中：
 
 ```js
 function dispatchAndLog(store, action) {
@@ -60,15 +92,21 @@ function dispatchAndLog(store, action) {
 
 You can then use it everywhere instead of `store.dispatch()`:
 
+这样就可以代替`store.dispatch()`：
+
 ```js
 dispatchAndLog(store, addTodo('Use Redux'))
 ```
 
 We could end this here, but it's not very convenient to import a special function every time.
 
-### Attempt #3: Monkeypatching Dispatch
+在这里好像可以结束了，但每次引入一个特殊的方法真的有点不方便。
 
-What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](../api/Store.md), and we're writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
+### 尝试#3：替换Dispatch方法（Attempt #3: Monkeypatching Dispatch）
+
+What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](https://github.com/reactjs/redux/blob/master/docs/api/Store.md), and we're writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
+
+是否可以替换Store实例的`dispatch`方法？Redux的Store对象只是有[一些方法](https://github.com/reactjs/redux/blob/master/docs/api/Store.md)的普通JavaScript对象，可以覆盖重写`dispatch`方法的实现：
 
 ```js
 let next = store.dispatch
@@ -81,6 +119,8 @@ store.dispatch = function dispatchAndLog(action) {
 ```
 
 This is already closer to what we want!  No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
+
+这个尝试已经非常接近我们的需求！现在不管在哪儿派发一个Action，都会被正确记录。但Monkeypatching总有一些坏代码的味道，但暂时先用这种方法实现。
 
 ### Problem: Crash Reporting
 
@@ -264,11 +304,11 @@ function applyMiddleware(store, middlewares) {
 }
 ```
 
-The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
+The implementation of [`applyMiddleware()`](https://github.com/reactjs/redux/blob/master/docs/api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
 
-* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.md#getState).
+* It only exposes a subset of the [store API](https://github.com/reactjs/redux/blob/master/docs/api/Store.md) to the middleware: [`dispatch(action)`](https://github.com/reactjs/redux/blob/master/docs/api/Store.md#dispatch) and [`getState()`](https://github.com/reactjs/redux/blob/master/docs/api/Store.md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
+* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](https://github.com/reactjs/redux/blob/master/docs/advanced/AsyncActions.md).
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
