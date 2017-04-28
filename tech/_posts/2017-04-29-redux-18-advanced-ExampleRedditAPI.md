@@ -1,8 +1,16 @@
-# Example: Reddit API
+---
+layout: post
+title: Redux 17 - 进阶：Example: Reddit API
+tags: 原创 技术 翻译 Redux
+---
 
-This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).
+[原文](https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md)
 
-## Entry Point
+This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](https://github.com/reactjs/redux/blob/master/docs/advanced/README.md).
+
+这是[Redux高级教程](https://github.com/reactjs/redux/blob/master/docs/advanced/README.md)中Reddit头条项目的完整源码。
+
+## 入口（Entry Point）
 
 #### `index.js`
 
