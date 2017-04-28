@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Redux 17 - 进阶：Example: Reddit API
+title: Redux 18 - 进阶：Reddit API Example
 tags: 原创 技术 翻译 Redux
 ---
 
