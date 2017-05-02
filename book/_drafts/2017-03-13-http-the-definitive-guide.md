@@ -142,6 +142,11 @@ HTTP是个应用层协议。HTTP无需关心网络通信的具体细节；联网
 
 ![HTTP网络协议栈](/book/media/http-the-definitive-guide-1-9.png)
 
+##### 1.6.2 连接、IP地址及端口号
+
+在HTTP客户端向服务器发送报文之前。需要用网际协议（Internet Protocol，IP）地址和端口号在客户端和服务器之间建立一条TCP/IP连接。
+
+
 #### 1.7 协议版本
 
 #### 1.8 Web的结构组件
