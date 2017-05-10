@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React 16 - 深入JSX（JSX In Depth）
+title: React 17 - 深入JSX（JSX In Depth）
 tags: 原创 技术 翻译 React
 ---
 
