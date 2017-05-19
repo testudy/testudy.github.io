@@ -6,9 +6,11 @@ tags: 原创 技术 翻译 React
 
 [原文](https://facebook.github.io/react/docs/refs-and-the-dom.html)
 
-In the typical React dataflow, [props](/react/docs/components-and-props.html) are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow. The child to be modified could be an instance of a React component, or it could be a DOM element. For both of these cases, React provides an escape hatch.
+In the typical React dataflow, [props](https://facebook.github.io/react/docs/components-and-props.html) are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow. The child to be modified could be an instance of a React component, or it could be a DOM element. For both of these cases, React provides an escape hatch.
 
-### When to Use Refs
+在典型的React数据流中，[Props](https://facebook.github.io/react/docs/components-and-props.)是父组件操作子组件的唯一方式。当需要修改一个子元素的时候，更新相关的Props重新渲染即可。但在个别情况下，需要直接修改子元素——可能是一个React组件，也可能是一个DOM元素。对于这两种情况，React提供了一个特殊的操作方法。
+
+### 使用引用的时机（When to Use Refs）
 
 There are a few good use cases for refs:
 
@@ -16,13 +18,23 @@ There are a few good use cases for refs:
 * Triggering imperative animations.
 * Integrating with third-party DOM libraries.
 
+适合使用引用的案例如下：
+
+* 管理输入框焦点，文本选择和媒体回放。
+* 触发高性能动画。
+* 集成第三方DOM库。
+
 Avoid using refs for anything that can be done declaratively.
+
+可以用声明方式解决的问题尽量避免使用引用。
 
 For example, instead of exposing `open()` and `close()` methods on a `Dialog` component, pass an `isOpen` prop to it.
 
-### Don't Overuse Refs
+比如，在`Dialog`组件中用`isOpen`属性替代`open()`和`close()`方法。
 
-Your first inclination may be to use refs to "make things happen" in your app. If this is the case, take a moment and think more critically about where state should be owned in the component hierarchy. Often, it becomes clear that the proper place to "own" that state is at a higher level in the hierarchy. See the [Lifting State Up](/react/docs/lifting-state-up.html) guide for examples of this.
+### 千万不要滥用引用（Don't Overuse Refs）
+
+Your first inclination may be to use refs to "make things happen" in your app. If this is the case, take a moment and think more critically about where state should be owned in the component hierarchy. Often, it becomes clear that the proper place to "own" that state is at a higher level in the hierarchy. See the [Lifting State Up](https://facebook.github.io/react/docs/lifting-state-up.html) guide for examples of this.
 
 ### Adding a Ref to a DOM Element
 
@@ -209,7 +221,7 @@ class Grandparent extends React.Component {
 
 Here, the ref callback is first specified by `Grandparent`. It is passed to the `Parent` as a regular prop called `inputRef`, and the `Parent` passes it to the `CustomTextInput` as a prop too. Finally, the `CustomTextInput` reads the `inputRef` prop and attaches the passed function as a `ref` attribute to the `<input>`. As a result, `this.inputElement` in `Grandparent` will be set to the DOM node corresponding to the `<input>` element in the `CustomTextInput`.
 
-All things considered, we advise against exposing DOM nodes whenever possible, but this can be a useful escape hatch. Note that this approach requires you to add some code to the child component. If you have absolutely no control over the child component implementation, your last option is to use [`findDOMNode()`](/react/docs/react-dom.html#finddomnode), but it is discouraged.
+All things considered, we advise against exposing DOM nodes whenever possible, but this can be a useful escape hatch. Note that this approach requires you to add some code to the child component. If you have absolutely no control over the child component implementation, your last option is to use [`findDOMNode()`](https://facebook.github.io/react/docs/react-dom.html#finddomnode), but it is discouraged.
 
 ### Legacy API: String Refs
 
