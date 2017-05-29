@@ -13,12 +13,14 @@ tags: 原创 技术
 
 1. 可迭代协议（[The Iterable Interface](http://www.ecma-international.org/ecma-262/6.0/#sec-iterable-interface)）
     > 可迭代协议允许JavaScript对象去定义或定制它们的迭代行为，为了变成可遍历对象，一个对象必须实现`@@iterator`方法, 即这个对象（或者它原型链上的某个对象）必须有一个名字是`Symbol.iterator`的属性:  
+    >
     > | 属性 | 必选 | 值 |
     > |-----|------|-----|
     > | [Symbol.iterator] | 是 | 返回一个迭代器对象的无参函数。当一个对象需要被遍历的时候（比如用于一个for..of循环中），该方法被调用并返回一个用于在遍历中获得值的迭代器。 |
 
 2. 迭代器协议（[The Iterator Interface](http://www.ecma-international.org/ecma-262/6.0/#sec-iterator-interface)）
     > 该迭代器协议定义了一种标准的方式来产生一个有限或无限序列的值。当一个对象被认为是一个迭代器时，它实现了一个 next() 的方法并且拥有以下含义：
+    >
     > | 属性 | 必选 | 值 |
     > |------|-----|----|
     > | next | 是 | 返回一个迭代器返回值对象的函数，也可以通过接受一个参数用以向生成器传值，如果之前的返回值的`done`属性为`true`，则返回值`done`属性为`true` |
@@ -27,6 +29,7 @@ tags: 原创 技术
 
 3. 迭代器返回值协议（[The IteratorResult Interface](http://www.ecma-international.org/ecma-262/6.0/#sec-iteratorresult-interface)）
     > 迭代器返回值需要遵循的协议，含义如下：  
+    >
     > | 属性 | 必选 | 值 |
     > |------|-----|----|
     > | done | 否 | 当迭代器遍历到迭代序列末端时返回值 true。此时，迭代器可以将返回值作为 value。当迭代器仍可继续在迭代序列中向前遍历时返回值 false。这相当于不指定 done 属性。 |
