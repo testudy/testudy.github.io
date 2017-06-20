@@ -1,12 +1,19 @@
 ---
-id: reconciliation
-title: Reconciliation
-permalink: docs/reconciliation.html
+layout: post
+title: React 25 - 子级校正（Reconciliation）
+tags: 原创 技术 翻译 React
 ---
+
+[原文](https://facebook.github.io/react/docs/reconciliation.html)
+
+> ### 说明
+> 曹楠的博客中已经有详细准确翻译[【翻译】Reconciliation React比对算法](https://github.com/cnsnake11/blog/blob/master/ReactNative翻译/Reconciliation.md)，再读一遍是为了巩固这个重要概念，下面的记录主要是个人学习为主，建议大家参考曹楠的翻译。
 
 React provides a declarative API so that you don't have to worry about exactly what changes on every update. This makes writing applications a lot easier, but it might not be obvious how this is implemented within React. This article explains the choices we made in React's "diffing" algorithm so that component updates are predictable while being fast enough for high-performance apps.
 
-## Motivation
+React提供了一组声明式的API来方便的编写应用程序，也不用关心程序更新操作时发生了哪些改变，隐藏了React内部的实现。这篇文章解释了React的“差异比较“算法中的条件选择，使得组件更新是可预测的，以便创建更高效的应用程序。
+
+## 动机（Motivation）
 
 When you use React, at a single point in time you can think of the `render()` function as creating a tree of React elements. On the next state or props update, that `render()` function will return a different tree of React elements. React then needs to figure out how to efficiently update the UI to match the most recent tree.
 
@@ -19,7 +26,7 @@ If we used this in React, displaying 1000 elements would require in the order of
 
 In practice, these assumptions are valid for almost all practical use cases.
 
-## The Diffing Algorithm
+## 差异比较算法（The Diffing Algorithm）
 
 When diffing two trees, React first compares the two root elements. The behavior is different depending on the types of the root elements.
 
