@@ -9,11 +9,17 @@ tags: 原创 技术 翻译 React
 
 [Components](https://facebook.github.io/react/docs/components-and-props.html) let you split the UI into independent, reusable pieces, and think about each piece in isolation. `React.Component` is provided by [`React`](https://facebook.github.io/react/docs/react-api.html).
 
-## Overview
+使用[组件](https://facebook.github.io/react/docs/components-and-props.html)可以将UI拆分为独立，重用，隔离的个体。`React.Component`由[`React`]对象(https://facebook.github.io/react/docs/react-api.html)提供。
+
+## 概述（Overview）
 
 `React.Component` is an abstract base class, so it rarely makes sense to refer to `React.Component` directly. Instead, you will typically subclass it, and define at least a [`render()`](#render) method.
 
+`React.Component`是一个抽象基类，直接使用`React.Component`没有意义，而是需要实现其子类，并且至少要定义一个[`render()`](#render)方法。
+
 Normally you would define a React component as a plain [JavaScript class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes):
+
+常见情况是用[JavaScript类](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)定义一个React组件：
 
 ```javascript
 class Greeting extends React.Component {
@@ -25,22 +31,30 @@ class Greeting extends React.Component {
 
 If you don't use ES6 yet, you may use the [`create-react-class`](https://facebook.github.io/react/docs/react-api.html#createclass) module instead. Take a look at [Using React without ES6](https://facebook.github.io/react/docs/react-without-es6.html) to learn more.
 
-### The Component Lifecycle
+如果还没有使用ES6，可以使用[`create-react-class`](https://facebook.github.io/react/docs/react-api.html#createclass)模块代替。更多信息可参考[不使用ES6](https://facebook.github.io/react/docs/react-without-es6.html)。
+
+### 组件生命周期（The Component Lifecycle）
 
 Each component has several "lifecycle methods" that you can override to run code at particular times in the process. Methods prefixed with **`will`** are called right before something happens, and methods prefixed with **`did`** are called right after something happens.
 
-#### Mounting
+可以在组件中覆盖特定的“生命周期方法”。**`will`**前缀的方法在某事件发生之前触发，**`did`**前缀的方法在某事件发生后立即触发。
+
+#### 加载（Mounting）
 
 These methods are called when an instance of a component is being created and inserted into the DOM:
+
+当组件实例创建并插入DOM中时，会调用下列方法：
 
 - [`constructor()`](#constructor)
 - [`componentWillMount()`](#componentwillmount)
 - [`render()`](#render)
 - [`componentDidMount()`](#componentdidmount)
 
-#### Updating
+#### 更新（Updating）
 
 An update can be caused by changes to props or state. These methods are called when a component is being re-rendered:
+
+Props或State的改变会导致组件更新操作。当组件重新渲染时会调用下列方法：
 
 - [`componentWillReceiveProps()`](#componentwillreceiveprops)
 - [`shouldComponentUpdate()`](#shouldcomponentupdate)
@@ -48,32 +62,36 @@ An update can be caused by changes to props or state. These methods are called w
 - [`render()`](#render)
 - [`componentDidUpdate()`](#componentdidupdate)
 
-#### Unmounting
+#### 卸载（Unmounting）
 
 This method is called when a component is being removed from the DOM:
 
+组件从DOM中删除时会调用下面的方法：
+
 - [`componentWillUnmount()`](#componentwillunmount)
 
-### Other APIs
+### 其他API（Other APIs）
 
 Each component also provides some other APIs:
+
+组件中也提供了下列API：
 
   - [`setState()`](#setstate)
   - [`forceUpdate()`](#forceupdate)
 
-### Class Properties
+### 类属性（Class Properties）
 
   - [`defaultProps`](#defaultprops)
   - [`displayName`](#displayname)
 
-### Instance Properties
+### 实例属性（Instance Properties）
 
   - [`props`](#props)
   - [`state`](#state)
 
 * * *
 
-## Reference
+## 参考（Reference）
 
 ### `render()`
 
