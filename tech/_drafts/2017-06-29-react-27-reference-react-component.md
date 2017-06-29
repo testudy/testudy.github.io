@@ -101,15 +101,25 @@ render()
 
 The `render()` method is required.
 
+`render()`是必须方法。
+
 When called, it should examine `this.props` and `this.state` and return a single React element. This element can be either a representation of a native DOM component, such as `<div />`, or another composite component that you've defined yourself.
+
+当调用这个方法的时候，会检查`this.props`和`this.state`，并且返回一个React元素——可以是一个表示原生DOM的组件，比如`<div />`，也可以是一个自定义的复合组件。
 
 You can also return `null` or `false` to indicate that you don't want anything rendered. When returning `null` or `false`, `ReactDOM.findDOMNode(this)` will return `null`.
 
+可以返回`null`或`false`来表示没有渲染任何内容，此时，`ReactDOM.findDOMNode(this)`将返回`null`。
+
 The `render()` function should be pure, meaning that it does not modify component state, it returns the same result each time it's invoked, and it does not directly interact with the browser. If you need to interact with the browser, perform your work in `componentDidMount()` or the other lifecycle methods instead. Keeping `render()` pure makes components easier to think about.
 
-> Note
+`render()`应该是一个纯函数，意味着状态不变，返回的结果就不变，并且返回结果不会直接作用于浏览器。如果需要和浏览器直接交互，可以在`componentDidMount()`或其他生命周期方法中操作。保持`render()`方法的纯粹性有利于后续的思考。
+
+> 提醒（Note）
 >
 > `render()` will not be invoked if [`shouldComponentUpdate()`](#shouldcomponentupdate) returns false.
+>
+> [`shouldComponentUpdate()`](#shouldcomponentupdate)方法返回false的时候`render()`方法不会调用。
 
 * * *
 
@@ -121,9 +131,15 @@ constructor(props)
 
 The constructor for a React component is called before it is mounted. When implementing the constructor for a `React.Component` subclass, you should call `super(props)` before any other statement. Otherwise, `this.props` will be undefined in the constructor, which can lead to bugs.
 
+React组件的构造函数会在加载前被调用，必须在`React.Component`子类中的构造函数的第一行代码写`super(props)`，否则，`this.props`在构造函数中将是undefined，可能导致一些错误。
+
 The constructor is the right place to initialize state. If you don't initialize state and you don't bind methods, you don't need to implement a constructor for your React component.
 
+构造函数中是初始化状态的一个合适的地方。如果不需要初始化状态，也不需要绑定方法，可以不在React组件中写构造函数。
+
 It's okay to initialize state based on props. This effectively "forks" the props and sets the state with the initial props. Here's an example of a valid `React.Component` subclass constructor:
+
+基于Props初始化State是合法的，可以有效的将Props传递给State，下面这个例子是一个有效的`React.Component`的子类构造函数：
 
 ```js
 constructor(props) {
@@ -136,7 +152,11 @@ constructor(props) {
 
 Beware of this pattern, as state won't be up-to-date with any props update. Instead of syncing props to state, you often want to [lift the state up](https://facebook.github.io/react/docs/lifting-state-up.html).
 
+需要注意的是，这种用法中State不会随着Props更新。如果需要同步Props到State，[状态提升](https://facebook.github.io/react/docs/lifting-state-up.html)一般可以满足需求。
+
 If you "fork" props by using them for state, you might also want to implement [`componentWillReceiveProps(nextProps)`](#componentwillreceiveprops) to keep the state up-to-date with them. But lifting state up is often easier and less bug-prone.
+
+如果将Props传递给State，还需要实现[`componentWillReceiveProps(nextProps)`](#componentwillreceiveprops)方法来保持State和Props同步。但是状态提升更容易并且不容易出错。
 
 * * *
 
@@ -148,7 +168,11 @@ componentWillMount()
 
 `componentWillMount()` is invoked immediately before mounting occurs. It is called before `render()`, therefore setting state synchronously in this method will not trigger a re-rendering. Avoid introducing any side-effects or subscriptions in this method.
 
+`componentWillMount()`在加载发生之前的那一刻调用，由于是在`render()`之前调用，在这个方法中同步设置State不会触发重新渲染。避免在这个方法中进行有副作用的操作或订阅。
+
 This is the only lifecycle hook called on server rendering. Generally, we recommend using the `constructor()` instead.
+
+这个方法是服务器端渲染中唯一调用的生命周期方法。通常情况下，建议将逻辑迁移到`constructor()`中。
 
 * * *
 
@@ -159,6 +183,8 @@ componentDidMount()
 ```
 
 `componentDidMount()` is invoked immediately after a component is mounted. Initialization that requires DOM nodes should go here. If you need to load data from a remote endpoint, this is a good place to instantiate the network request. Setting state in this method will trigger a re-rendering.
+
+`componentDidMount()`在加载发生之后的那一刻调用。需要DOM节点的初始化操作需要在这里进行。如果需要从远端加载数据，适合在这个方法中发送网络请求。在这个方法中设置State将会触发重新渲染。
 
 * * *
 
