@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 2 - 基础学习（Learn the Basics）
+title: React Native 2 - 入门：基础学习（Learn the Basics）
 tags: 原创 技术 翻译 React-Native
 ---
 

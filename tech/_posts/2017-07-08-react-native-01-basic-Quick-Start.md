@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 1 - 快速起步（Quick Start）
+title: React Native 1 - 入门：快速起步（Quick Start）
 tags: 原创 技术 翻译 React-Native
 ---
 
