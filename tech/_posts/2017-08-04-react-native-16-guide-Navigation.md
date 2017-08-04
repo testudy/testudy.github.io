@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 16 - 指南：特定平台代码（Navigating Between Screens）
+title: React Native 16 - 指南：在屏幕之间导航（Navigating Between Screens）
 tags: 原创 技术 翻译 React-Native
 ---
 
@@ -8,10 +8,12 @@ tags: 原创 技术 翻译 React-Native
 
 Mobile apps are rarely made up of a single screen. Managing the presentation of, and transition between, multiple screens is typically handled by what is known as a navigator.
 
-This guide covers the various navigation components available in React Native.
-If you are just getting started with navigation, you will probably want to use [React Navigation](docs/navigation.html#react-navigation). React Navigation provides an easy to use navigation solution, with the ability to present common stack navigation and tabbed navigation patterns on both iOS and Android. As this is a JavaScript implementation, it provides the greatest amount of configurability as well as flexibility when integrating with state management libraries such as [redux](https://reactnavigation.org/docs/guides/redux).
+手机应用程序很少是单个屏幕。一般用导航器来管理多个屏幕的展示、切换。
 
-If you're only targeting iOS, you may want to also check out [NavigatorIOS](docs/navigation.html#navigatorios) as a way of providing a native look and feel with minimal configuration, as it provides a wrapper around the native `UINavigationController` class. This component will not work on Android, however.
+This guide covers the various navigation components available in React Native.
+If you are just getting started with navigation, you will probably want to use [React Navigation](https://facebook.github.io/react-native/docs/navigation.html#react-navigation). React Navigation provides an easy to use navigation solution, with the ability to present common stack navigation and tabbed navigation patterns on both iOS and Android. As this is a JavaScript implementation, it provides the greatest amount of configurability as well as flexibility when integrating with state management libraries such as [redux](https://reactnavigation.org/docs/guides/redux).
+
+If you're only targeting iOS, you may want to also check out [NavigatorIOS](https://facebook.github.io/react-native/docs/navigation.html#navigatorios) as a way of providing a native look and feel with minimal configuration, as it provides a wrapper around the native `UINavigationController` class. This component will not work on Android, however.
 
 If you'd like to achieve a native look and feel on both iOS and Android, or you're integrating React Native into an app that already manages navigation natively, the following libraries provide native navigation on both platforms: [native-navigation](http://airbnb.io/native-navigation/), [react-native-navigation](https://github.com/wix/react-native-navigation).
 
@@ -61,7 +63,7 @@ class HomeScreen extends React.Component {
 
 React Navigation routers make it easy to override navigation logic or integrate it into redux. Because routers can be nested inside each other, developers can override navigation logic for one area of the app without making widespread changes.
 
-The views in React Navigation use native components and the [`Animated`](docs/animated.html) library to deliver 60fps animations that are run on the native thread. Plus, the animations and gestures can be easily customized.
+The views in React Navigation use native components and the [`Animated`](https://facebook.github.io/react-native/docs/animated.html) library to deliver 60fps animations that are run on the native thread. Plus, the animations and gestures can be easily customized.
 
 For a complete intro to React Navigation, follow the [React Navigation Getting Started Guide](https://reactnavigation.org/docs/intro/), or browse other docs such as the [Intro to Navigators](https://reactnavigation.org/docs/navigators/).
 
@@ -135,4 +137,4 @@ class MyScene extends React.Component {
 }
 ```
 
-Check out the [`NavigatorIOS` reference docs](docs/navigatorios.html) to learn more about this component.
+Check out the [`NavigatorIOS` reference docs](https://facebook.github.io/react-native/docs/navigatorios.html) to learn more about this component.
