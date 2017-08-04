@@ -1,12 +1,10 @@
 ---
-id: navigation
-title: Navigating Between Screens
-layout: docs
-category: Guides
-permalink: docs/navigation.html
-next: images
-previous: platform-specific-code
+layout: post
+title: React Native 16 - 指南：特定平台代码（Navigating Between Screens）
+tags: 原创 技术 翻译 React-Native
 ---
+
+[原文](https://facebook.github.io/react-native/docs/navigation.html)
 
 Mobile apps are rarely made up of a single screen. Managing the presentation of, and transition between, multiple screens is typically handled by what is known as a navigator.
 
@@ -75,7 +73,7 @@ For a complete intro to React Navigation, follow the [React Navigation Getting S
 
 ```javascript
 <NavigatorIOS
-  initialRoute={{
+  initialRoute={{'{{'}}
     component: MyScene,
     title: 'My Initial Scene',
     passProps: { myProp: 'foo' },
@@ -96,11 +94,11 @@ export default class NavigatorIOSApp extends React.Component {
   render() {
     return (
       <NavigatorIOS
-        initialRoute={{
+        initialRoute={{'{{'}}
           component: MyScene,
           title: 'My Initial Scene',
         }}
-        style={{flex: 1}}
+        style={{'{{'}}flex: 1}}
       />
     )
   }

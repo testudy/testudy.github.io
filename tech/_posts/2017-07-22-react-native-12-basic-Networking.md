@@ -123,14 +123,14 @@ export default class Movies extends Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={{flex: 1, paddingTop: 20}}>
+        <View style={{'{{'}}flex: 1, paddingTop: 20}}>
           <ActivityIndicator />
         </View>
       );
     }
 
     return (
-      <View style={{flex: 1, paddingTop: 20}}>
+      <View style={{'{{'}}flex: 1, paddingTop: 20}}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Text>{rowData.title}, {rowData.releaseYear}</Text>}
