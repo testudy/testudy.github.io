@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 16 - 指南：在屏幕之间导航（Navigating Between Screens）
+title: React Native 16 - 指南：屏幕导航（Navigating Between Screens）
 tags: 原创 技术 翻译 React-Native
 ---
 
