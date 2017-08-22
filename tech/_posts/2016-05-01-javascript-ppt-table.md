@@ -31,10 +31,10 @@ tags: 原创 技术
         <h2>Contents目录——ECMAScript</h2>
         <ol style="width: 600px">
             <li><a href="/tech/2016/05/02/javascript-intro.html">JavaScript简介</a></li>
+            <li><a href="/tech/2016/05/03/basic.html">JavaScript基本概念</a></li>
         </ol>
         <ol style="display:none;">
             <li><a href="employ.html">在HTML中使用JavaScript</a></li>
-            <li><a href="basic.html">基本概念</a></li>
             <li><a href="scope.html">变量、作用域和内存问题</a></li>
             <li><a href="ref.html">引用类型</a></li>
             <li><a href="oo.html">面向对象的程序设计</a></li>
