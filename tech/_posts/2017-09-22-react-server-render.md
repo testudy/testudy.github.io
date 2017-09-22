@@ -10,15 +10,18 @@ React服务端渲染，在React官方文档中只有[ReactDOMServer](https://fac
 ### 1. 调用`renderToString()`方法
 
 ```javascript
+const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const Home = require('./src/page/home/index.js').default;
-const html = ReactDOMServer.renderToString(React.createElement(Home, data));
+const App = require('./app/App.js').default;
+const html = ReactDOMServer.renderToString(React.createElement(App, data));
 ```
 
 ### 2. 在Node服务器中运行
 React也是JavaScript，HTTP请求生成HTML文档最简单的办法是将其在Node中运行，直接使用成熟的[Express](http://expressjs.com/)来完成。
 
 ```javascript
+npm i express --save
+
 const express = require('express');
 const app = express();
 app.get('/', function (req, res) {
@@ -33,6 +36,7 @@ app.listen(3000, function () {
 
 ### 3. 让Node服务器支持JSX
 Node服务器目前不支持JSX（尚不是标准语法），React组件中的JSX需要经过处理才能运行，主要有两种方法：
+
     1. 编译预处理；
     2. 使用require的hook，require的调用时先编译处理为标准JavaScript再执行。
 
@@ -40,30 +44,33 @@ Node服务器目前不支持JSX（尚不是标准语法），React组件中的JS
 
 ```javascript
 npm i --save babel-register
+npm i --save babel-preset-es2015
 
 require("babel-register")({
-	presets: ["es2015", "react-app"],
+    presets: ["es2015", "react-app"],
 
-	// Optional ignore regex - if any filenames **do** match this regex then they
-  	// aren't compiled.
-	ignore: /(.css|.less)$/,
+    // Optional ignore regex - if any filenames **do** match this regex then they
+    // aren't compiled.
+    ignore: /(.css|.less)$/,
 
-  	// Optional only regex - if any filenames **don't** match this regex then they
-  	// aren't compiled
-  	only: /src/,
+    // Optional only regex - if any filenames **don't** match this regex then they
+    // aren't compiled
+    only: /src/,
 
-  	// Setting this will remove the currently hooked extensions of .es6, `.es`, `.jsx`
-  	// and .js so you'll have to add them back if you want them to be used again.
-  	extensions: ['.js'],
+    // Setting this will remove the currently hooked extensions of .es6, `.es`, `.jsx`
+    // and .js so you'll have to add them back if you want them to be used again.
+    extensions: ['.js'],
 
-  	// Setting this to false will disable the cache.
-  	cache: true
+    // Setting this to false will disable the cache.
+    cache: true
 });
+
+NODE_ENV=development node index.js
 ```
 
-现在已经可以引用Home组件了，但会存在错误。
+现在已经可以引用App组件了，但会存在错误。
 
-### 4. 忽略组件中的CSS引用
+### 4. 忽略组件中的CSS和图片等非JS资源引用
 为了便于维护，一般将组件相关的CSS就近引用，但这部分代码对Node来说是无效代码，将其在上述的预处理过程中忽略。
 
 ```javascript
@@ -74,7 +81,7 @@ require('ignore-styles');
 至此，已经有了正确的html输出。但格式不符合使用要求，继续调整。
 
 ### 5. 引入模板，规范化HTML的使用
-express支持很多中模板，选择偏好的`Hogan`。将
+express支持很多中模板，选择偏好的`Hogan`。
 
 ```javascript
 npm i --save consolidate
@@ -92,14 +99,21 @@ res.render('index.html', { html: html, data: JSON.stringify(data) });
 
 ```html
 <script>
-    window.__INITIAL_STATE__ = {{& data }};
+    window.__INITIAL_STATE__ = {{"{{"}}& data }};
 </script>
 
 <div id="root">
-    {{& html }}
+    {{"{{"}}& html }}
 </div>
 ```
 此时，代码修改完成后，刷新浏览器即可。
+
+### 7. 配置静态资源
+直接使用express的static中间件（开发环境，线上部署使用对应的CDN）
+
+```javascript
+app.use(express.static('build'));
+```
 
 ## Todo
 1. 热更新；
@@ -109,8 +123,8 @@ res.render('index.html', { html: html, data: JSON.stringify(data) });
 ## 参考
 1. [ReactDOMServer](https://facebook.github.io/react/docs/react-dom-server.html)
 2. [React Without JSX](https://facebook.github.io/react/docs/react-without-jsx.html)
-3. [Babel register](http://babeljs.io/docs/usage/babel-register/)
 4. [React Top-Level API .createElement](https://facebook.github.io/react/docs/react-api.html#createelement)
+3. [Babel register](http://babeljs.io/docs/usage/babel-register/)
 5. [ignore-styles](https://github.com/bkonkle/ignore-styles)
 6. [Express](http://expressjs.com/)
 7. [Hello world example](http://expressjs.com/en/starter/hello-world.html)
