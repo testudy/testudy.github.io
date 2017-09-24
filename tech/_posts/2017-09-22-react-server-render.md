@@ -73,6 +73,9 @@ NODE_ENV=development node index.js
 ### 4. 忽略组件中的CSS和图片等非JS资源引用
 为了便于维护，一般将组件相关的CSS就近引用，但这部分代码对Node来说是无效代码，将其在上述的预处理过程中忽略。
 
+> #### 注意
+> 此时，忽略后的图片引用如`import logo from './logo.svg';`时，`logo`的值为`{}`。需要继续优化服务器端静态资源的处理（限制静态资源的使用方式也是个好办法，或者写个对应CDN的钩子）
+
 ```javascript
 npm i --save ignore-styles
 
@@ -115,6 +118,20 @@ res.render('index.html', { html: html, data: JSON.stringify(data) });
 app.use(express.static('build'));
 ```
 
+### 8. 服务器端支持fetch
+代码在服务器端渲染的时候，Node环境需要作为HTTP Client访问服务接口。为了保持和客户端代码的同构，使用同样的fetch方法。
+
+服务器端使用fetch和客户端存在一些差异，详见[LIMITS.md](https://github.com/bitinn/node-fetch/blob/master/LIMITS.md)。
+
+> 需要注意的是，服务器端fetch完成之后才能继续render，fetch是异步操作，render是同步操作。
+
+```javascript
+npm i --save node-fetch
+
+// polyfills
+global.fetch = require('node-fetch');
+```
+
 ## Todo
 1. 热更新；
 2. 代码分割；
@@ -133,3 +150,5 @@ app.use(express.static('build'));
 10. [Hogan.js](http://twitter.github.io/hogan.js/)
 11. [MUSTACHE MANUAL](http://mustache.github.io/mustache.5.html)
 12. [Mustache.js 使用简介](http://gzool.com/js/2014/09/09/js-mustachejs-usage/)
+13. [node-fetch](https://github.com/bitinn/node-fetch);
+14. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch);
