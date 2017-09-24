@@ -1,12 +1,10 @@
 ---
-id: gesture-responder-system
-title: Gesture Responder System
-layout: docs
-category: Guides
-permalink: docs/gesture-responder-system.html
-next: javascript-environment
-previous: performance
+layout: post
+title: React Native 23 - 指南：手势响应系统（Gesture Responder System）
+tags: 原创 技术 翻译 React-Native
 ---
+
+[原文](https://facebook.github.io/react-native/docs/gesture-responder-system.html)
 
 The gesture responder system manages the lifecycle of gestures in your app. A touch can go through several phases as the app determines what the user's intention is. For example, the app needs to determine if the touch is scrolling, sliding on a widget, or tapping. This can even change during the duration of a touch. There can also be multiple simultaneous touches.
 
@@ -69,4 +67,4 @@ However, sometimes a parent will want to make sure that it becomes responder. Th
 
 ### PanResponder
 
-For higher-level gesture interpretation, check out [PanResponder](docs/panresponder.html).
+For higher-level gesture interpretation, check out [PanResponder](https://facebook.github.io/react-native/docs/panresponder.html).
