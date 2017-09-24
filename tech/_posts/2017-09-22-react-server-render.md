@@ -38,7 +38,7 @@ app.listen(3000, function () {
 Node服务器目前不支持JSX（尚不是标准语法），React组件中的JSX需要经过处理才能运行，主要有两种方法：
 
     1. 编译预处理；
-    2. 使用require的hook，require的调用时先编译处理为标准JavaScript再执行。
+    2. 实时处理，使用require的hook，require的调用时先编译处理为标准JavaScript再执行。
 
 方法1繁琐一些，直接使用方法2来完成。编译转化库跟浏览器端保持一致，使用`babel-register`。再presets中配置`es2015`和`react-app`来支持`import&export`和`JSX`。
 
@@ -132,10 +132,23 @@ npm i --save node-fetch
 global.fetch = require('node-fetch');
 ```
 
+### 9. 引入Redux
+
+客户端的状态处理和服务器端同构。
+
+```javascript
+npm install --save redux
+npm install --save react-redux
+npm install --save redux-thunk
+```
+
 ## Todo
 1. 热更新；
 2. 代码分割；
 3. 服务器部署（包括服务器HTTP Client相关的DNS解析）。
+
+## 源码
+[react-server-render](https://github.com/testudy/react-server-render)
 
 ## 参考
 1. [ReactDOMServer](https://facebook.github.io/react/docs/react-dom-server.html)
