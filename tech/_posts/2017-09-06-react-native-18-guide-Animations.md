@@ -1,32 +1,39 @@
 ---
-id: animations
-title: Animations
-layout: docs
-category: Guides
-permalink: docs/animations.html
-next: accessibility
-previous: images
+layout: post
+title: React Native 18 - 指南：动画（Animations）
+tags: 原创 技术 翻译 React-Native
 ---
+
+[原文](https://facebook.github.io/react-native/docs/animations.html)
 
 Animations are very important to create a great user experience.
 Stationary objects must overcome inertia as they start moving.
 Objects in motion have momentum and rarely come to a stop immediately.
 Animations allow you to convey physically believable motion in your interface.
 
+动画对于创建优秀的用户体验来说非常重要。物理运动不会立刻开始，在惯性的作用下也不会立即停下来，动画应该遵循基本的物理定律。
+
 React Native provides two complementary animation systems:
-[`Animated`](docs/animations.html#animated-api) for granular and interactive control of specific values, and
-[`LayoutAnimation`](docs/animations.html#layoutanimation) for animated global layout transactions.
+[`Animated`](#animated-api) for granular and interactive control of specific values, and
+[`LayoutAnimation`](#layoutanimation) for animated global layout transactions.
 
-## `Animated` API
+React Native提供了两套相互补充的动画系统：
+基于值处理组件交互动画的[`Animated`](#animated-api)和
+处理整体布局过渡的[`LayoutAnimation`](#layoutanimation)。
 
-The [`Animated`](docs/animated.html) API is designed to make it very easy to concisely express a wide variety of interesting animation and interaction patterns in a very performant way.
+## Animated API
+
+The [`Animated`](https://facebook.github.io/react-native/docs/animated.html) API is designed to make it very easy to concisely express a wide variety of interesting animation and interaction patterns in a very performant way.
 `Animated` focuses on declarative relationships between inputs and outputs, with configurable transforms in between, and simple `start`/`stop` methods to control time-based animation execution.
+
+[`Animated`](https://facebook.github.io/react-native/docs/animated.html) API用来简洁、高效的创建丰富的动画和交互模式。
+`Animated`声明输入和输出的
 
 `Animated` exports four animatable component types: `View`, `Text`, `Image`, and `ScrollView`, but you can also create your own using `Animated.createAnimatedComponent()`.
 
 For example, a container view that fades in when it is mounted may look like this:
 
-```SnackPlayer
+```javascript
 import React from 'react';
 import { Animated, Text, View } from 'react-native';
 
@@ -50,7 +57,7 @@ class FadeInView extends React.Component {
 
     return (
       <Animated.View                 // Special animatable View
-        style={{
+        style={{"{{"}}
           ...this.props.style,
           opacity: fadeAnim,         // Bind opacity to animated value
         }}
@@ -65,9 +72,9 @@ class FadeInView extends React.Component {
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <FadeInView style={{width: 250, height: 50, backgroundColor: 'powderblue'}}>
-          <Text style={{fontSize: 28, textAlign: 'center', margin: 10}}>Fading in</Text>
+      <View style={{"{{"}}flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <FadeInView style={{"{{"}}width: 250, height: 50, backgroundColor: 'powderblue'}}>
+          <Text style={{"{{"}}fontSize: 28, textAlign: 'center', margin: 10}}>Fading in</Text>
         </FadeInView>
       </View>
     )
@@ -91,7 +98,7 @@ Because the entire configuration is declarative, we will be able to implement fu
 
 Animations are heavily configurable. Custom and predefined easing functions, delays, durations, decay factors, spring constants, and more can all be tweaked depending on the type of animation.
 
-`Animated` provides several animation types, the most commonly used one being [`Animated.timing()`](docs/animated.html#timing).
+`Animated` provides several animation types, the most commonly used one being [`Animated.timing()`](https://facebook.github.io/react-native/docs/animated.html#timing).
 It supports animating a value over time using one of various predefined easing functions, or you can use your own.
 Easing functions are typically used in animation to convey gradual acceleration and deceleration of objects.
 
@@ -112,7 +119,7 @@ Animated.timing(
 ).start();  
 ```
 
-Take a look at the [Configuring animations](docs/animated.html#configuring-animations) section of the `Animated` API reference to learn more about all the config parameters supported by the built-in animations.
+Take a look at the [Configuring animations](https://facebook.github.io/react-native/docs/animated.html#configuring-animations) section of the `Animated` API reference to learn more about all the config parameters supported by the built-in animations.
 
 ### Composing animations
 
@@ -144,11 +151,11 @@ Animated.sequence([            // decay, then spring to start and twirl
 If one animation is stopped or interrupted, then all other animations in the group are also stopped.
 `Animated.parallel` has a `stopTogether` option that can be set to `false` to disable this.
 
-You can find a full list of composition methods in the [Composing animations](docs/animated.html#composing-animations) section of the `Animated` API reference.
+You can find a full list of composition methods in the [Composing animations](https://facebook.github.io/react-native/docs/animated.html#composing-animations) section of the `Animated` API reference.
 
 ### Combining animated values
 
-You can [combine two animated values](docs/animated.html#combining-animated-values) via addition, multiplication, division, or modulo to make a new animated value.
+You can [combine two animated values](https://facebook.github.io/react-native/docs/animated.html#combining-animated-values) via addition, multiplication, division, or modulo to make a new animated value.
 
 There are some cases where an animated value needs to invert another animated value for calculation.
 An example is inverting a scale (2x --> 0.5x):
@@ -183,7 +190,7 @@ but animate the position from 150px to 0px and the opacity from 0 to 1.
 This can easily be done by modifying `style` from the example above like so:
 
 ```javascript
-  style={{
+  style={{"{{"}}
     opacity: this.state.fadeAnim, // Binds directly
     transform: [{
       translateY: this.state.fadeAnim.interpolate({
@@ -194,7 +201,7 @@ This can easily be done by modifying `style` from the example above like so:
   }}
 ```
 
-[`interpolate()`](docs/animated.html#interpolate) supports multiple range segments as well, which is handy for defining dead zones and other handy tricks.
+[`interpolate()`](https://facebook.github.io/react-native/docs/animated.html#interpolate) supports multiple range segments as well, which is handy for defining dead zones and other handy tricks.
 For example, to get an negation relationship at -300 that goes to 0 at -100, then back up to 1 at 0, and then back down to zero at 100 followed by a dead-zone that remains at 0 for everything beyond that, you could do:
 
 ```javascript
@@ -231,7 +238,7 @@ value.interpolate({
 ```
 
 `interpolate()` also supports arbitrary easing functions, many of which are already implemented in the
-[`Easing`](docs/easing.html) module.
+[`Easing`](https://facebook.github.io/react-native/docs/easing.html) module.
 `interpolate()` also has configurable behavior for extrapolating the `outputRange`.
 You can set the extrapolation by setting the `extrapolate`, `extrapolateLeft`, or `extrapolateRight` options.
 The default value is `extend` but you can use `clamp` to prevent the output value from exceeding `outputRange`.
@@ -261,7 +268,7 @@ It allows us to track both x and y values in the example above.
 
 ### Tracking gestures
 
-Gestures, like panning or scrolling, and other events can map directly to animated values using [`Animated.event`](docs/animated.html#event).
+Gestures, like panning or scrolling, and other events can map directly to animated values using [`Animated.event`](https://facebook.github.io/react-native/docs/animated.html#event).
 This is done with a structured map syntax so that values can be extracted from complex event objects.
 The first level is an array to allow mapping across multiple args, and that array contains nested objects.
 
@@ -472,7 +479,7 @@ manage frame updates for you.
 
 ### `setNativeProps`
 
-As mentioned [in the Direct Manipulation section](docs/direct-manipulation.html),
+As mentioned [in the Direct Manipulation section](https://facebook.github.io/react-native/docs/direct-manipulation.html),
 `setNativeProps` allows us to modify properties of native-backed
 components (components that are actually backed by native views, unlike
 composite components) directly, without having to `setState` and
@@ -489,5 +496,5 @@ the JavaScript thread [with the useNativeDriver
 option](http://facebook.github.io/react-native/blog/2017/02/14/using-native-driver-for-animated.html).
 You may also want to defer any computationally intensive work until after
 animations are complete, using the
-[InteractionManager](docs/interactionmanager.html). You can monitor the
+[InteractionManager](https://facebook.github.io/react-native/docs/interactionmanager.html). You can monitor the
 frame rate by using the In-App Developer Menu "FPS Monitor" tool.
