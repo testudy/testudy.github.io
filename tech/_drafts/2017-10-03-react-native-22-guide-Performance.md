@@ -1,12 +1,10 @@
 ---
-id: performance
-title: Performance
-layout: docs
-category: Guides
-permalink: docs/performance.html
-next: gesture-responder-system
-previous: debugging
+layout: post
+title: React Native 22 - 指南：性能（Performance）
+tags: 原创 技术 翻译 React-Native
 ---
+
+[原文](https://facebook.github.io/react-native/docs/performance.html)
 
 A compelling reason for using React Native instead of WebView-based tools is to achieve 60 frames per second and a native look and feel to your apps.
 Where possible, we would like for React Native to do the right thing and help you to focus on your app instead of performance optimization,
