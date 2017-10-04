@@ -1,29 +1,40 @@
 ---
-id: javascript-environment
-title: JavaScript Environment
-layout: docs
-category: Guides
-permalink: docs/javascript-environment.html
-next: direct-manipulation
-previous: gesture-responder-system
+layout: post
+title: React Native 24 - 指南：JavaScript运行环境（JavaScript Environment）
+tags: 原创 技术 翻译 React-Native
 ---
 
-## JavaScript Runtime
+[原文](https://facebook.github.io/react-native/docs/javascript-environment.html)
+
+## JavaScript运行时（JavaScript Runtime）
 
 When using React Native, you're going to be running your JavaScript code in two environments:
 
 * On iOS simulators and devices, Android emulators and devices React Native uses [JavaScriptCore](http://trac.webkit.org/wiki/JavaScriptCore) which is the JavaScript engine that powers Safari. On iOS JSC doesn't use JIT due to the absence of writable executable memory in iOS apps.
 * When using Chrome debugging, it runs all the JavaScript code within Chrome itself and communicates with native code via WebSocket. So you are using [V8](https://code.google.com/p/v8/).
 
+React Native中的JavaScript代码运行在两种环境中：
+
+* 在iOS模拟器以及设备、Android模拟器以及设备，React Native运行在[JavaScriptCore](http://trac.webkit.org/wiki/JavaScriptCore)中——驱动Safari浏览器的JavaScript引擎。由于在iOS的应用程序中中不存在可写内存，所以JSC不能启用JIT。
+* 当用Chrome调试的时候，所有的JavaScript代码运行在Chrome内部的[V8](https://code.google.com/p/v8/)引擎上，并通过WebSocket将执行结果通信。
+
 While both environments are very similar, you may end up hitting some inconsistencies. We're likely going to experiment with other JS engines in the future, so it's best to avoid relying on specifics of any runtime.
 
-## JavaScript Syntax Transformers
+这两种执行环境非常相似，但也可能遇到不完全一致的情况。在未来有可能会更换JS引擎，所以最好避免代码依赖于特定的运行环境特性。
+
+## JavaScritp语法转换（JavaScript Syntax Transformers）
 
 Syntax transformers make writing code more enjoyable by allowing you to use new JavaScript syntax without having to wait for support on all interpreters.
 
+借住语法转换器可以用更舒服的方式编写代码，充分使用JavaScript新的语法特性，而不必等解释器的支持。
+
 As of version 0.5.0, React Native ships with the [Babel JavaScript compiler](https://babeljs.io). Check [Babel documentation](https://babeljs.io/docs/plugins/#transform-plugins) on its supported transformations for more details.
 
+从0.5.0版本开始，React Native中集成了[Babel JavaScript编译器](https://babeljs.io)。查看[Babel文档](https://babeljs.io/docs/plugins/#transform-plugins)以获取更多支持转换的详细信息。
+
 Here's a full list of React Native's [enabled transformations](https://github.com/facebook/react-native/blob/master/babel-preset/configs/main.js#L16).
+
+点击查看React Native中[启用的语法转换](https://github.com/facebook/react-native/blob/master/babel-preset/configs/main.js#L16)清单。
 
 ES5
 
@@ -51,15 +62,17 @@ ES7
 * [Function Trailing Comma](https://github.com/jeffmo/es-trailing-function-commas): `function f(a, b, c,) { }`
 * [Async Functions](https://github.com/tc39/ecmascript-asyncawait): `async function doStuffAsync() { const foo = await doOtherStuffAsync(); }`;
 
-Specific
+特殊（Specific）
 
 * [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html): `<View style={{color: 'red'}} />`
 * [Flow](http://flowtype.org/): `function foo(x: ?number): string {}`
 
 
-## Polyfills
+## 垫片（Polyfills）
 
 Many standards functions are also available on all the supported JavaScript runtimes.
+
+所有JavaScript运行时中支持的大多数标准方法也是可用的。
 
 Browser
 
@@ -80,6 +93,6 @@ ES7
 
 * Object.{[entries](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)}
 
-Specific
+特殊（Specific）
 
 * `__DEV__`
