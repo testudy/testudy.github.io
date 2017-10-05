@@ -1,18 +1,20 @@
 ---
-id: colors
-title: Color Reference
-layout: docs
-category: Guides
-permalink: docs/colors.html
-next: integration-with-existing-apps
-previous: direct-manipulation
+layout: post
+title: React Native 26 - 指南：颜色参考（Color Reference）
+tags: 原创 技术 翻译 React-Native
 ---
 
-Components in React Native are [styled using JavaScript](docs/style.html). Color properties usually match how [CSS works on the web](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+[原文](https://facebook.github.io/react-native/docs/colors.html)
 
-### Red-green-blue
+Components in React Native are [styled using JavaScript](https://facebook.github.io/react-native/docs/style.html). Color properties usually match how [CSS works on the web](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+
+React Native中组件[使用JavaScript声明样式](https://facebook.github.io/react-native/docs/style.html)。颜色属性与[浏览器中运行的CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)一致。
+
+### RGB格式（Red-green-blue）
 
 React Native supports `rgb()` and `rgba()` in both hexadecimal and functional notation:
+
+React Native中`rgb()`和`rgba()`支持16进制和有效数字两种参数形式：
 
 - `'#f0f'` (#rgb)
 - `'#ff00ff'` (#rrggbb)
@@ -23,9 +25,11 @@ React Native supports `rgb()` and `rgba()` in both hexadecimal and functional no
 - `'#f0ff'` (#rgba)
 - `'#ff00ff00'` (#rrggbbaa)
 
-### Hue-saturation-lightness
+### HSL格式（Hue-saturation-lightness）
 
 `hsl()` and `hsla()` is supported in functional notation:
+
+`hsl()`和`hsla()`支持有效数字参数形式：
 
 - `'hsl(360, 100%, 100%)'`
 - `'hsla(360, 100%, 100%, 1.0)'`
@@ -34,11 +38,15 @@ React Native supports `rgb()` and `rgba()` in both hexadecimal and functional no
 
 This is a shortcut for `rgba(0,0,0,0)`:
 
+`rgba(0, 0, 0, 0)`的简写：
+
 - `'transparent'`
 
-### Named colors
+### 命名颜色（Named colors）
 
 You can also use color names as values. React Native follows the [CSS3 specification](http://www.w3.org/TR/css3-color/#svg-color):
+
+也可以直接使用颜色值，React Native遵循[CSS3规范](http://www.w3.org/TR/css3-color/#svg-color)：
 
 - <color aliceblue /> aliceblue (#f0f8ff)
 - <color antiquewhite /> antiquewhite (#faebd7)
