@@ -1,69 +1,107 @@
 ---
-id: debugging
-title: Debugging
-layout: docs
-category: Guides
-permalink: docs/debugging.html
-next: performance
-previous: timers
+layout: post
+title: React Native 21 - 指南：调试（Debugging）
+tags: 原创 技术 翻译 React-Native
 ---
 
-## Enabling Keyboard Shortcuts
+[原文](https://facebook.github.io/react-native/docs/debugging.html)
+
+## 启用键盘快捷键（Enabling Keyboard Shortcuts）
 
 React Native supports a few keyboard shortcuts in the iOS Simulator. They are described below. To enable them, open the Hardware menu, select Keyboard, and make sure that "Connect Hardware Keyboard" is checked.
 
-## Accessing the In-App Developer Menu
+在iOS模拟器中，React Native支持一组快捷键，下面会对其进行介绍。为了启用它们，打开Hardware菜单，选择Keyboard，确保“Connect Hardware Keyboard”是选中状态。
+
+## 使用应用内开发者菜单（Accessing the In-App Developer Menu）
 
 You can access the developer menu by shaking your device or by selecting "Shake Gesture" inside the Hardware menu in the iOS Simulator. You can also use the `⌘D` keyboard shortcut when your app is running in the iOS Simulator, or `⌘M` when running in an Android emulator.
 
-![](img/DeveloperMenu.png)
+设备摇一摇可以打开开发者菜单，或者在iOS模拟器中选择Hardware菜单下的“Shake Gesture”。也可以在iOS模拟器中使用`⌘D`快捷键，或者在Android模拟器中使用`⌘M`快捷键。
+
+![](/tech/media/DeveloperMenu.png)
 
 > The Developer Menu is disabled in release (production) builds.
+> 
+> 在发布（生产）构建中，开发者菜单是禁用的。
 
-## Reloading JavaScript
+## 重载JavaScript（Reloading JavaScript）
 
 Instead of recompiling your app every time you make a change, you can reload your app's JavaScript code instantly. To do so, select "Reload" from the Developer Menu. You can also press `⌘R` in the iOS Simulator, or tap `R` twice on Android emulators.
 
-### Automatic reloading
+修改应用程序的代码之后，不用重新编译，直接重载应用程序的JavaScript代码即可立即生效。可以从开发者菜单中选择“Reload”，也可以在iOS模拟器中按`⌘R`快捷键，或者在Android模拟器中连按两次`R`。
+
+### 自动重载（Automatic reloading）
 
 You can speed up your development times by having your app reload automatically any time your code changes. Automatic reloading can be enabled by selecting "Enable Live Reload" from the Developer Menu.
 
+代码更改后应用程序自动重载，加快开发速度。可以从开发者菜单中打开“Enable Live Reload”，以应用程序的自动重载功能。
+
 You may even go a step further and keep your app running as new versions of your files are injected into the JavaScript bundle automatically by enabling [Hot Reloading](https://facebook.github.io/react-native/blog/2016/03/24/introducing-hot-reloading.html) from the Developer Menu. This will allow you to persist the app's state through reloads.
 
+您甚至可以进一步启用开发者菜单中的[Hot Reloading](https://facebook.github.io/react-native/blog/2016/03/24/introducing-hot-reloading.html)选项，来运行应用程序的最新版本，并保持应用程序的状态。
+
+
 > There are some instances where hot reloading cannot be implemented perfectly. If you run into any issues, use a full reload to reset your app.
+>
+> 但使用热更新并不完美，如果发现了一些不正常的问题，重载应用程序试试。
 
 You will need to rebuild your app for changes to take effect in certain situations:
 
 * You have added new resources to your native app's bundle, such as an image in `Images.xcassets` on iOS or the `res/drawable` folder on Android.
 * You have modified native code (Objective-C/Swift on iOS or Java/C++ on Android).
 
-## In-app Errors and Warnings
+另外在下面两种情况下，您需要重新编译应用程序：
+
+* 当在原生应用中添加了新的资源，比如在iOS的`Images.xcassets`或Android的`res/drawable`文件夹中添加图片。
+* 当原生应用中的代码修改时（iOS中的Objective-C/Swift，或Android中的Java/C++）。
+
+## 应用内错误和警告（In-app Errors and Warnings）
 
 Errors and warnings are displayed inside your app in development builds.
 
-### Errors
+在开发构建中，错误和警告信息会显示在应用程序中。
+
+### 错误（Errors）
 
 In-app errors are displayed in a full screen alert with a red background inside your app. This screen is known as a RedBox. You can use `console.error()` to manually trigger one.
 
-### Warnings
+应用程序内错误显示在红色背景的全屏弹窗中，叫做RedBox。可以使用`console.error()`来手工上报。
+
+### 警告（Warnings）
 
 Warnings will be displayed on screen with a yellow background. These alerts are known as YellowBoxes. Click on the alerts to show more information or to dismiss them.
 
+警告信息会显示在黄色背景的屏幕中，叫做YellowBox。点击弹窗可以查看更多信息或者忽略。
+
 As with a RedBox, you can use `console.warn()` to trigger a YellowBox.
+
+跟RedBox类似，可以使用`console.warn()`来触发YellowBox。
 
 YellowBoxes can be disabled during development by using `console.disableYellowBox = true;`. Specific warnings can be ignored programmatically by setting an array of prefixes that should be ignored: `console.ignoredYellowBox = ['Warning: ...'];`.
 
+使用`console.disableYellowBox = true;`可以在开发环境禁用YellowBox。也可以设置一个前缀数组`console.ignoredYellowBox = ['Warning: ...'];`，通过编程的方式忽略掉某些警告。
+
 In CI/Xcode, YellowBoxes can also be disabled by setting the `IS_TESTING` environment variable.
 
+在CI/Xcode中，可以通过设置`IS_TESTING`环境变量来禁用YellowBox。
+
 > RedBoxes and YellowBoxes are automatically disabled in release (production) builds.
+>
+> 在发布（生产）构建中，会自动禁用RedBox和YellowBox。
 
 ## Chrome Developer Tools
 
 To debug the JavaScript code in Chrome, select "Debug JS Remotely" from the Developer Menu. This will open a new tab at [http://localhost:8081/debugger-ui](http://localhost:8081/debugger-ui).
 
+要在Chrome中Debug JavaScript代码，需要在开发者菜单中选择“Debug JS Remotely”，会在Chrome中打开一个新的标签页[http://localhost:8081/debugger-ui](http://localhost:8081/debugger-ui)。
+
 Select `Tools → Developer Tools` from the Chrome Menu to open the [Developer Tools](https://developer.chrome.com/devtools). You may also access the DevTools using keyboard shortcuts (`⌘⌥I` on macOS, `Ctrl` `Shift` `I` on Windows). You may also want to enable [Pause On Caught Exceptions](http://stackoverflow.com/questions/2233339/javascript-is-there-a-way-to-get-chrome-to-break-on-all-errors/17324511#17324511) for a better debugging experience.
 
-> Note: the React Developer Tools Chrome extension does not work with React Native, but you can use its standalone version instead. Read [this section](docs/debugging.html#react-developer-tools) to learn how.
+在Chrome的菜单中选择`Tools → Developer Tools`打开[Developer Tools](https://developer.chrome.com/devtools)。也可以通过快捷键（macOS中的`⌘⌥I`，Windows中的`Ctrl` `Shift` `I`）。也可以打开[Pause On Caught Exceptions](http://stackoverflow.com/questions/2233339/javascript-is-there-a-way-to-get-chrome-to-break-on-all-errors/17324511#17324511)以获得更好的调试体验。
+
+> Note: the React Developer Tools Chrome extension does not work with React Native, but you can use its standalone version instead. Read [this section](https://facebook.github.io/react-native/docs/debugging.html#react-developer-tools) to learn how.
+>
+> 注意：Chrome的React Developer Tools扩展在React Native中使用，可以使用独立版本替代。从[这一节](#react-developer-tools)学习更多。
 
 ### Debugging using a custom JavaScript debugger
 
