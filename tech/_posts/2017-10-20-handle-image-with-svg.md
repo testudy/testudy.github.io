@@ -14,7 +14,7 @@ tags: 技术 原创
 ## SVG语法简介
 SVG跟HTML类似的嵌套标签，既有`rect`，`circle`、`line`等用来标记描述图形的标签，也有`text`、`tspan`等用来标记文本的标签。
 
-SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总体原则保持不变；也支持外联的CSS样式表，可以如下方式引入：
+SVG支持CSS，所以图片处理中的裁切就等价于了超出隐藏。SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总体原则保持不变；也支持外联的CSS样式表，可以如下方式引入：
 
 ```svg
 <?xml-stylesheet type="text/css" href="svg-stylesheet.css" ?>
@@ -146,7 +146,7 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
 >
     <rect x="0" y="0" width="117" height="153" style="fill:#FFFFFF;" />
     <svg
-        viewBox="0 0 {{ $imageViewBoxWidth }} {{ $imageViewBoxHeight }}"
+        viewBox="0 0 {{"{{"}} $imageViewBoxWidth }} {{"{{"}} $imageViewBoxHeight }}"
         preserveAspectRatio="xMinYMin slice"
         width="114"
         height="150"
@@ -154,10 +154,10 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
         y="1.5"
     >
         <image
-            xlink:href="{{ $photo_url }}"
-            width="{{ $imageWidth }}"
-            height="{{ $imageHeight }}"
-            transform="translate(-{{ $offsetLeft }}, -{{ $offsetTop }})"
+            xlink:href="{{"{{"}} $photo_url }}"
+            width="{{"{{"}} $imageWidth }}"
+            height="{{"{{"}} $imageHeight }}"
+            transform="translate(-{{"{{"}} $offsetLeft }}, -{{"{{"}} $offsetTop }})"
             style="overflow: hidden;"
         />
     </svg>
@@ -191,7 +191,7 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
             style="enable-background:new 0 0 150 114;"
         >
             <svg
-                viewBox="0 0 {{ $imageViewBoxWidth }} {{ $imageViewBoxHeight }}"
+                viewBox="0 0 {{"{{"}} $imageViewBoxWidth }} {{"{{"}} $imageViewBoxHeight }}"
                 preserveAspectRatio="xMinYMin slice"
                 width="150"
                 height="114"
@@ -199,10 +199,10 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
                 y="0"
             >
                 <image
-                    xlink:href="{{ $photo_url }}"
-                    width="{{ $imageWidth }}"
-                    height="{{ $imageHeight }}"
-                    transform="translate(-{{ $offsetLeft }}, -{{ $offsetTop }})"
+                    xlink:href="{{"{{"}} $photo_url }}"
+                    width="{{"{{"}} $imageWidth }}"
+                    height="{{"{{"}} $imageHeight }}"
+                    transform="translate(-{{"{{"}} $offsetLeft }}, -{{"{{"}} $offsetTop }})"
                     style="overflow: hidden;"
                 />
             </svg>
