@@ -127,6 +127,8 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
 
 ## 最终模板
 
+竖版照片模板如下：
+
 ```svg
 <?xml version="1.0" encoding="utf-8"?>
 <svg
@@ -161,6 +163,8 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
     </svg>
 </svg>
 ```
+
+横版照片模板如下：
 
 ```svg
 <?xml version="1.0" encoding="utf-8"?>
@@ -206,6 +210,16 @@ SVG元素上内联的CSS属性与HTML元素上的CSS属性有所不同，但总�
     </g>
 </svg>
 ```
+
+原图缩放根据SVG viewBox特性处理，参数意义如下。
+
+1. `$offsetLeft`，代表图片水平偏移
+2. `$offsetTop`，代表图片垂直偏移
+3. `$imageViewBoxWidth`，代表图片裁切宽度
+4. `$imageViewBoxHeight`，代表图片裁切高度
+5. `$imageWidth`，代表图片尺寸宽度
+6. `$imageHeight`，代表图片尺寸高度
+7. `$photo_url`，代表原图，非上面6个值计算使用的压缩图。由于原图和压缩图是等比例的，5和6两个值来相对表示原图的尺寸，而1、2、3、4都相对于5和6来度量，计算的参考系保持一致。
 
 
 ## 生成PDF
