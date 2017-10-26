@@ -142,6 +142,21 @@ npm install --save react-redux
 npm install --save redux-thunk
 ```
 
+### 10. 引入React Router
+
+引入路由后，有两部分状态需要处理，一部分是路由的状态，一部分是应用的状态数据。
+
+数据（Props，State) + 组件 = 视图
+数据 + 模板 = 视图
+
+在componentWillMount中获取到的数据和在路由中获取到的组件基本一致。
+
+如果处理不当，容易给服务器造成双倍的压力。componentWillMount会在服务器端执行，如果里面有数据请求相关的操作，会造成再次请求数据。将其暂时放置在componentDidMount中，但在首次加载完成页面后，有可能会再次发送请求，需要在请求加载时做合适的判断）。
+
+注意：
+客户端必须发起请求，后续的操作和页面请求都需要单独发送请求，服务器预置的数据不包含这一部分。
+
+
 ## Todo
 1. 热更新；
 2. 代码分割；
@@ -151,17 +166,19 @@ npm install --save redux-thunk
 [react-server-render](https://github.com/testudy/react-server-render)
 
 ## 参考
-1. [ReactDOMServer](https://facebook.github.io/react/docs/react-dom-server.html)
-2. [React Without JSX](https://facebook.github.io/react/docs/react-without-jsx.html)
-4. [React Top-Level API .createElement](https://facebook.github.io/react/docs/react-api.html#createelement)
-3. [Babel register](http://babeljs.io/docs/usage/babel-register/)
-5. [ignore-styles](https://github.com/bkonkle/ignore-styles)
-6. [Express](http://expressjs.com/)
-7. [Hello world example](http://expressjs.com/en/starter/hello-world.html)
-8. [app.engine](http://expressjs.com/en/4x/api.html#app.engine)
-9. [consolidate.js](https://github.com/tj/consolidate.js)
-10. [Hogan.js](http://twitter.github.io/hogan.js/)
-11. [MUSTACHE MANUAL](http://mustache.github.io/mustache.5.html)
-12. [Mustache.js 使用简介](http://gzool.com/js/2014/09/09/js-mustachejs-usage/)
-13. [node-fetch](https://github.com/bitinn/node-fetch);
-14. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch);
+1. [ReactDOMServer](https://reactjs.org/docs/react-dom-server.html)
+2. [Redux Server Rendering](http://redux.js.org/docs/recipes/ServerRendering.html)
+3. [React Router Server Rendering](https://reacttraining.com/react-router/web/guides/server-rendering)
+4. [React Without JSX](https://facebook.github.io/react/docs/react-without-jsx.html)
+5. [React Top-Level API .createElement](https://facebook.github.io/react/docs/react-api.html#createelement)
+6. [Babel register](http://babeljs.io/docs/usage/babel-register/)
+7. [ignore-styles](https://github.com/bkonkle/ignore-styles)
+8. [Express](http://expressjs.com/)
+9. [Hello world example](http://expressjs.com/en/starter/hello-world.html)
+10. [app.engine](http://expressjs.com/en/4x/api.html#app.engine)
+11. [consolidate.js](https://github.com/tj/consolidate.js)
+12. [Hogan.js](http://twitter.github.io/hogan.js/)
+13. [MUSTACHE MANUAL](http://mustache.github.io/mustache.5.html)
+14. [Mustache.js 使用简介](http://gzool.com/js/2014/09/09/js-mustachejs-usage/)
+15. [node-fetch](https://github.com/bitinn/node-fetch);
+16. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch);
