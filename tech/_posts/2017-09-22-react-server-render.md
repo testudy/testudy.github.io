@@ -169,7 +169,7 @@ BrowserRouter和HashRouter等适用于浏览器环境的工具；
 4. 重新调用render方法，呈现最终页面；
 5. 随着用户的交互（比如输入新的条件，重新执行步骤1、3、4；跳转新的URL地址，重新执行步骤1、2、3、4）。这个步骤在浏览器端独立发起，和步骤4中的最终页面是两个阶段的状态。
 
-> 注意：
+> ##### 注意：
 > 客户端必须发起请求，后续的操作和页面请求都需要单独发送请求，服务器预置的数据不包含这一部分。
 
 服务器端渲染的目的是完成步骤4中的最终页面。而服务器端渲染使用的`renderToString()`方法本质上是一个同步函数，如果将上述代码直接用在服务器端，得到的是步骤2中的第一版页面（未填充数据）。此时需要想办法将步骤1中在`componentWillMount`方法中执行的获取数据方法前置到`renderToString()`方法执行前。
@@ -285,7 +285,7 @@ app.get('/*', function (req, res) {
 
 将匹配到的路径中容器组件获取到，并使用其返回的thunk组装到`Promise.all`中，随后处理服务器端渲染。
 
-> 注意：
+> ##### 注意：
 > 将`componentWillMount`方法中异步获取数据的方法迁移到`componentDidMount`方法中更合适。原因有两个：
 > 1. 避免服务器端请求重复发送。如果处理不当，容易给服务器造成双倍的压力。`componentWillMount`会在服务器端执行，如果里面有数据请求相关的操作，会造成再次请求数据。将其放置在`componentDidMount`中，但在首次加载完成页面后，有可能会再次发送请求，需要在请求加载时做合适的判断）。
 > 2. 从时机上讲，虽然前者在后者之前执行，但后者的执行时机并没有太大差异。却可以明确的表明：异步数据的获取在客户端执行。
@@ -302,10 +302,12 @@ ReactDOM.hydrate(<Root
 />, document.getElementById('root'));
 ```
 
-> 提醒
+> #### 提醒
 > React 16中还提供了粉笔等价于`renderToString`和`renderToStaticMarkup`方法的`renderToNodeStream`和`renderToStaticNodeStream`方法。
 
-## 未完待续，Todo
+
+## Todo
+
 1. 热更新；
 2. 代码分割；
 3. 服务器部署（包括服务器HTTP Client相关的DNS解析）。
