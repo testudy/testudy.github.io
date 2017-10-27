@@ -134,7 +134,9 @@ global.fetch = require('node-fetch');
 
 ### 9. 引入Redux
 
-客户端的状态处理和服务器端同构。
+> 状态（数据，Props、State）+ 组件（模板） = 视图
+
+随着应用程序的复杂度增加，将状态和组件分离是常见的做法，比如MVC和Flux的设计模式。将在浏览器端运行的JS代码复用——同构到服务端之后，原来的应用程序架构依然适用，客户端的状态处理和服务器端同构。
 
 ```javascript
 npm install --save redux
@@ -142,22 +144,168 @@ npm install --save react-redux
 npm install --save redux-thunk
 ```
 
+Redux中典型的状态更新属于同步模式，引入`redux-thunk`之后，异步的Action被包装为promise。
+
+
 ### 10. 引入React Router
 
-引入路由后，有两部分状态需要处理，一部分是路由的状态，一部分是应用的状态数据。
+```javascript
+npm install --save react-router
+```
 
-数据（Props，State) + 组件 = 视图
-数据 + 模板 = 视图
+React Router提供了StaticRouter（在React Router内部保持应用程序的location状态，适用于不需要更新浏览器地址栏的测试环境，或者无法更改浏览器端地址栏的服务端环境）；
+BrowserRouter和HashRouter等适用于浏览器环境的工具；
+以及matchPath方法来进行路径的匹配计算。
 
-在componentWillMount中获取到的数据和在路由中获取到的组件基本一致。
-
-如果处理不当，容易给服务器造成双倍的压力。componentWillMount会在服务器端执行，如果里面有数据请求相关的操作，会造成再次请求数据。将其暂时放置在componentDidMount中，但在首次加载完成页面后，有可能会再次发送请求，需要在请求加载时做合适的判断）。
-
-注意：
-客户端必须发起请求，后续的操作和页面请求都需要单独发送请求，服务器预置的数据不包含这一部分。
+原则上讲，引入路由后，路由中的URI代表整个页面上所有的资源，所以页面上所有的数据（状态）都可以根据URI中的信息直接或间接获取到。有两部分状态需要处理，一部分是路由的状态，一部分是应用的状态数据。获取到数据后，将其填入模板，即可完成模板的渲染。
 
 
-## Todo
+#### 分析React中的典型状态和渲染
+
+在典型的客户端React应用程序中，最终页面的渲染完成要经过以下5个主要过程：
+1. 在组件（Component）中的`componentWillMount`方法中执行容器（Container）组件中的异步获取数据方法；
+2. 随后执行render方法，此时虽然尚未获得数据，当渲染出第一版页面；
+3. 数据从服务器端返回，组件props更新；
+4. 重新调用render方法，呈现最终页面；
+5. 随着用户的交互（比如输入新的条件，重新执行步骤1、3、4；跳转新的URL地址，重新执行步骤1、2、3、4）。这个步骤在浏览器端独立发起，和步骤4中的最终页面是两个阶段的状态。
+
+> 注意：
+> 客户端必须发起请求，后续的操作和页面请求都需要单独发送请求，服务器预置的数据不包含这一部分。
+
+服务器端渲染的目的是完成步骤4中的最终页面。而服务器端渲染使用的`renderToString()`方法本质上是一个同步函数，如果将上述代码直接用在服务器端，得到的是步骤2中的第一版页面（未填充数据）。此时需要想办法将步骤1中在`componentWillMount`方法中执行的获取数据方法前置到`renderToString()`方法执行前。
+
+获取数据的方法一般在容器组件中定义，作为props传递到组件中调用。如果能将props中调用的方法在之前获取到就可以解决这个问题。初步想到的方法如下，典型的代码如下所示：
+
+```javascript
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+import Detail from '../component/Detail';
+import {
+    fetchDetail,
+} from '../action';
+
+function getInitData(dispatch, params) {
+    const title = params.title;
+    return () => dispatch(fetchDetail(title));
+}
+
+function mapStateToProps(state, ownProps) {
+    const title = decodeURIComponent(ownProps.match.params.title);
+    const entity = state.data.entities.find(item => item.title === title) || {}; 
+    
+    return Object.assign({
+        isLoading: state.data.isDetailFetching,
+    }, entity);
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+    const title = ownProps.match.params.title;
+    return {
+        fetch: getInitData(dispatch, ownProps.match.params),
+    };  
+}
+
+const DetailContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Detail));
+DetailContainer.getInitData = getInitData;
+
+export default DetailContainer;
+```
+
+约定每个容器组件中的getInitData方法用来获取组件中所使用的初始化数据。将原来`mapDispatchToProps`中的初始化逻辑独立出来。并将这个函数通过容器组件的静态方法暴露出来，以便于在能获取到容器组件的地方，就能使用该初始化方法。至此，将原来在组件中使用的方法暴露在了路由组件中。
+
+接下来需要思考的问题是，路由的匹配。React Router提供了`matchPath`方法来匹配路径，路径在客户端指地址栏中的URL，在服务端所指的就是`req.url`，即请求发送到服务器的URL。
+
+可以将React Router进行如下改进，以方便将路由的配置暴露出来：
+
+```javascript
+const config = [
+    { exact: true, path: '/', component: Home },
+    { exact: true, path: '/:title', component: Detail },
+];
+
+const routes = (
+    <Switch>
+        {
+            config.map((item, index) => (<Route key={index} {...item} />))
+        }
+        <Redirect from='*' to='/'/>
+    </Switch>
+);
+
+export {
+    config,
+    routes as default,
+};
+```
+
+从逻辑上讲，路由解析后被渲染组件中的`componentWillMount`方法中获取到的数据和提前解析路由，并主动使用相同的方法获取到的数据一致。
+
+服务器端需要处理如下：
+
+```javascript
+app.get('/*', function (req, res) {
+    // 简单解决node-fetch host问题
+    app.locals.host = req.headers.host;
+
+    // store必须是fresh的，以避免前后请求间的干扰
+    const store = configureStore();
+    const context = {};
+
+    // inside a request
+    const promises = []
+    // use `some` to imitate `<Switch>` behavior of selecting only
+    // the first to match
+    routerConfig.some(route => {
+        // use `matchPath` here
+        const match = matchPath(req.url, route);
+        console.log('match', match);
+        if (match) {
+            promises.push(route.component.getInitData(store.dispatch, match.params)());
+        }
+        return match;
+    });
+
+    Promise.all(promises).then(data => {
+        // do something w/ the data so the client
+        // can access it then render the app
+        const props = store.getState();
+        console.log('store.getState()', props);
+        const html = ReactDOMServer.renderToString(React.createElement(Root, {
+            store: store,
+            isClient: false,
+            location: req.url,
+            context: context,
+        }));
+        console.log('html', html);
+        res.render('index.html', { html: html, props: JSON.stringify(props) });
+    });
+});
+```
+
+将匹配到的路径中容器组件获取到，并使用其返回的thunk组装到`Promise.all`中，随后处理服务器端渲染。
+
+> 注意：
+> 将`componentWillMount`方法中异步获取数据的方法迁移到`componentDidMount`方法中更合适。原因有两个：
+> 1. 避免服务器端请求重复发送。如果处理不当，容易给服务器造成双倍的压力。`componentWillMount`会在服务器端执行，如果里面有数据请求相关的操作，会造成再次请求数据。将其放置在`componentDidMount`中，但在首次加载完成页面后，有可能会再次发送请求，需要在请求加载时做合适的判断）。
+> 2. 从时机上讲，虽然前者在后者之前执行，但后者的执行时机并没有太大差异。却可以明确的表明：异步数据的获取在客户端执行。
+> `componentWillMount`适合执行同步的状态更新。
+
+### 11. `ReactDOM.hydrate`方法的使用
+
+该方法是React 16版本中添加的新方法，专门用来配合服务器端渲染在客户端调用，以达到更好的性能。
+
+```javascript
+ReactDOM.hydrate(<Root
+    store={store}
+    isClient
+/>, document.getElementById('root'));
+```
+
+> 提醒
+> React 16中还提供了粉笔等价于`renderToString`和`renderToStaticMarkup`方法的`renderToNodeStream`和`renderToStaticNodeStream`方法。
+
+## 未完待续，Todo
 1. 热更新；
 2. 代码分割；
 3. 服务器部署（包括服务器HTTP Client相关的DNS解析）。
@@ -166,19 +314,18 @@ npm install --save redux-thunk
 [react-server-render](https://github.com/testudy/react-server-render)
 
 ## 参考
-1. [ReactDOMServer](https://reactjs.org/docs/react-dom-server.html)
-2. [Redux Server Rendering](http://redux.js.org/docs/recipes/ServerRendering.html)
-3. [React Router Server Rendering](https://reacttraining.com/react-router/web/guides/server-rendering)
-4. [React Without JSX](https://facebook.github.io/react/docs/react-without-jsx.html)
-5. [React Top-Level API .createElement](https://facebook.github.io/react/docs/react-api.html#createelement)
-6. [Babel register](http://babeljs.io/docs/usage/babel-register/)
-7. [ignore-styles](https://github.com/bkonkle/ignore-styles)
-8. [Express](http://expressjs.com/)
-9. [Hello world example](http://expressjs.com/en/starter/hello-world.html)
-10. [app.engine](http://expressjs.com/en/4x/api.html#app.engine)
-11. [consolidate.js](https://github.com/tj/consolidate.js)
-12. [Hogan.js](http://twitter.github.io/hogan.js/)
-13. [MUSTACHE MANUAL](http://mustache.github.io/mustache.5.html)
-14. [Mustache.js 使用简介](http://gzool.com/js/2014/09/09/js-mustachejs-usage/)
-15. [node-fetch](https://github.com/bitinn/node-fetch);
-16. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch);
+1. [ReactDOM](https://reactjs.org/docs/react-dom.html)
+2. [ReactDOMServer](https://reactjs.org/docs/react-dom-server.html)
+3. [React Without JSX](https://facebook.github.io/react/docs/react-without-jsx.html)
+4. [React Top-Level API .createElement](https://facebook.github.io/react/docs/react-api.html#createelement)
+5. [Redux Server Rendering](http://redux.js.org/docs/recipes/ServerRendering.html)
+6. [React Router Server Rendering](https://reacttraining.com/react-router/web/guides/server-rendering)
+7. [Babel register](http://babeljs.io/docs/usage/babel-register/)
+8. [ignore-styles](https://github.com/bkonkle/ignore-styles)
+9. [Express](http://expressjs.com/)
+10. [consolidate.js](https://github.com/tj/consolidate.js)
+11. [Hogan.js](http://twitter.github.io/hogan.js/)
+12. [MUSTACHE MANUAL](http://mustache.github.io/mustache.5.html)
+13. [Mustache.js 使用简介](http://gzool.com/js/2014/09/09/js-mustachejs-usage/)
+14. [node-fetch](https://github.com/bitinn/node-fetch);
+15. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch);
