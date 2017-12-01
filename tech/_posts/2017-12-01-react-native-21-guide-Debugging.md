@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 21 - 指南：调试（Debugging）
+title: React Native 21 - 指南：调试1（Debugging 1）
 tags: 原创 技术 翻译 React-Native
 ---
 
@@ -101,19 +101,27 @@ Select `Tools → Developer Tools` from the Chrome Menu to open the [Developer T
 
 > Note: the React Developer Tools Chrome extension does not work with React Native, but you can use its standalone version instead. Read [this section](https://facebook.github.io/react-native/docs/debugging.html#react-developer-tools) to learn how.
 >
-> 注意：Chrome的React Developer Tools扩展在React Native中使用，可以使用独立版本替代。从[这一节](#react-developer-tools)学习更多。
+> 注意：Chrome的React Developer Tools扩展不能在React Native中使用，可以使用独立版本替代。从[这一节](#react-developer-tools)学习更多。
 
-### Debugging using a custom JavaScript debugger
+### 使用自定义的JavaScript调试器（Debugging using a custom JavaScript debugger）
 
 To use a custom JavaScript debugger in place of Chrome Developer Tools, set the `REACT_DEBUGGER` environment variable to a command that will start your custom debugger. You can then select "Debug JS Remotely" from the Developer Menu to start debugging.
 
+使用自定义JavaScript调试器替代Chrome Developer Tools，需要在启动调试器时设置`REACT_DEBUGGER`环境变量，然后可以在开发者菜单中选择“Debug JS Remotely”开始调试。
+
 The debugger will receive a list of all project roots, separated by a space. For example, if you set `REACT_DEBUGGER="node /path/to/launchDebugger.js --port 2345 --type ReactNative"`, then the command `node /path/to/launchDebugger.js --port 2345 --type ReactNative /path/to/reactNative/app` will be used to start your debugger.
 
-> Custom debugger commands executed this way should be short-lived processes, and they shouldn't produce more than 200 kilobytes of output.
+调试器将接收到一组用空格分割的项目跟路径列表。比如，如果设置环境变量为`REACT_DEBUGGER="node /path/to/launchDebugger.js --port 2345 --type ReactNative"`，使用列表中的`node /path/to/launchDebugger.js --port 2345 --type ReactNative /path/to/reactNative/app`可以打开调试。
 
-## React Developer Tools
+> Custom debugger commands executed this way should be short-lived processes, and they shouldn't produce more than 200 kilobytes of output.
+>
+> 用这种方式启动的自定义调试器应该是一个短时间存活的进程，而且不能处理超过200k的输出。
+
+## React开发者工具（React Developer Tools）
 
 You can use [the standalone version of React Developer Tools](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools) to debug the React component hierarchy. To use it, install the `react-devtools` package globally:
+
+可以使用[独立版本的React开发者工具](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools)，来调试React组件结构。首先需要全局安装`react-devtools`：
 
 ```
 npm install -g react-devtools
@@ -121,126 +129,62 @@ npm install -g react-devtools
 
 Now run `react-devtools` from the terminal to launch the standalone DevTools app:
 
+然后在命令行中执行`react-devtools`，来启动独立开发者工具软件：
+
 ```
 react-devtools
 ```
 
-![React DevTools](img/ReactDevTools.png)
+![React DevTools](/tech/media/ReactDevTools.png)
 
 It should connect to your simulator within a few seconds.
 
-> Note: if you prefer to avoid global installations, you can add `react-devtools` as a project dependency. Add the `react-devtools` package to your project using `npm install --save-dev react-devtools`, then add `"react-devtools": "react-devtools"` to the `scripts` section in your `package.json`, and then run `npm run react-devtools` from your project folder to open the DevTools.
+这个软件稍后就会自动连上模拟器。
 
-### Integration with React Native Inspector
+> Note: if you prefer to avoid global installations, you can add `react-devtools` as a project dependency. Add the `react-devtools` package to your project using `npm install --save-dev react-devtools`, then add `"react-devtools": "react-devtools"` to the `scripts` section in your `package.json`, and then run `npm run react-devtools` from your project folder to open the DevTools.
+>
+> 注意：如果不希望全局安装，可以将`react-devtools`作为项目依赖，运行`npm install --save-devr eact-devtools`将其安装，然后在`package.json`的`scripts`配置中添加`"react-devtools": "react-devtools"`，随后在当前项目文件夹执行`npm run react-devtools`打开开发者工具即可。
+
+### 和内置的React Native查看器集成（Integration with React Native Inspector）
 
 Open the in-app developer menu and choose "Show Inspector". It will bring up an overlay that lets you tap on any UI element and see information about it:
 
-![React Native Inspector](img/Inspector.gif)
+打开App内置的开发者菜单，选择“Show Inspector”会打开一个调试信息蒙层，直接点击需要查看的UI元素即可。
+
+![React Native Inspector](/tech/media/Inspector.gif)
 
 However, when `react-devtools` is running, Inspector will enter a special collapsed mode, and instead use the DevTools as primary UI. In this mode, clicking on something in the simulator will bring up the relevant components in the DevTools:
 
-![React DevTools Inspector Integration](img/ReactDevToolsInspector.gif)
+但是 ，当`react-devtools`正在运行的时候，内置查看器打开后会收起来，使用DevTools作为主界面。这时候，点击模拟器上的任何元素，DevTools会相应的响应：
+
+![React DevTools Inspector Integration](/tech/media/ReactDevToolsInspector.gif)
 
 You can choose "Hide Inspector" in the same menu to exit this mode.
 
-### Inspecting Component Instances
+点击菜单中的“Hide Inspector”退出这种模式。
+
+### 查看组件实例（Inspecting Component Instances）
 
 When debugging JavaScript in Chrome, you can inspect the props and state of the React components in the browser console.
 
+在Chrome中调试JavaScript的时候，可以在浏览器的控制台中将React组件的实例打印出来，查看其属性和状态。
+
 First, follow the instructions for debugging in Chrome to open the Chrome console.
+
+首先，打开Chrome中的控制台。
 
 Make sure that the dropdown in the top left corner of the Chrome console says `debuggerWorker.js`. **This step is essential.**
 
+确保控制台在左上角的下拉菜单中选中`debuggerWorker.js`。**这个步骤非常关键**。
+
 Then select a React component in React DevTools. There is a search box at the top that helps you find one by name. As soon as you select it, it will be available as `$r` in the Chrome console, letting you inspect its props, state, and instance properties.
 
-![React DevTools Chrome Console Integration](img/ReactDevToolsDollarR.gif)
+随后在DevTool始终选择一个React组件，顶部的搜索框可以根据名字搜索组件。选中之后，在Chrome的控制台中，使用`$r`变量可以将其打印出来查看器Props、State和其他实例属性。
 
-## Performance Monitor
+![React DevTools Chrome Console Integration](/tech/media/ReactDevToolsDollarR.gif)
+
+## 性能监视器（Performance Monitor）
 
 You can enable a performance overlay to help you debug performance problems by selecting "Perf Monitor" in the Developer Menu.
 
-<hr style="margin-top:25px; margin-bottom:25px;"/>
-
-# Debugging in Ejected Apps
-
-<div class="banner-crna-ejected" style="margin-top:25px">
-  <h3>Projects with Native Code Only</h3>
-  <p>
-    The remainder of this guide only applies to projects made with <code>react-native init</code>
-    or to those made with Create React Native App which have since ejected. For
-    more information about ejecting, please see
-    the <a href="https://github.com/react-community/create-react-native-app/blob/master/EJECTING.md" target="_blank">guide</a> on
-    the Create React Native App repository.
-  </p>
-</div>
-
-## Accessing console logs
-
-You can display the console logs for an iOS or Android app by using the following commands in a terminal while the app is running:
-
-```
-$ react-native log-ios
-$ react-native log-android
-```
-
-You may also access these through `Debug → Open System Log...` in the iOS Simulator or by running `adb logcat *:S ReactNative:V ReactNativeJS:V` in a terminal while an Android app is running on a device or emulator.
-
-> If you're using Create React Native App, console logs already appear in the same terminal output as the packager.
-
-## Debugging on a device with Chrome Developer Tools
-
-> If you're using Create React Native App, this is configured for you already.
-
-On iOS devices, open the file [`RCTWebSocketExecutor.m`](https://github.com/facebook/react-native/blob/master/Libraries/WebSocket/RCTWebSocketExecutor.m) and change "localhost" to the IP address of your computer, then select "Debug JS Remotely" from the Developer Menu.
-
-On Android 5.0+ devices connected via USB, you can use the [`adb` command line tool](http://developer.android.com/tools/help/adb.html) to setup port forwarding from the device to your computer:
-
-`adb reverse tcp:8081 tcp:8081`
-
-Alternatively, select "Dev Settings" from the Developer Menu, then update the "Debug server host for device" setting to match the IP address of your computer.
-
-> If you run into any issues, it may be possible that one of your Chrome extensions is interacting in unexpected ways with the debugger. Try disabling all of your extensions and re-enabling them one-by-one until you find the problematic extension.
-
-### Debugging with [Stetho](http://facebook.github.io/stetho/) on Android
-
-1. In ```android/app/build.gradle```, add these lines in the `dependencies` section:
-
-   ```gradle
-   compile 'com.facebook.stetho:stetho:1.3.1'
-   compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
-   ```
-
-2. In ```android/app/src/main/java/com/{yourAppName}/MainApplication.java```, add the following imports:
-
-   ```java
-   import com.facebook.react.modules.network.ReactCookieJarContainer;
-   import com.facebook.stetho.Stetho;
-   import okhttp3.OkHttpClient;
-   import com.facebook.react.modules.network.OkHttpClientProvider;
-   import com.facebook.stetho.okhttp3.StethoInterceptor;
-   import java.util.concurrent.TimeUnit;
-   ```
-
-3. In ```android/app/src/main/java/com/{yourAppName}/MainApplication.java``` add the function:
-   ```java
-   public void onCreate() {
-         super.onCreate();
-         Stetho.initializeWithDefaults(this);
-         OkHttpClient client = new OkHttpClient.Builder()
-         .connectTimeout(0, TimeUnit.MILLISECONDS)
-         .readTimeout(0, TimeUnit.MILLISECONDS)
-         .writeTimeout(0, TimeUnit.MILLISECONDS)
-         .cookieJar(new ReactCookieJarContainer())
-         .addNetworkInterceptor(new StethoInterceptor())
-         .build();
-         OkHttpClientProvider.replaceOkHttpClient(client);
-   }
-   ```
-
-4. Run  ```react-native run-android ```
-
-5. In a new Chrome tab, open: ```chrome://inspect```, then click on 'Inspect device' (the one followed by "Powered by Stetho").
-
-## Debugging native code
-
-When working with native code, such as when writing native modules, you can launch the app from Android Studio or Xcode and take advantage of the native debugging features (setting up breakpoints, etc.) as you would in case of building a standard native app.
+在开发者菜单中选择“Perf Monitor”选项可以打开性能监视器蒙层，来监测性能状态。
