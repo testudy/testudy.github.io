@@ -191,9 +191,15 @@ router.post('/report/*', (ctx, next) => {
 
 最终结果，使用sync后，可以使用`beforeunload`或`pagehide`事件，均能达到较好的效果。数据上报完成后，即卸载页面，避免无谓的等待数据上报。但这种方式还是会造成一定的延迟，依赖于服务器性能和网络状态。
 
+原则上，服务器正常的情况下可用。期待下个Safari大版本中`navigator.sendBeacon`方法的[普及](https://caniuse.com/#feat=beacon)，TP版本中显示已经支持了。
+
 ### 细节
 
-这种方式是同步执行，无法abort请求，可以设置timeout时间，以避免长时间的等待。
+这种方式是同步执行，无法abort请求，~~可以设置timeout时间，以避免长时间的等待~~。
+
+> 同步请求中不支持设置timeout，默认时间是好像是10S（尚未测试，参考[jquery 的 ajax 同步调用方式的超时是如何指定的？](https://www.v2ex.com/t/135338)）。
+>
+> Web Worker是否可以解决这个问题？规范中所说的document environment，Web Worker是否差异？待测试
 
 
 ## Todo
@@ -211,3 +217,8 @@ router.post('/report/*', (ctx, next) => {
 3. [各个浏览器中对于beforeunload事件和unload事件的对比](https://sinaad.github.io/xfe/2016/06/29/beforeunlod-vs-unload/)
 4. [SD9026: 各浏览器对 onunload 事件的支持与触发条件实现有差异](http://www.w3help.org/zh-cn/causes/SD9026)
 5. [BX2047: 各浏览器对 onbeforeunload 事件的支持与触发条件实现有差异](http://www.w3help.org/zh-cn/causes/BX2047)
+6. [XMLHttpRequest.timeout](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/timeout)
+7. [jquery 的 ajax 同步调用方式的超时是如何指定的？](https://www.v2ex.com/t/135338)
+8. [你真的会使用XMLHttpRequest吗？](https://segmentfault.com/a/1190000004322487)
+9. [XMLHttpRequest](https://dvcs.w3.org/hg/xhr/raw-file/tip/Overview.html)
+10. [HTML 5.3](https://w3c.github.io/html/webappapis.html#document-environment)
