@@ -4,7 +4,11 @@ title: 浏览器页面卸载事件监听
 tags: 技术 原创
 ---
 
-最近需要做一个数据上报的JS库，遇到的最后一个细节问题是，页面关闭/卸载时如何进行数据上报的问题。
+最近需要做一个数据上报的JS库，遇到的最后一个细节问题是，页面关闭/卸载时如何进行数据上报的问题。此时进行数据上报，主要有3种方法可以解决：
+
+1. 给数据上报留足时间（同步上报或下面的wait方法）；
+2. 用超出页面生命周期和作用域的方法（`navigator.sendBeacon`方法或者理论上可行的service worker）；
+3. 将数据持久化，下次接着上报。
 
 可用的事件主要是beforeunload，pagehide，或unload3个事件。简单测试后，不同的事件是常规的方法，数据上报特别容易丢失，为了防止丢失，常用的方法有两个：1是用同步请求（常见的同步请求是XMLHttpRequest对象），2是模拟一个延迟函数。
 
@@ -193,18 +197,21 @@ router.post('/report/*', (ctx, next) => {
 
 原则上，服务器正常的情况下可用。期待下个Safari大版本中`navigator.sendBeacon`方法的[普及](https://caniuse.com/#feat=beacon)，TP版本中显示已经支持了。
 
+目前业务中日志上报的服务器性能不错，50ms内可以完成，用同步的方法作为sendBeacon的降级方案减少实现的复杂。
+
 ### 细节
 
 这种方式是同步执行，无法abort请求，~~可以设置timeout时间，以避免长时间的等待~~。
 
-> 同步请求中不支持设置timeout，默认时间是好像是10S（尚未测试，参考[jquery 的 ajax 同步调用方式的超时是如何指定的？](https://www.v2ex.com/t/135338)）。
+> 同步请求中不支持设置timeout，~~默认时间是好像是10S~~（测试后Chrome中可以超出10S，链接不断就行）。
 >
-> Web Worker是否可以解决这个问题？规范中所说的document environment，Web Worker是否差异？待测试
-
+> Web Worker中会随着销毁文档的卸载而销毁，不可用。
 
 ## Todo
 
 1. 做更多的机型测试。
+2. Service Worker理论上可以解决同步数据上报的问题 (待测试）。
+
 
 
 ## 实验源码
@@ -222,3 +229,9 @@ router.post('/report/*', (ctx, next) => {
 8. [你真的会使用XMLHttpRequest吗？](https://segmentfault.com/a/1190000004322487)
 9. [XMLHttpRequest](https://dvcs.w3.org/hg/xhr/raw-file/tip/Overview.html)
 10. [HTML 5.3](https://w3c.github.io/html/webappapis.html#document-environment)
+11. [同步和异步请求](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests)
+12. [Cross-document messaging](https://caniuse.com/#feat=x-doc-messaging)
+13. [踩坑之统计请求发送与页面跳转冲突](http://blog.csdn.net/allenliu6/article/details/77341538)
+14. [页面跳转时，统计数据丢失问题探讨](http://www.barretlee.com/blog/2016/02/20/navigator-beacon-api/)
+15. [web worker详解](http://xgfe.github.io/2017/05/03/LexHuang/web-worker/)
+16. [Web workers Standard](https://html.spec.whatwg.org/multipage/workers.html)
