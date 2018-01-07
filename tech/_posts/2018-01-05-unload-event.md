@@ -146,58 +146,107 @@ router.post('/report/*', (ctx, next) => {
 
 ## 实验数据
 
-### beforeunload + async + nowait
+### beforeunload+async+nowait
 
 |  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | Y | Y | N | Y | Y | N | Y | N | Y | Y | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | N | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Sony Z2；Android 4.4.2；系统浏览器 | N | N | N | N | Y | Y | N | Y | N | Y | N | N | N | N | N |
+| 华为 Nova；Android 6.0；系统浏览器 | Y | Y | N | N | Y | Y | N | Y | Y | Y | N | Y | Y | N | N |
 
-### beforeunload + sync + nowait
-
-|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
-| Safari 11.0.2 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
-
-### pagehide + sync + nowait
-
-|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
-| Safari 11.0.2 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
-
-### unload + sync + nowait
+### beforeunload+sync+nowait
 
 |  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
-| Safari 11.0.2 | N | N | N | N | N | N | N | N | Y | Y | Y | Y | N | N | N |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | N | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | N | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| Sony Z2；Android 4.4.2；系统浏览器 | Y | N | Y | N | Y | Y | N | Y | Y | Y | Y | Y | Y | N | N |
+| 华为 Nova；Android 6.0；系统浏览器 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | Y | N | Y |
 
-### beforeunload + async + wait
-
-|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
-| Safari 11.0.2 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | Y | Y | Y |
-
-### pagehide + async + wait
-
-|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
-| Safari 11.0.2 | N | N | N | N | N | N | N | N | N | N | N | N | Y | N | N |
-
-### unload + async + wait
+### beforeunload+async+wait
 
 |  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
-| Chrome 63 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
-| Safari 11.0.2 | N | N | N | N | N | N | N | N | N | N | N | N | Y | N | N |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | Y | Y | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Sony Z2；Android 4.4.2；系统浏览器 | Y | N | Y | N | Y | Y | N | Y | Y | Y | N | Y | Y | N | Y |
+| 华为 Nova；Android 6.0；系统浏览器 | Y | Y | N | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+
+### pagehide+async+nowait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | N | N | N | N | N | N | N | Y | N | Y | N | Y | N | N | N |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | N | N | Y | Y | N | Y | N | N | N | N | N | N | Y |
+
+
+### pagehide+sync+nowait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| iPhone 6s 11.2.1；微信/6.6.1 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | Y | Y |
+| iPhone 6s 11.2.1；Safari | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | N | N | N | Y | Y | N | Y | Y | Y | N | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | N | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | N | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+| Sony Z2；Android 4.4.2；系统浏览器 | Y | N | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | N |
+| iPhone 5s 8.4.1；Safari | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 华为 Nova；Android 6.0；系统浏览器 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+
+### pagehide+async+wait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | N | N | N | N | N | N | N | N | N | N | N | N | Y | N | N |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | Y | Y | N | Y | Y | N | Y | N | Y | N | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+
+### unload+async+nowait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | Y | N | N | Y | N | N | N | N | Y | N | N | N | Y | N |
+
+### unload+sync+nowait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | N | N | N | N | N | N | N | N | Y | Y | Y | Y | N | N | N |
+| iPhone 6s 11.2.1；微信/6.6.1 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | Y | Y |
+| iPhone 6s 11.2.1；Safari | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | N | N | N | Y | Y | N | Y | Y | Y | N | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | N | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | N | N | N | N | N | N | N | N | Y | Y | Y | Y | N | N | N |
+| Sony Z2；Android 4.4.2；系统浏览器 | Y | N | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | N |
+| iPhone 5s 8.4.1；Safari | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 华为 Nova；Android 6.0；系统浏览器 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | Y | Y | N | N | Y |
+
+### unload+async+wait
+
+|  | anchor | anchor.click | custom: | document.write | form.onsubmit | form.submit | javascript: | location.href | location.reload | location.replace | mailto: | reload | window.close | window.open | window.open_self |
+| Mac 10.13.2；Chrome/63.0.3239.132 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| Mac 10.13.2；Safari/604.4.7 | N | N | N | N | N | N | N | N | N | N | N | N | Y | N | N |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111 | Y | Y | Y | N | Y | Y | N | Y | Y | Y | N | Y | N | N | Y |
+| 一加5T；Android 7.1.1；Chrome 63.0.3239.111；微信6.5.23.1160 | Y | Y | Y | N | Y | Y | N | Y | N | Y | N | Y | N | Y | Y |
+| 一加5T；Android 7.1.1；Chrome/57.0.2987.108；UCBrowser/11.8.2.962 | N | N | Y | N | N | N | N | N | Y | Y | N | Y | N | N | N |
 
 ## 实验结果
 
-从上面的表格结果中，可以简单的看出，产生的7组数据中，以`beforeunload + sync + nowait`、`pagehide + sync + nowait`、`pagehide + async + wait`在个浏览器中兼容性好，数据全面。
+从上面的表格结果中，可以简单的看出，产生的9组数据中，~~以`beforeunload + sync + nowait`、`pagehide + sync + nowait`、`pagehide + async + wait`在各个浏览器中兼容性好，数据全面。~~并没有完全兼容所有浏览器的方法，在iOS中，只有同步的方法能上报成功数据，用`pagehide+sync+nowait`这组表现最好；在其他机型和浏览器中，`beforeunload+sync+nowait`这组表现略好一些。
 
 但wait形式依赖于固定值的延迟，页面会造成无谓的延长等待，所以放弃wait的形式。
 
-最终结果，使用sync后，可以使用`beforeunload`或`pagehide`事件，均能达到较好的效果。数据上报完成后，即卸载页面，避免无谓的等待数据上报。但这种方式还是会造成一定的延迟，依赖于服务器性能和网络状态。
+最终结果，使用sync后，~~在`beforeunload`或`pagehide`两者均能达到较好的效果的前提下选择前者，语义化更好~~，在iOS中使用后者，其他情况下使用前者。数据上报完成后，即卸载页面，避免无谓的等待数据上报。但这种方式还是会造成一定的延迟，依赖于服务器性能和网络状态。
 
 原则上，服务器正常的情况下可用。期待下个Safari大版本中`navigator.sendBeacon`方法的[普及](https://caniuse.com/#feat=beacon)，TP版本中显示已经支持了。
 
-目前业务中日志上报的服务器性能不错，50ms内可以完成，用同步的方法作为sendBeacon的降级方案减少实现的复杂。
+目前业务中日志上报的服务器性能不错，50ms内可以完成，用同步XHR的方法作为sendBeacon的降级方案减少实现的复杂。
 
 ### 细节
 
