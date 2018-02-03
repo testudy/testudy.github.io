@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DOM</title>
+        <meta charset="utf-8"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    
+        <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+        <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+    
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+    
+        <link rel="stylesheet" href="/css/reveal.css"/>
+    
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            (function () {
+                var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+                document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+            }());
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+        		<section>
+        			<section>
+        			    <h1>表单脚本</h1>
+        			</section>
+        			<section>
+                    	<p>JavaScript 最初的一个应用,就是分担服务器处理表单的责任,打破处处依赖服务器的局面。尽管目前的Web和JavaScript已经有了长足的发展,但Web表单的变化并不明显。由于Web表单没有为许多常见任务提供现成的解决手段,很多开发人员不仅会在验证表单时使用 JavaScirpt,而且还增强了一些标准表单控件的默认行为。
+                    	</p>
+                    </section>
+        		</section>
+        		<section>
+        			<section>
+        				<h2>表单的基础知识</h2>
+        				<p><small>在 HTML 中,表单是由&lt;form&gt;元素来表示的,而在 JavaScript 中,表单对应的则是 HTMLForm- Element 类型。HTMLFormElement 继承了 HTMLElement,因而与其他 HTML 元素具有相同的默认属 性。</small></p>
+        			</section>
+        			<section>
+        				<ul>
+        					<li>acceptCharset:服务器能够处理的字符集;等价于 HTML 中的 accept-charset 特性。</li>
+        					<li>action:接受请求的 URL;等价于 HTML 中的 action 特性。</li>
+        					<li>elements:表单中所有控件的集合(HTMLCollection)。</li>
+        					<li>enctype:请求的编码类型;等价于 HTML 中的 enctype 特性。</li>
+        					<li>length:表单中控件的数量。</li>
+        					<li> method:要发送的 HTTP 请求类型,通常是"get"或"post";等价于 HTML 的 method 特性。</li>
+        					<li>name:表单的名称;等价于 HTML 的 name 特性。</li>
+        					<li>reset():将所有表单域重置为默认值。</li>
+        					<li>submit():提交表单。</li>
+        					<li>target:用于发送请求和接收响应的窗口名称;等价于 HTML 的 target 特性。</li>
+        				</ul>
+        			</section>
+        			<section>
+        				<h2>提交表单</h2>
+        				<p>用户单击提交按钮或图像按钮时,就会提交表单。使用&lt;input&gt;或&lt;button&gt;都可以定义提交按钮, 只要将其 type 特性的值设置为"submit"即可,而图像按钮则是通过将&lt;input&gt;的 type 特性值设置为 "image"来定义的。</p>
+        			</section>
+        			<section>
+        				<h3>阻止表单提交</h3>
+        				<pre><code class="javascript">
+var form = document.getElementById("myForm");
+EventUtil.addHandler(form, "submit", function(event){
+￼    event = EventUtil.getEvent(event);
+//阻止默认事件
+    EventUtil.preventDefault(event);
+});
+                        </code></pre>
+        			</section>
+        			<section>
+        				<h3>javascript提交表单</h3>
+        				<pre><code class="javascript">
+var form = document.getElementById("myForm");
+//提交表单 
+form.submit();
+                        </code></pre>
+                        <p><small>防止用户重复提交表单：在第一次提交表单后就禁用提交按钮,或者利用 onsubmit 事件处理程序取消后续的 表单提交操作。</small></p>
+        			</section>
+        			<section>
+        				<h2>重置表单</h2>
+        				<p>在用户单击重置按钮时,表单会被重置。使用 type 特性值为"reset"的&lt;input&gt;或&lt;button&gt;都可以创建重置按钮</p>
+        			</section>
+        			<section>
+        				<h3>阻止重置表单</h3>
+        				<pre><code class="javascript">
+var form = document.getElementById("myForm");
+    EventUtil.addHandler(form, "reset", function(event){
+//取得事件对象
+event = EventUtil.getEvent(event);
+//阻止表单重置
+    EventUtil.preventDefault(event);
+});
+                        </code></pre>
+        			</section>
+        			<section>
+        				<h3>javascript重置表单</h3>
+        				<pre><code class="javascript">
+var form = document.getElementById("myForm");
+//重置表单 
+form.reset();
+                        </code></pre>
+        			</section>
+        			<section>
+        				<h2>表单字段</h2>
+        				<p><small>可以像访问页面中的其他元素一样,使用原生 DOM 方法访问表单元素。此外,每个表单都有elements 属性,该属性是表单中所有表单元素(字段)的集合。这个 elements 集合是一个有序列表, 14 其中包含着表单中的所有字段,例如&lt;input&gt;、&lt;textarea&gt;、&lt;button&gt;和&lt;fieldset&gt;。每个表单字段在 elements 集合中的顺序,与它们出现在标记中的顺序相同,可以按照位置和name特性来访问它们。</small></p>
+        			</section>
+        			<section>
+        				<h3>共有的表单字段属性</h3>
+        				<ul>
+        					<li>disabled:布尔值,表示当前字段是否被禁用。</li>
+        					<li>form:指向当前字段所属表单的指针;只读。</li>
+        					<li>name:当前字段的名称。</li>
+        					<li>readOnly:布尔值,表示当前字段是否只读。</li>
+        					<li>tabIndex:表示当前字段的切换(tab)序号。</li>
+        					<li>type:当前字段的类型,如"checkbox"、"radio",等等。</li>
+        					<li>value:当前字段将被提交给服务器的值。对文件字段来说,这个属性是只读的,包含着文件在计算机中的路径。</li>
+        				</ul>
+        			</section>
+        			<section>
+        				<h3>共有的表单字段方法</h3>
+        				<p>每个表单字段都有两个方法:focus()和 blur()。</p>
+        			</section>
+        			<section>
+        				<h3>共有的表单字段事件</h3>
+        				<ul>
+        					<li>blur:当前字段失去焦点时触发。</li>
+        					<li>change:对于&lt;input&gt;和&lt;textarea&gt;元素,在它们失去焦点且value值改变时触发;对于&lt;select&gt;元素,在其选项改变时触发。</li>
+        					<li>focus:当前字段获得焦点时触发。</li>
+        				</ul>
+        			</section>
+        		</section>
+        		<section>
+        			<section>
+        				<h2>文本框脚本</h2>
+        				<p><small>在 HTML 中,有两种方式来表现文本框:一种是使用&lt;input&gt;元素的单行文本框,另一种是使用 &lt;textarea&gt;的多行文本框。两种文本框都支持 select()方法,这个方法用于选择文本框中的所有文本。</small></p>
+        			</section>
+        			<section>
+        				<h3>过滤输入</h3>
+        				<p><small>我们经常会要求用户在文本框中输入特定的数据,或者输入特定格式的数据。例如,必须包含某些 字符,或者必须匹配某种模式。由于文本框在默认情况下没有提供多少验证数据的手段,因此必须使用 JavaScript 来完成此类过滤输入的操作。而综合运用事件和 DOM 手段,就可以将普通的文本框转换成能 够理解用户输入数据的功能型控件。</small></p>
+        			</section>
+        			<section>
+        				<h3>屏蔽字符</h3>
+        				<p>有时候,我们需要用户输入的文本中包含或不包含某些字符。例如,电话号码中不能包含非数值字符。如前所述,响应向文本框中插入字符操作的是 keypress 事件。因此,可以通过阻止这个事件的默认行为来屏蔽此类字符。</p>
+        			</section>
+        			<section>
+        				<h3>只允许用户输入数字</h3>
+        				<pre><code class="javascript">
+EventUtil.addHandler(textbox, "keypress", function(event){
+    event = EventUtil.getEvent(event);
+    var target = EventUtil.getTarget(event);
+    var charCode = EventUtil.getCharCode(event);
+    if (!/\d/.test(String.fromCharCode(charCode))){
+        EventUtil.preventDefault(event);}
+    });
+                        </code></pre>
+        			</section>
+        			<section>
+        				<h3>操作剪贴板</h3>
+        				<p><small>IE 是第一个支持与剪贴板相关事件,以及通过 JavaScript 访问剪贴板数据的浏览器。IE 的实现成为 了事实上的标准,不仅 Safari 2、Chrome 和 Firefox 3 也都支持类似的事件和剪贴板访问(Opera 不支持通过 JavaScript 访问剪贴板),HTML 5 后来也把剪贴板事件纳入了规范。</small></p>
+        			</section>
+        			<section>
+        				<ul>
+        					<li>beforecopy:在发生复制操作前触发。</li>
+        					<li>copy:在发生复制操作时触发。</li>
+        					<li>beforecut:在发生剪切操作前触发。</li>
+        					<li>cut:在发生剪切操作时触发。</li>
+        					<li>beforepaste:在发生粘贴操作前触发。</li>
+        					<li>paste:在发生粘贴操作时触发。</li>
+        				</ul>
+        			</section>
+        			<section>
+        				<h2>HTML5 约束验证API</h2>
+        			</section>
+        			<section>
+        				<h3>必填字段</h3>
+        				<p>第一种情况是在表单字段中指定了 required 属性,如下面的例子所示:</p>
+        				<pre><code>
+&lt;input type="text" name="username" required&gt;
+        				</code></pre>
+        			</section>
+        			<section>
+        				<h3>其他输入类型</h3>
+        				<p>HTML5 为&lt;input&gt;元素的 type 属性又增加了几个值。这些新的类型不仅能反映数据类型的信息, 而且还能提供一些默认的验证功能。其中,"email"和"url"是两个得到支持最多的类型,各浏览器也 都为它们增加了定制的验证机制。</p>
+        				<pre><code class="html">
+&lt;input type="email" name ="email"&gt;
+&lt;input type="url" name="homepage"&gt;
+        				</code></pre>
+        			</section>
+        			<section>
+        			    <h3>数值范围</h3>
+        				<p>对所有这些数值类型的输入元素,可以指定 min 属性(最小的可能值)、max 属性(最大的可能值) 和 step 属性(从 min 到 max 的两个刻度间的差值)。例如,想让用户只能输入 0 到 100 的值,而且这 个值必须是 5 的倍数,可以这样写代码:</p>
+        				<pre><code class="html">
+&lt;input type="number" min="0" max="100" step="5" name="count"&gt;
+        				</code></pre>
+        				<p>这些属性在 JavaScript 中都能通过对应的元素访问(或修改)。此外,还有两个方法:stepUp() 和 stepDown()</p>
+        		    </section>
+        	    	<section>
+        				<h3>输入模式</h3>
+        				<p>HTML5为文本字段新增了pattern属性。这个属性的值是一个正则表达式,用于匹配文本框中的 值。例如,如果只想允许在文本字段中输入数值,可以像下面的代码一样应用约束:</p>
+        				<pre><code class="html">
+&lt;input type="text" pattern="\d+" name="count"&gt;
+        				</code></pre>
+        			</section>
+        			<section>
+        				<h3>检测有效性</h3>
+        				<p><small>使用 checkValidity()方法可以检测表单中的某个字段是否有效。所有表单字段都有个方法,如 果字段的值有效,这个方法返回 true,否则返回 false。字段的值是否有效的判断依据是本节前面介绍过的那些约束。</small></p>
+        			</section>
+        			<section>
+        				<h3>禁用验证</h3>
+        				<p>通过设置 novalidate 属性,可以告诉表单不进行验证。</p>
+        				<pre><code class="html">
+&lt;form method="post" action="signup.php" novalidate&gt; 
+&gt;!--这里插入表单元素--&gt;
+&lt;/form&gt;
+        				</code></pre>
+        			</section>
+        		</section>
+        		<section>
+        			<section>
+        				<h2>选择框脚本</h2>
+        			</section>
+        			<section>
+        				<p>选择框是通过&lt;select&gt;和&lt;option&gt;元素创建的。为了方便与这个控件交互,除了所有表单字段共 有的属性和方法外,HTMLSelectElement 类型还提供了下列属性和方法。</p>
+        				<ul>
+        					<li>add(newOption, relOption):向控件中插入新<option>元素,其位置在相关项(relOption) 之前。</li>
+        					<li>multiple:布尔值,表示是否允许多项选择;等价于 HTML 中的 multiple 特性。</li>
+        					<li>options:控件中所有<option>元素的 HTMLCollection。</li>
+        					<li>remove(index):移除给定位置的选项。</li>
+        					<li>selectedIndex:基于 0 的选中项的索引,如果没有选中项,则值为-1。</li>
+        					<li>size:选择框中可见的行数;</li>
+        					<li>如果没有选中的项,则选择框的 value 属性保存空字符串</li>
+        					<li>如果有一个选中项,而且该项的 value 特性已经在 HTML 中指定,则选择框的 value 属性等于选中项的 value 特性。即使 value 特性的值是空字符串,也同样遵循此条规则。</li>
+        					<li>如果有一个选中项,但该项的 value 特性在 HTML 中未指定,则选择框的 value 属性等于该项的文本。</li>
+        				    <li>如果有多个选中项,则选择框的 value 属性将依据前两条规则取得第一个选中项的值。</li>
+        				</ul>
+        			</section>
+        			<section>
+        				<ul>
+        					<li>index:当前选项在 options 集合中的索引。</li>
+        					<li>label:当前选项的标签;等价于 HTML 中的 label 特性。</li>
+        					<li>selected:布尔值,表示当前选项是否被选中。将这个属性设置为 true 可以选中当前选项。</li>
+        					<li>text:选项的文本。</li>
+        					<li>value:选项的值(等价于 HTML 中的 value 特性)。</li>
+        				</ul>
+        			</section>
+        			<section>
+        				<h3>选择选项</h3>
+        				<p>对于只允许选择一项的选择框,访问选中项的最简单方式,就是使用选择框的 selectedIndex 属性,如下面的例子所示:</p>
+        				<pre><code class="javascript">
+var selectedOption = selectbox.options[selectbox.selectedIndex];
+        				</code></pre>
+        			</section>
+        			<section>
+        				<p>另一种选择选项的方式,就是取得对某一项的引用,然后将其 selected 属性设置为 true。例如, 下面的代码会选中选择框中的第一项:</p>
+        				<pre><code class="javascript">
+selectbox.options[0].selected = true;
+        				</code></pre>
+        			</section>
+        			<section>
+        				<h3>添加选项</h3>
+        			</section>
+        			<section>
+        				<p>添加选项的方式有很多,第一种方 式就是使用如下所示的 DOM 方法。</p>
+        				<pre><code class="javascript">
+var newOption = document.createElement("option"); 
+newOption.appendChild(document.createTextNode("Option text")); 
+newOption.setAttribute("value", "Option value");
+selectbox.appendChild(newOption);
+        				</code></pre>
+        			</section>
+        			<section>
+        				<p>第二种方式是使用 Option 构造函数来创建新选项,这个构造函数是 DOM 出现之前就有的,一 直遗留到现在。Option 构造函数接受两个参数:文本(text)和值(value);第二个参数可选。</p>
+        				<pre><code class="javascript">
+var newOption = new Option("Option text", "Option value"); 
+selectbox.appendChild(newOption); //在 IE8 及之前版本中有问题
+        				</code></pre>
+        			</section>
+        			<section>
+        				<p>第三种添加新选项的方式是使用选择框的 add()方法。</p>
+        				<pre><code class="javascript">
+var newOption = new Option("Option text", "Option value"); 
+selectbox.add(newOption, undefined); //最佳方案
+        				</code></pre>
+        			</section>
+        			<section>
+        				<h3>移除选项</h3>
+        			</section>
+        			<section>
+        				<p>首先,可以使用 DOM 的 removeChild()方法,为其传入要移除的选项,如下面的例子所示:</p>
+        				<pre><code class="javascript">
+selectbox.removeChild(selectbox.options[0]); //移除第一个选项
+        				</code></pre>
+        			</section>
+        			<section>
+        				<p>其次,可以使用选择框的 remove()方法。这个方法接受一个参数,即要移除选项的索引,如下面的例子所示:</p>
+        				<pre><code class="javascript">
+selectbox.remove(0); //移除第一个选项
+        				</code></pre>
+        			</section>
+        			<section>
+        				<p>最后一种方式,就是将相应选项设置为 null。</p>
+        				<pre><code class="javascript">
+selectbox.options[0] = null;
+        				</code></pre>
+        			</section>
+        			<section>
+        				<h3>移动和重排选项</h3>
+        				<p>要在选择框中向前移动一个选项的位置,可以使用以下代码:</p>
+        				<pre><code class="javascript">
+var optionToMove = selectbox.options[1];
+selectbox.insertBefore(optionToMove, selectbox.options[optionToMove.index-1]);
+        				</code></pre>
+        			</section>
+        		</section>	
+        		<section>
+        			<section>
+        				<h2>表单序列化</h2>
+        				<p><small>随着 Ajax 的出现,表单序列化已经成为一种常见需求。</small></p>
+        			</section>
+        			<section>
+        				<h3>浏览器是怎样将数据发送给服务器的</h3>
+        				<ul>
+        					<li>对表单字段的名称和值进行 URL 编码,使用和号(&)分隔。</li>
+        					<li>不发送禁用的表单字段。</li>
+        					<li>只发送勾选的复选框和单选按钮。</li> 
+        					<li>不发送 type 为"reset"和"button"的按钮。</li>
+        					<li>多选选择框中的每个选中的值单独一个条目。</li>
+        					<li>在单击提交按钮提交表单的情况下,也会发送提交按钮;否则,不发送提交按钮。</li>
+        					<li>&lt;select&gt;元素的值,就是选中的&lt;option&gt;元素的 value 特性的值。如果&lt;option&gt;元素没有value 特性,则是&lt;option&gt;元素的文本值</li>
+        				</ul>
+        			</section>
+        		</section>
+        		<section>
+        			<section>
+        				<h2>富文本编辑</h2>
+        				<p><small>富文本编辑,又称为 WYSIWYG(What You See Is What You Get,所见即所得)。在网页中编辑富 文本内容,是人们对 Web 应用程序最大的期待之一。</small></p>
+        			</section>
+        		</section>
+                <section>
+                    <section>
+                        <h1>Thanks</h1>
+                        <p>
+                            <small><a href="index.html#/1">返回目录</a></small>
+                        </p>
+                    </section>
+                </section>
+            </div>
+        </div>
+        <!-- footer -->
+        <script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                        return !document.body.classList;
+                    } },
+                    { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    } }
+                ]
+            });
+        
+        </script>
+    </body>
+</html>

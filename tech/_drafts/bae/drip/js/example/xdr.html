@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>XDR</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <script>
+        var xdr = new XDomainRequest();
+        xdr.onload = function () {
+            alert(xdr.responseText);
+        };
+
+        xdr.onerror = function () {
+            alert('error occurred');
+        };
+
+        xdr.timeout = 1000;
+        xdr.ontimeout = function () {
+            alert('request timeout');
+        };
+
+        xdr.open('POST', 'http://qingling.duapp.com/');
+
+        xdr.contentType = 'application/x-www-form-urlencoded';
+
+        xdr.send('name1=value1&name2=value2');
+
+        xdr.abort();
+    </script>
+</body>
+</html>

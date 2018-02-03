@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="/css/reveal.css" />
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+    <section>
+        <h1>BOM</h1>
+    </section>
+    <section>
+        <ol>
+            <li>理解window对象——BOM的核心</li>
+            <li>控制窗口、框架和弹出窗口</li>
+            <li>利用location对象中的页面信息</li>
+            <li>使用navigator对象了解浏览器</li>
+        </ol>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>window对象</h2>
+    </section>
+    <section>
+        <p>BOM的核心对象是window，它表示一个浏览器的实例。在浏览器中window对象有双重角色，它既是通过javascript访问浏览器窗口的一个接口，又是ECMAScript规定Global对象。</p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>全局作用域</h2>
+
+        <p style="text-align: left">
+            <small>
+                由于window对象同时扮演着ECMAScript中global对象的角色，因此所有在全局作用域声明和变量，函数都会变成window对象的属性和方法。全局变量不能通过delete操作符删除，而直接在window对象上的定义的属性可以。var语句添加的window属性有个名为[[Configurable]],这个值被设置为false因此这样定义的属性不可以通过delete操作符删除
+            </small>
+        </p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>窗口关系及框架</h2>
+
+        <p style="text-align: left">
+            <small>
+                如果页面中包含框架，则每个框架都拥有自己的window对象，并且保存在frames集合中。在frames集合中，可以通过数值索引（从0开始，从上至下，从左到右），或者通过框架名来访问相应的window对象
+            </small>
+        </p>
+
+    </section>
+    <section>
+        <p style="text-align: left">如实例：</p>
+        <pre>
+            <code class="html">
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Frameset Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;frameset rows="160,*"&gt;
+        &lt;frame src="frame.htm" name="topFrame"&gt;&lt;/frame&gt;
+        &lt;frameset cols="50%,50%"&gt;
+            &lt;frame src="" name="leftFrame"&gt;&lt;/frame&gt;
+            &lt;frame src="" name="rightFrame"&gt;&lt;/frame&gt;
+        &lt;/frameset&gt;
+    &lt;/frameset&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </code>
+        </pre>
+    </section>
+    <section>
+        <p>每个部分访问</p>
+        <img src="img/t8_1.png" alt="每个部分访问"/>
+    </section>
+    <section>
+        <ul>
+            <li>与top 相对的另一个window对象是parent。在某些情况下，parent有可能等于top；但是在没有框架的情况下parent一定等于top。</li>
+            <li>
+                在使用框架的情况下，浏览器会存在多个Global对象，在每个框架中定义的全局变量会自动成为框架中window对象的属性。由于每个window都包含原生类型的构造函数，因此每个框架都有一套自己的构造函数，这些构造函数一一对应，但并不相等。这个问题会影响到对跨域框架传递的对象使用instanceof操作符
+            </li>
+        </ul>
+
+    </section>
+    <section>
+        <h2>窗口的位置</h2>
+    </section>
+    <section>
+        <h3>修改窗口位置的方法</h3>
+        <ul>
+            <li>screenLeft screenTop 表示相对屏幕左边和上边（相对于由window对象表示的页面可见区域的距离），支持的浏览器IE、Safari、Opera、Chrome</li>
+            <li>screenX screenY 表示相对屏幕左边和上边（整个浏览器窗口相对于屏幕的坐标值），支持的浏览器Firefox、Safari、Chrome、Opera（不建议）</li>
+        </ul>
+    </section>
+    <section>
+        <h3>兼容写法</h3>
+        <pre>
+            <code class="javascript">
+ var leftPos = (typeof window.screenLeft == 'number') ?
+        window.screenLeft :
+        window.screenX;
+ var topPos = (typeof window.screenTop == 'number') ?
+        window.screenTop :
+        window.screenY;
+            </code>
+        </pre>
+    </section>
+    <section>
+        <h2>窗口大小</h2>
+    </section>
+    <section>
+        <p>
+            <small>IE9+、Firefox、Safari、Opera 和 Chrome 均为此提供了 4个属性：<br>innerWidth、innerHeight、outerWidth 和 outerHeight
+            </small>
+        </p>
+        <ul>
+            <li>innerWidth、innerHeight表示该容器中页面视图区的大小（减去边框宽度）。</li>
+            <li>outerWidth 和 outerHeight 返回浏览器窗口本身的尺寸（在 Chrome 中，与 innerWidth、innerHeight 返回相同的值）</li>
+        </ul>
+    </section>
+    <section>
+        <p>在 IE、Firefox、Safari、Opera 和 Chrome 中，document.documentElement.clientWidth
+            和document.documentElement.clientHeight 中保存了页面视口的信息。在 IE6 中，这些属性必须在标准模式下才有效；
+            如果是混杂模式，就必须通过 document.body.clientWidth 和document.body.clientHeight 取得相同信息。而对于混杂模式下的 Chrome，这些方法都可以取得视口的大小。
+        </p>
+    </section>
+    <section>
+        <p style="text-align: left">取得页面视口的大小的兼容各浏览器方法：</p>
+        <pre>
+            <code class="javascript">
+var pageWidth = window.innerWidth,
+    pageHeight = window.innerHeight;
+
+if (typeof pageWidth != "number") {
+    if (document.compatMode == "CSS1Compat") {
+        pageWidth = document.documentElement.clientWidth;
+        pageHeight = document.documentElement.clientHeight;
+    } else {
+        pageWidth = document.body.clientWidth;
+        pageHeight = document.body.clientHeight;
+    }
+}
+            </code>
+        </pre>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>导航和打开窗口</h2>
+    </section>
+    <section>
+        <p>window.open()方法,可接收 4 个参数：</p>
+        <ul style="margin:20px 0; ">
+            <li>要加载的 URL</li>
+            <li>窗口目标</li>
+            <li>一个特性字符串</li>
+            <li>一个表示新页面是否取代浏览器历史记录中当前加载页面的布尔值</li>
+        </ul>
+        <p>
+            <small>通常只须传递第一个参数，最后一个参数只在不打开新窗口的情况下使用</small>
+        </p>
+    </section>
+    <section>
+        <p>.close()方法</p>
+        <ul>
+            <li>.close()方法可关闭通过 window.open()打开的弹出窗口。</li>
+            <li>弹出窗口可以调用 top.close()在不经用户允许的情况下关闭自己</li>
+            <li>对于浏览器的主窗口，如果没有得到用户的允许是不能关闭它的。</li>
+        </ul>
+    </section>
+    <section>
+        <h2>安全限制与弹出窗口屏蔽程序</h2>
+    </section>
+    <section>
+        <p style="text-align: left">检测调用 window.open()打开的弹出窗口是不是被屏蔽了：</p>
+        <pre>
+            <code class="javascript">
+var blocked = false;
+    try {
+        var wroxWin = window.open("http://www.wrox.com", "_blank");
+        if (wroxWin == null) {
+            blocked = true;
+        }
+    } catch (ex){
+        blocked = true;
+    }
+    if (blocked){
+        alert("The popup was blocked!");
+    }
+            </code>
+        </pre>
+        <p style="text-align: left">
+            <small>要注意的是，检测弹出窗口是否被屏蔽只是一方面，它并不会阻止浏览器显示与被屏蔽的弹出窗口有关的消息。</small>
+        </p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>间歇调用和超时调用</h2>
+    </section>
+    <section>
+        <ul>
+            <li style="margin-bottom: 20px;">间歇调用 则是每隔指定的时间就执行一次代码 setInterval()</li>
+            <li>超时调用 即在指定的时间过后执行代码 setTimeout()</li>
+        </ul>
+        <p style="margin-top: 20px;">
+            <small>这2个方法分别可以用clearTimeout()方法和 clearInterval()方法取消间歇调用和超时调用</small>
+        </p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>系统对话窗</h2>
+
+        <p>
+            <small>浏览器通过alert()、confirm()和prompt()方法可以调用系统对话框想用户显示消息。</small>
+        </p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>location 对象</h2>
+
+        <p>
+            <small>location 是最有用的 BOM对象之一，它提供了与当前窗口中加载的文档有关的信息，还提供了一些导航功能。事实上，location 对象它既是 window 对象的属性，也是document
+                对象的属性；换句话说，window.location 和 document.location 引用的是同一个对象。
+            </small>
+        </p>
+    </section>
+    <section>
+        <h2>location 对象的主要作用</h2>
+        <ul>
+            <li style="margin-bottom: 20px;">查询字符串参数</li>
+            <li>位置操作(location 对象可以以下方式来改变浏览器的位置)
+                <ul>
+                    <li>location.assign()方法</li>
+                    <li>location.hash=""</li>
+                    <li>location.search=""</li>
+                    <li>location.hostname=""</li>
+                    <li>location.pathname=""</li>
+                    <li>location.port=</li>
+                    <li>location.reload()</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>navigator 对象</h2>
+
+        <p>
+            <small>navigator 对象也有一套自己的属性(通常用于检测网页的浏览器类型，第9章详尽讨论)</small>
+        </p>
+        <p>
+            <small>下面是navigator 对象的2个主要用途</small>
+        </p>
+        <ul>
+            <li style="margin-bottom: 20px;">检测插件</li>
+            <li>注册处理程序</li>
+        </ul>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>screen 对象</h2>
+
+        <p>
+            <small>screen 对象基本上只用来表明客户端的能力，其中包括浏览器窗口外部的显示器的信息，如像素宽度和高度等。</small>
+        </p>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>history 对象</h2>
+
+        <p>
+            <small>history 是 window对象的属性,它存着用户上网的历史记录，从窗口被打开的那一刻算起。出于安全方面的考虑，开发人员无法得知用户浏览过的 URL。。</small>
+        </p>
+        <ul>
+            <small>
+                <li style="margin:20px 0">go()方法可以在用户的历史记录中任意跳转，可以向后或向前，该方法接受一个参数，可以是正数，负数或者具体的网址</li>
+                <li>还可以使用两个简写方法 back()和 forward()来代替 go()。这两个方法可以模仿浏览器的“后退”和“前进”按钮</li>
+            </small>
+        </ul>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>小结</h2>
+    </section>
+    <section>
+        <p>浏览器对象模型（BOM）以window
+            对象为依托，表示浏览器窗口以及页面可见区域。同时，window对象还是ECMAScrip中的Global对象，因而所有全局变量和函数都是它的属性，而且所有原生的构造函数及其它函数也都存在于它的命名空间下</p>
+    </section>
+    <section>
+        <ul>
+            <li style="padding: .5em 0">在使用框架时，每个框架都有自己的window以及所有原生构造函数及其它函数的副本。每个框架都保存在frames集合中，可以通过位置或通过名称来访问。</li>
+            <li style="padding: .5em 0">有一些窗口指针，可以用来引用其它框架，包括父框架</li>
+            <li style="padding: .5em 0">top对象 始终指向最外围的框架，也就是整个浏览器窗口</li>
+            <li style="padding: .5em 0">parent 对象表示包含当前框架的框架，而self对象则回指window</li>
+            <li style="padding: .5em 0">使用location对象可以通过编程的方式来访问浏览器的导航系统。设置相应的属性，可以逐段或整体性地修改浏览器的URL</li>
+            <li style="padding: .5em 0">调用replace方法可以导航到一个新的URL，同时该URL会替换浏览器历史记录中当前显示的页面。</li>
+            <li style="padding: .5em 0">navigator对象提供了浏览器相关的信息。</li>
+        </ul>
+    </section>
+    <section>
+        <p>BOM中还有两个对象：screen 和 history： screen对象中保存着与客户端显示器有关的信息，这些信息一般只用于站点分析。history对象
+            开发人员据此判断历史记录的数量，也可以在历史记录中，向后或向前导航到任意的页面</p>
+    </section>
+</section>
+<section>
+    <section>
+        <h1>Thanks</h1>
+
+        <p>
+            <small><a href="index.html#/2">返回目录</a></small>
+        </p>
+    </section>
+</section>
+</div>
+</div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

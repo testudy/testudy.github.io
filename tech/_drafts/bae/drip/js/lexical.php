@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>词法结构</title>
+		<?php
+			include('../header.php');
+		?>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>词法结构</h1>
+						<p>做为语法的基础，词法结构规定了诸如变量名是什么样的、怎么写注释，以及程序语句之间如何分割等规则。</p>
+					</section>
+					<section>
+						<ol>
+							<li>字符集</li>
+							<li>注释</li>
+							<li>直接量</li>
+							<li>标识符和保留字</li>
+							<li>可选的分号</li>
+						</ol>
+					</section>
+				</section>
+				<section>
+					<h2>字符集</h2>
+				</section>
+				<section>
+					<h2>注释</h2>
+				</section>
+				<section>
+					<h2>直接量</h2>
+				</section>
+				<section>
+					<h2>标识符和保留字</h2>
+				</section>
+				<section>
+					<h2>可选的分号</h2>
+				</section>
+				<section>
+					<h1>再见！</h1>
+				</section>
+			</div>
+		</div>
+		<?php
+			include('../footer.php');
+		?>
+	</body>
+</html>

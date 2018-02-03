@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="ie6" lang="zh-cn"><![endif]-->
+<!--[if IE 7]><html class="ie7" lang="zh-cn"><![endif]-->
+<!--[if IE 8]><html class="ie8" lang="zh-cn"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="zh-cn"><!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>Overlay Demo</title>
+    <link rel="stylesheet" href="http://static01.babytreeimg.com/img/bui/2.0.0/build/reset/css/reset.min.css" />
+    <link rel="stylesheet" href="http://static01.babytreeimg.com/img/bui/2.0.0/build/overlay/css/overlay.css" />
+</head>
+<body>
+    <div style="width: 100%; height: 5000px; background: yellow url(http://su.bdimg.com/static/skin/img/all_skin/5.jpg) repeat-y center 0;">
+        <a href="#tmplOverlay" data-toggle="show.overlay" data-overlay-click="true">A触发弹层</a>
+        <button data-toggle="show.overlay" data-target="#tmplOverlay2">按钮触发弹层</button>
+        <a href="data/popup.html" data-toggle="show.overlay" data-overlay-click="true">A Ajax</a>
+        <button data-toggle="show.overlay" data-url="data/popup.html">按钮Ajax</button>
+        <button id="btnShow">按钮控制弹层</button>
+    </div>
+    <div class="bui-popup-overlay in" data-overlay-click="true">
+        <div class="bui-popup-dialog">
+
+            <div class="bui-popup-basic">
+                <div class="popup-title">启动弹层</div>
+                <div class="popup-content">
+                    <p>这是一行说明。</p>
+                    <p class="popup-footer">
+                        <button type="submit" class="bui-button-green">提　交</button>
+                        <button type="reset" class="bui-button-red">取　消</button>
+                    </p>
+                </div>
+                <button class="bui-close" hidefocus="hidefocus" data-toggle="close.overlay"></button>
+            </div>
+
+        </div>
+        <span class="bui-popup-align"></span>
+    </div>
+    <!--
+    <div class="bui-popup-overlay in" data-overlay-click="true">
+        <div class="bui-popup-dialog">
+
+            <div class="loading">
+            </div>
+
+        </div>
+        <span class="bui-popup-align"></span>
+    </div>
+    -->
+    <script type="text/template" id="tmplOverlay">
+        <div class="bui-popup-basic">
+            <div class="popup-title">Tmpl弹层</div>
+            <div class="popup-content">
+                <p>这是一行说明。</p>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="tmplOverlay2">
+        <div class="bui-popup-basic">
+            <div class="popup-title">Tmpl弹层</div>
+            <div class="popup-content">
+                <p>这是一行说明。</p>
+            </div>
+            <p class="popup-footer">
+                <button type="submit" class="bui-button-green">提　交</button>
+                <button type="reset" class="bui-button-red">取　消</button>
+            </p>
+            <button class="bui-close" hidefocus="hidefocus" data-toggle="close.overlay">关闭</button>
+        </div>
+    </script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/lib/jquery/1.6.4/jquery.min.js"></script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/build/support/js/support.min.js"></script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/build/helper/js/helper.min.js"></script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/build/overlay/js/overlay.min.js"></script>
+    <script>
+        $('#btnShow').click(function () {
+            var $template = $($.trim($('#tmplOverlay').html()));
+            /*
+            $template.bind('show', function (e) {
+                //e.preventDefault();
+                console.log('show');
+            }).bind('shown', function () {
+                console.log('shown');
+            }).bind('close', function (e) {
+                //e.preventDefault();
+                console.log('close');
+            }).bind('closed', function () {
+                console.log('closed');
+            });
+            */
+            $template.overlay({
+                overlayClick: true,
+                onshow: function (e) {
+                    //e.preventDefault();
+                    console.log('show');
+                },
+                onshown: function (e) {
+                    console.log('shown');
+                },
+                onclose: function (e) {
+                    //e.preventDefault();
+                    console.log('close');
+                },
+                onclosed: function (e) {
+                    console.log('closed');
+                }
+            });
+
+            setTimeout(function () {
+                alert('压栈');
+                $($('button')[0]).click();
+            }, 1000);
+        });
+
+        $(document.body).delegate('button[type=submit]', 'click', function () {
+            $($.trim($('#tmplOverlay').html())).overlay();
+        });
+    </script>
+</body>
+</html>

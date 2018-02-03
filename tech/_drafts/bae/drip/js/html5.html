@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="/css/reveal.css"/>
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section><h1>HTML5 脚本编程</h1></section>
+        </section>
+        <section>
+            <section>
+                <h2>跨文档消息传递</h2>
+                <p>跨文档消息传送(cross-document messaging),有时候简称为 XDM,指的是在来自不同域的页面间传递消息。</p>
+            </section>
+            <section>
+                <p>XDM的核心是postMessage()方法。在HTML5规范中,除了XDM部分之外的其他部分也会提到这个方法名,但都是为了同一个目的:向另一个地方传递数据。对于XDM而言,“另一个地方”指的 是包含在当前页面中的 iframe 元素,或者由当前页面弹出的窗口。</p>
+                <p>postMessage()方法接收两个参数:一条消息和一个表示消息接收方来自哪个域的字符串。第二 个参数对保障安全通信非常重要,可以防止浏览器把消息发送到不安全的地方。</p>
+            </section>
+            <section>
+                <pre><code class="javascript">
+   //注意:所有支持 XDM 的浏览器也支持 iframe 的 contentWindow 属性
+   var iframeWindow = document.getElementById("myframe").contentWindow;
+   iframeWindow.postMessage("A secret", "http://www.wrox.com");
+                </code></pre>
+                <p><small>如果传给 postMessage()的第二个参 数是"*",则表示可以把消息发送给来自任何域的文档,但我们不推荐这样做。</small></p>
+            </section>
+            <section>
+                <h3>接收到XDM消息</h3>
+                <p>接收到 XDM 消息时,会触发 window 对象的 message 事件。这个事件是以异步形式触发的,因此 从发送消息到接收消息(触发接收窗口的 message 事件)可能要经过一段时间的延迟。</p>
+            </section>
+            <section>
+                <h3>onmessage 处理程序</h3>
+                <p>触发 message 事件后,传递给 onmessage 处理程序的事件对象包含以下三方面的重要信息</p>
+                <ul>
+                    <li> data:作为 postMessage()第一个参数传入的字符串数据。</li>
+                    <li> origin:发送消息的文档所在的域,例如"http://www.wrox.com"。</li>
+                    <li>  source:发送消息的文档的 window 对象的代理。</li>
+                </ul>
+            </section>
+            <section>
+                <pre><code>
+   EventUtil.addHandler(window, "message", function(event){
+       //确保发送消息的域是已知的域
+       if (event.origin == "http://www.wrox.com"){
+       //处理接收到的数据 processMessage(event.data);
+       //可选:向来源窗口发送回执
+       event.source.postMessage("Received!", "http://p2p.wrox.com"); }5
+   });
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>媒体元素</h2>
+            </section>
+            <section>
+                <p>随着音频和视频在 Web 上的迅速流行,大多数提供富媒体内容的站点为了保证跨浏览器兼容性, 不得不选择使用 Flash。HTML5 新增了两个与媒体相关的标签,让开发人员不必依赖任何插件就能在网 页中嵌入跨浏览器的音频和视频内容。这两个标签就是&lt;audio&gt;和&lt;video&gt;。</p>
+            </section>
+            <section>
+                <h3>用法</h3>
+                <pre><code>
+                    <!-- 嵌入视频 -->
+                    &lt;video src="conference.mpg" id="myVideo"&gt;Video player not available.&lt;/video&gt;
+                    <!-- 嵌入音频 -->
+                    &lt;audio src="song.mp3" id="myAudio"&gt;Audio player not available.&lt;/audio&gt;
+                </code></pre>
+            </section>
+            <section>
+                <p>因为并非所有浏览器都支持所有媒体格式,所以可以指定多个不同的媒体来源。为此,不用在标签 中指定 src 属性,而是要像下面这样使用一或多个&lt;source&gt;元素。</p>
+                <p><a href="http://www.w3schools.com/tags/ref_av_dom.asp">Audio/Video API 详情参见</a></p>
+            </section>
+            <section>
+                <h3>自定义媒体播放器</h3>
+                <pre><code class="html">
+                    &lt;div class="mediaplayer"&gt;
+                        &lt;div class="video"&gt;
+                            &lt;video id="player" src="movie.mov" poster="mymovie.jpg"
+                                   width="300" height="200"&gt;
+                                Video player not available.
+                            &lt;/video&gt;
+                        &lt;/div&gt;
+                        &lt;div class="controls"&gt;
+                            &lt;input type="button" value="Play" id="video-btn"&gt;
+                            &lt;span id="curtime"&gt;0&lt;/span&gt;/&lt;span id="duration"&gt;0&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                </code></pre>
+            </section>
+            <section>
+                <h3></h3>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Thanks</h1>
+                <p>
+                    <small><a href="index.html#/1">返回目录</a></small>
+                </p>
+            </section>
+        </section>
+    </div>
+</div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

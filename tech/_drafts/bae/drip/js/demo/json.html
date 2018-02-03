@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>JSON Demo</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <script>
+        var qling = {
+
+            name: {
+                first: 'Hu',
+                last: 'Jiwei'
+            },
+            
+            address: 'Hukou',
+
+            age: 26,
+
+            schools: ['光明', '柳园', '31', '临漳', '燕山'],
+
+            date: new Date()
+        };
+
+        var jsonText1 = JSON.stringify(qling);
+        var jsonText2 = JSON.stringify(qling, ['name', 'address', 'schools', 'first', 'test']);
+        var jsonText3 = JSON.stringify(qling, function (key, value) {
+            switch(key) {
+                case 'name':
+                    return value.first + ' ' + value.last;
+                case 'schools':
+                    return value.join(', ');
+                case 'age':
+                    return undefined;
+                default:
+                    return value;
+            }
+        });
+        var jsonText4 = JSON.stringify(qling, null, 21);
+
+        var dukou = {
+            name: 'qingling dukou',
+
+            toJSON: function () {
+                //return {n: '渡口'};
+                return 'n:渡口';
+            }
+        };
+
+        var jsonText5 = JSON.stringify(dukou, function (key, value) {
+            if (key === 'n') {
+                return 'hi world';
+            }
+            return value;
+        });
+
+        var ql = JSON.parse(jsonText1, function (key, value) {
+            if (key === 'date') {
+                return new Date(value);
+            }
+
+            return value;
+        });
+
+    </script>
+</body>
+</html>

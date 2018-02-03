@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>引用类型</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section>
+                <h1>引用类型</h1>
+            </section>
+            <section>
+                <p>
+                    引用类型的值（对象）是引用类型的一个实例。在ECMAScript中，引用类型是一种数据结构，用于讲数据和功能组织在一起。引用类型有时候也被称为对象定义，因为他们描述的是一类对象所具有的属性和方法。</p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Object类型</h2>
+
+                <p> 我们看到的大多数引用类型值都是Object类型的实例，是ECMAScript中使用最多的一个类型。</p>
+            </section>
+            <section>
+                <h2>创建Object</h2>
+                <ul>
+                    <li style="padding:.5em 0;">第一种是使用new操作符后跟Object构造函数</li>
+                    <li style="padding:.5em 0;">另一种方式是使用对象字面量表示法</li>
+                </ul>
+                <p class="fragment">
+                    <small>在通过对象字面量定义对象时，不会调用Object构造函数</small>
+                </p>
+            </section>
+            <section>
+                <h2>访问对象属性</h2>
+                <ul>
+                    <li style="padding:.5em 0;">访问对象属性时使用的都是点表示法</li>
+                    <li style="padding:.5em 0;">javascript也可以使用方括号表示法</li>
+                    <li style="padding:.5em 0;">方括号语法的主要优点是可以通过变量来访问属性</li>
+                    <li style="padding:.5em 0;">person["first name"] 中间有空格是合法的</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Array类型</h2>
+                <p> ECMAScript数组的每一项可以保存任何类型的数据</p>
+            </section>
+            <section>
+                <h2>创建array</h2>
+                <ul>
+                    <li style="padding:.5em 0;">第一种是使用Array构造函数</li>
+                    <li style="padding:.5em 0;">另一种方式是使用数组字面量表示法</li>
+                </ul>
+                <p class="fragment">
+                    <small>在通过数组字面量定义对象时，不会调用Array构造函数</small>
+                </p>
+            </section>
+            <section>
+                <ul>
+                    <li style="padding:.5em 0;">
+                        由于数组最后一项的索引始终是length-1，因此下一个新项的位置就是length。每当在数组末尾添加一项后，其length属性都会自动更新以反映这一变化。
+                    </li>
+                    <li style="padding:.5em 0;">数组最多可以包含 4294967295个项</li>
+                </ul>
+            </section>
+            <section>
+                <h2>检测数组</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">对于一个网页或者一个全局作用域而言，使用instanceof操作符</li>
+                    <li  style="padding:.5em 0;">ECMAScript 5 使用isArray（）方法</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>转换方法</h2>
+                <p style="text-align: left">所有对象都具有toLocaleString()、toString()和valueOf()方法。其中，调用数组的toString()方式会返回有数组中每个的字符形式拼接而成的一个以逗号分隔的字符串，valueOf()返回的还是数组。如果数组中的某一项的值是null或者undefined，那么该值在join()、toLocaleString()、toString()和valueOf()方法返回的结果中以空字符串表示。</p>
+            </section>
+            <section>
+                <h2>栈方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">ECMAScript为数组专门提供了push()和pop()方法，以便实现类似栈的行为。</li>
+                    <li  style="padding:.5em 0;">push()方法可以接受任意数量的参数，把他们逐个添加到数组的末尾，并返回修改后数组的长度</li>
+                    <li  style="padding:.5em 0;">pop()方法则从数组末尾移除最后一项，减少数组的length，然后返回移除的项</li>
+                </ul>
+
+            </section>
+            <section>
+                <h2>队列方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">ECMAScript5为数组专门提供了shift()方法，以便实现类似队列的行为。</li>
+                    <li  style="padding:.5em 0;">shift()方法能够移除数组中的第一项并返回该项，同时将数组长度减1</li>
+                    <li  style="padding:.5em 0;">unshift()方法能够在数组的前端添加任意个项并返回新数组的长度</li>
+                </ul>
+                <p><small>IE7以下浏览器 unshift()方法总是返回undefined而不是数组的长度</small></p>
+            </section>
+            <section>
+                <h2>重排序方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">数组中已经存在两个可以直接用来重排序的方法：reversr()和 sort()</li>
+                    <li  style="padding:.5em 0;">reverse()方法会反转数组项的顺序</li>
+                    <li  style="padding:.5em 0;">sort() 方法按照升序排列数组项，默认先调用每个数组项的toString方法</li>
+                    <li  style="padding:.5em 0;">sort()和reverse()方法的返回值是经过排序之后的数组</li>
+                </ul>
+            </section>
+            <section>
+                <h2>操作方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">concat() 方法用于连接两个或多个数组,该方法不会改变现有的数组,而仅仅会返回被连接数组的一个副本.</li>
+                    <li  style="padding:.5em 0;">slice() 方法可从已有的数组中返回选定的元素,即一个新的数组.该方法可传入2个参数（start,end）,返回的新数组包含从 start 到 end （不包括该元素）的元素，如果 end 未被规定，那么返回start 到数组结尾的所有元素，
+                        slice()方法的参数如为负数，则用数组长度加上该数来确定相应的位置。</li>
+                    <li  style="padding:.5em 0;">splice() 方法向/从数组中添加/删除项目，然后返回被删除的项目。该方法会改变原始数组。splice() 方法可删除从 index 处开始的零个或多个元素，并且用参数列表中声明的一个或多个值来替换那些被删除的元素。
+                        如果从 arrayObject 中删除了元素，则返回的是含有被删除的元素的数组。
+                    </li>
+                    <li  style="padding:.5em 0;">请注意：splice() 方法与 slice() 方法的作用是不同的，splice() 方法会直接对数组进行修改。</li>
+                </ul>
+            </section>
+            <section>
+                <h2>位置方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">ECMAScript5 为数组实例添加了两个位置方法：indexOf()和lastIndexOf(),这两个方法可返回指定的字符串值在字符串中首次出现的位置，或者在没找到的情况下返回-1。</li>
+                    <li  style="padding:.5em 0;">indexOf()方法从数组的开头（位置0）开始向后查找</li>
+                    <li  style="padding:.5em 0;">lastIndexOf()方法从数组的末尾开始向前查找</li>
+                </ul>
+                <p class="fragment">请注意：这两个方法在检索并比较第一个参数与数组中的每一项时，使用全等操作符(===)，且区分大小写，IE8及以下不支持这两个方法</p>
+            </section>
+            <section>
+                <h2>迭代方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">every():对数组中的每一项运行给定的函数，如果该函数对每一项都返回true，则返回true</li>
+                    <li  style="padding:.5em 0;">filter():对数组中的每一项运行给定的函数，返回该函数会返回true的项组成的数组</li>
+                    <li  style="padding:.5em 0;">forEach():对数组中的每一项运行给定的函数，没有返回值</li>
+                    <li  style="padding:.5em 0;">map():对数组中的每一项运行给定的函数，返回每次函数调用的结果组成的数组</li>
+                    <li  style="padding:.5em 0;">some():对数组中的每一项运行给定的函数，如果该函数对任意一项返回true，则返回true</li>
+                    <li  style="padding:.5em 0;">IE8及以下不支持</li>
+                </ul>
+            </section>
+            <section>
+                <h2>缩小方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">ECMAScript5 为数组实例添加了两个缩小方法：reduce()和reduceRight()</li>
+                    <li  style="padding:.5em 0;">reduce和reduceRight用于简化或降级（reduce）数组，前者是从开始处进行分析，而后者则从结束处</li>
+                    <li  style="padding:.5em 0;">回调函数callback接受4个参数：前一个值（previous）、当前值（current）、索引（index）和数组（array）本身</li>
+                    <li  style="padding:.5em 0;">IE8及以下不支持</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Date类型</h2>
+            </section>
+            <section>
+                <p style="text-align: left">ECMAScript中的date类型是在早期java中java.util.Date 类基础上构建的。为此Date类型使用自UTC 1970年1月1日午夜（零食）开始经过的毫秒数来保存日期。在使用这种数据存储格式的条件下，Date类型保存的日期能够精确到 1970年1月1日之前或之后的285616年</p>
+            </section>
+            <section>
+                <h2>继承的方法</h2>
+                <p>与其他引用类型一样，Date类型也重写了toLocaleString()、toString()和valueOf()方法；但这些方法返回的值与其他类型中的方法不同。Date类型的toLocaleString()方法会按照浏览器设置的地区想适应的格式返回日期和时间。Date类型的valueOf()方法，则根本不返回字符串而是返回日期的毫秒数。</p>
+            </section>
+            <section>
+                <h2>日期格式化方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">toDateString()——以特定于实现的格式显示星期几、月、日和年</li>
+                    <li  style="padding:.5em 0;">toTimeString()——以特定于实现的格式显示时、分、秒和时区</li>
+                    <li  style="padding:.5em 0;">toLocaleDateString()——以特定于地区的格式显示星期几、月、日和年</li>
+                    <li  style="padding:.5em 0;">toLocaleTimeString()——以特定于现实的格式显示时、分、秒</li>
+                    <li  style="padding:.5em 0;">toUTCString()——以特定于现实的格式完整的UTC日期</li>
+                </ul>
+            </section>
+            <section>
+                <h3>日期/时间组件方法（一）</h3>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">方法</th>
+                        <th>说明</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>getDate()</small></td>
+                        <td><small>从 Date 对象返回一个月中的某一天 (1 ~ 31)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getDay()</small></td>
+                        <td><small>从 Date 对象返回一周中的某一天 (0 ~ 6)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getMonth()</small></td>
+                        <td><small>从 Date 对象返回月份 (0 ~ 11)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getFullYear()</small></td>
+                        <td><small>从 Date 对象以四位数字返回年份</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getHours()</small></td>
+                        <td><small>返回 Date 对象的小时 (0 ~ 23)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getMinutes()</small></td>
+                        <td><small>返回 Date 对象的分钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getSeconds()</small></td>
+                        <td><small>返回 Date 对象的秒数 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getMilliseconds()</small></td>
+                        <td><small>返回 Date 对象的毫秒(0 ~ 999)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getTime()</small></td>
+                        <td><small>返回 1970 年 1 月 1 日至今的毫秒数</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getTimezoneOffset()</small></td>
+                        <td><small>返回本地时间与格林威治标准时间 (GMT) 的分钟差</small></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3>日期/时间组件方法（二）</h3>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">方法</th>
+                        <th>说明</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>getUTCDate()</small></td>
+                        <td><small>根据世界时从 Date 对象返回月中的一天 (1 ~ 31)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCDay()</small></td>
+                        <td><small>根据世界时从 Date 对象返回周中的一天 (0 ~ 6)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCMonth()</small></td>
+                        <td><small>根据世界时从 Date 对象返回月份 (0 ~ 11)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCFullYear()</small></td>
+                        <td><small>根据世界时从 Date 对象返回四位数的年份</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCHours()</small></td>
+                        <td><small>根据世界时返回 Date 对象的小时 (0 ~ 23)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCMinutes()</small></td>
+                        <td><small>根据世界时返回 Date 对象的分钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCSeconds()</small></td>
+                        <td><small>根据世界时返回 Date 对象的秒钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getUTCMilliseconds()</small></td>
+                        <td><small>根据世界时返回 Date 对象的毫秒(0 ~ 999)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>getTime()</small></td>
+                        <td><small>返回 1970 年 1 月 1 日至今的毫秒数</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>parse()</small></td>
+                        <td><small>返回1970年1月1日午夜到指定日期（字符串）的毫秒数</small></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3>日期/时间组件方法（三）</h3>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">方法</th>
+                        <th>说明</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>setDate()</small></td>
+                        <td><small>设置 Date 对象中月的某一天 (1 ~ 31)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setMonth()</small></td>
+                        <td><small>设置 Date 对象中月份 (0 ~ 11)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setFullYear()</small></td>
+                        <td><small>设置 Date 对象中的年份（四位数字）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setHours()</small></td>
+                        <td><small>设置 Date 对象中的小时 (0 ~ 23)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setMinutes()</small></td>
+                        <td><small>设置 Date 对象中的分钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setSeconds()</small></td>
+                        <td><small>设置 Date 对象中的秒钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setMilliseconds()</small></td>
+                        <td><small>设置 Date 对象中的毫秒 (0 ~ 999)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setTime()</small></td>
+                        <td><small>以毫秒设置 Date 对象</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setUTCDate()</small></td>
+                        <td><small>根据世界时设置 Date 对象中月份的一天 (1 ~ 31)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setUTCMonth()</small></td>
+                        <td><small>根据世界时设置 Date 对象中的月份 (0 ~ 11)</small></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3>日期/时间组件方法（四）</h3>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">方法</th>
+                        <th>说明</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>setUTCHours()</small></td>
+                        <td><small>根据世界时设置 Date 对象中的小时 (0 ~ 23)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setUTCMinutes()</small></td>
+                        <td><small>根据世界时设置 Date 对象中的分钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setUTCSeconds()</small></td>
+                        <td><small>根据世界时设置 Date 对象中的秒钟 (0 ~ 59)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>setUTCMilliseconds()</small></td>
+                        <td><small>根据世界时设置 Date 对象中的毫秒 (0 ~ 999)</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>UTC()</small></td>
+                        <td><small>根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数</small></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>RegExp类型</h2>
+            </section>
+            <section>
+                <p style="text-align: left">ECMAScript通过RegExp类型来支持正则表达式</p>
+               <ul>
+                   <li>当您检索某个文本时，可以使用一种模式来描述要检索的内容。RegExp 就是这种模式。</li>
+                   <li>简单的模式可以是一个单独的字符。</li>
+                   <li>更复杂的模式包括了更多的字符，并可用于解析、格式检查、替换等等。</li>
+                   <li>您可以规定字符串中的检索位置，以及要检索的字符类型，等等。</li>
+               </ul>
+                                <pre><code class="javascript">
+                                    var expression = / pattern/ flags
+                                </code></pre>
+
+            </section>
+            <section>
+                <p>正则表达式的匹配模式支持以下3个标志。</p>
+            <ul>
+                <li>g:表示全局（global）模式</li>
+                <li>i:表示不区分大小写模式</li>
+                <li>m:表示多行模式</li>
+            </ul>
+                </section>
+            <section>
+                <h2>RegExp实例属性</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">global：布尔值，表示是否设置了g标志</li>
+                    <li  style="padding:.5em 0;">ignoreCase：布尔值，表示是否设置了i标志</li>
+                    <li  style="padding:.5em 0;">lastIndex：整数，表示开始搜索下一匹配项的字符位置，从0算起</li>
+                    <li  style="padding:.5em 0;">multiline：布尔值，表示是否设置了m标志</li>
+                    <li  style="padding:.5em 0;">source：正则表达式的字符串表示，按照字面量形式而非传入构造函数中的字符串模式返回</li>
+                </ul>
+            </section>
+            <section>
+                <h2>RegExp实例方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">RegExp对象的主要方法是exec(),该方法检索字符串中的指定值。返回值是包含第一个匹配项信息的数组。如果没有发现匹配，则返回 null。</li>
+                    <li  style="padding:.5em 0;">test() 方法检索字符串中的指定值。返回值是 true 或 false。</li>
+                    <li  style="padding:.5em 0;">RegExp 实例继承的 toLocaleString()和 toString()方法都会返回正则表达式的字面量，与创建正则表达式的方式无关。</li>
+                    <li  style="padding:.5em 0;">正则表达式的 valueOf()方法返回正则表达式本身。</li>
+</ul>
+            </section>
+            <section>
+                <h2>RegExp构造函数属性</h2>
+                <p>RegExp构造函数包含一些属性。这些属性适用于作用域中的所有正则表达式，并且基于所执行的最近一次正则表达式操作而变化。关于这些属性的另一个独特之外，就是可以通过两种方式访问它们。换句话说，这些属性分别有一个长属性名哈一个短属性名（Opera是例外，它不支持短属性名）。下表列出了RegExp构造函数的属性</p>
+
+            </section>
+            <section>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">长属性名</th>
+                        <th style="width: 5em">短属性名</th>
+                        <th>说明</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Input</td>
+                        <td>$_</td>
+                        <td>最近一次匹配的字符串。Opera未实现此属性</td>
+                    </tr>
+                    <tr>
+                        <td>lastMatch</td>
+                        <td>$&amp;</td>
+                        <td>最近一次的匹配项。Opera为实现此属性</td>
+                    </tr>
+                    <tr>
+                        <td>lastParen</td>
+                        <td>$+</td>
+                        <td>最近一次匹配的捕获组</td>
+                    </tr>
+                    <tr>
+                        <td>leftContext</td>
+                        <td>$`</td>
+                        <td>input字符串中lastMatch之前的文本</td>
+                    </tr>
+                    <tr>
+                        <td>multiline</td>
+                        <td>$*</td>
+                        <td>布尔值，表示是否所有表达式都使用多行模式<br>
+                            IE和Opera未实现此属性</td>
+                    </tr>
+                    <tr>
+                        <td>rightContext</td>
+                        <td>$’</td>
+                        <td>input字符串中lastMatch之后的文本</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h2>模式的局限性</h2>
+                <ul>
+                    <li>匹配字符串开始和结尾的\A 和 \Z 锚</li>
+                    <li>向后查找</li>
+                    <li>并集和交集</li>
+                    <li>原子组</li>
+                    <li>Unicode支持</li>
+                    <li>命名的捕获组</li>
+                    <li>s和x匹配模式</li>
+                    <li>条件匹配</li>
+                    <li>正则表达式注释</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Function类型</h2>
+            </section>
+            <section>
+                <h3>没有重载（深入理解）</h3>
+                <p style="text-align: left">将函数名想象为指针，有助于了解为什么ECMAScript中没有函数重载的概念。来看下面的例子：</p>
+                <pre><code class="javascript">
+  function addNum(s1){
+    return 100+s1;
+  }
+  function addNum(s2){
+    return 200+s2;
+  }
+  alert(addNum(1)); // 输出 201，实际上第二个函数覆盖了第一个函数。
+                </code></pre>
+                <p  style="text-align: left">对于变量的声明，实际上此处的 addNum 是对 Function 对象的一个引用，可以想象成指针，变量声明了两次，实际上第二次的声明切断了函数第一次的引用而指向了另外一个对象。</p>
+                <p  style="text-align: left"> 在这里，我们可以把每个函数都看做是 Function 类型的实例。由于这里的函数是对象，则函数名实际上是指向函数对象的指针，而并不会与某个具体的函数绑定。</p>
+            </section>
+            <section>
+                <h2>函数声明与函数表达式</h2>
+                <ul>
+                <li  style="padding:.5em 0;">解析器在向执行环境中加载数据时，对函数声明和函数表达式并非一视同仁。</li>
+                <li  style="padding:.5em 0;">解析器会率先读取函数声明（函数声明提升），并使其在执行任何代码前可用（可以访问）；</li>
+                <li  style="padding:.5em 0;">函数表达式，则必须等到解析器执行到它所在的代码行，才会真正被执行</li>
+                </ul>
+            </section>
+            <section>
+                <h2>作为值的函数</h2>
+                <p>因为ECMAScript中的函数命名本身就是变量，所以函数也可以作为值来使用。也就是说，不仅可以像传递参数一样把一个函数传递给另一个函数，而且可以将一个函数作为另一个函数的结果返回</p>
+            </section>
+            <section>
+                <h2>函数内部属性</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">在函数中有两个特殊的对象：arguments 和 this </li>
+                    <li  style="padding:.5em 0;">arguments参见第三章，arguments有个callee属性，该属性是一个指针，指向拥有这个arguments对象的函数</li>
+                    <li  style="padding:.5em 0;">this引用的是函数据以执行的环境对象，当在网页的全局作用域中调用函数时，this 对象引用的就是 window</li>
+                </ul>
+            </section>
+            <section>
+                <h2>函数属性和方法</h2>
+                <ul>
+                    <li  style="padding:.5em 0;">ECMAScript中的函数是对象，包含：length 和 prototype </li>
+                    <li  style="padding:.5em 0;">length 属性表示函数希望接收的命名参数的个数</li>
+                    <li  style="padding:.5em 0;">prototype 见第六章</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>基本包装类型</h2>
+                <p><small>ECMAScript提供了三个特殊的引用类型Boolean、Number和String</small></p>
+            </section>
+            <section>
+                <h3>Boolean类型</h3>
+                <p>Boolean类型是与布尔值对应的应用类型</p>
+            </section>
+            <section>
+                <h3>Number类型</h3>
+            </section>
+            <section>
+                <h3>String类型</h3>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>单体内置对象</h2>
+                <p><small>ECMAScript对内置对象实现提供的、不依赖与宿主环境的对象，这些对象在ECMAScript程序执行之前就已经存在了</small></p>
+            </section>
+            <section>
+                <h2>Global对象</h2>
+                <p><small>ECMAScript中的Global对象在某种意义上是作为一个终极的“兜底儿对象”来定义的。换句话说，不属于任何其他对象的属性和方法，最终都是它的属性和方法。事实上，没有全局变量或者全局函数；所有在全局作用域中定义的属性和方法，最终都是他的属性和方法</small></p>
+                <ul>
+                    <li  style="padding:.5em 0;">URI编码方法 Global对象的encodeURI()和encodeURIComponent()方法截图对于URI进行编码以便发给浏览器 </li>
+                    <li  style="padding:.5em 0;">eval()方法 eval方法就像是一个完整的ECMAScript解析器，它只接受一个参数，即要执行的ECMAScript 字符串</li>
+                    <li  style="padding:.5em 0;">window对象 详见第八章</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Math对象</h2>
+                <p><small>ECMAScript还为保存数学公式和信息提供了一个公共位置，即Math对象。与我们在Javascript直接编写的计算功能相比，Math对象提供的计算功能执行起来要快得多</small></p>
+            </section>
+            <section>
+                <h2>Math对象的属性</h2>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">属性</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>E</small></td>
+                        <td><small>返回算术常量 e，即自然对数的底数（约等于2.718</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>LN2</small></td>
+                        <td><small>返回 2 的自然对数（约等于0.693）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>LN10</small></td>
+                        <td><small>返回 10 的自然对数（约等于2.302）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>LOG2E</small></td>
+                        <td><small>返回以 2 为底的 e 的对数（约等于 1.414）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>LOG10E</small></td>
+                        <td><small>返回以 10 为底的 e 的对数（约等于0.434）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>PI</small></td>
+                        <td><small>返回圆周率（约等于3.14159）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>SQRT2</small></td>
+                        <td><small>返回 2 的平方根（约等于 1.414）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>SQRT1_2</small></td>
+                        <td><small>返回返回 2 的平方根的倒数（约等于 0.707）</small></td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h2>Math对象的方法</h2>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">属性</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>abs(x)</small></td>
+                        <td><small>返回数的绝对值</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>acos(x)</small></td>
+                        <td><small>返回数的反余弦值</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>asin(x)</small></td>
+                        <td><small>返回数的反正弦值</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>atan(x)</small></td>
+                        <td><small>以介于 -PI/2 与 PI/2 弧度之间的数值来返回 x 的反正切值。</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>atan2(y,x)</small></td>
+                        <td><small>返回从 x 轴到点 (x,y) 的角度（介于 -PI/2 与 PI/2 弧度之间）</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>ceil(x)</small></td>
+                        <td><small>对数进行上舍入</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>cos(x)</small></td>
+                        <td><small>返回数的余弦</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>exp(x)</small></td>
+                        <td><small>返回 e 的指数</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>floor(x)</small></td>
+                        <td><small>对数进行下舍入</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>log(x)</small></td>
+                        <td><small>返回数的自然对数（底为e）</small></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h2>Math对象的方法</h2>
+                <table style=" margin:  1em auto">
+                    <thead>
+                    <tr>
+                        <th width="30%" style="padding: 1em 0">属性</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td><small>max(x,y)</small></td>
+                        <td><small>返回 x 和 y 中的最高值</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>min(x,y)</small></td>
+                        <td><small>返回 x 和 y 中的最低值</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>pow(x,y)</small></td>
+                        <td><small>返回 x 的 y 次幂</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>random()</small></td>
+                        <td><small>返回 0 ~ 1 之间的随机数</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>round(x)</small></td>
+                        <td><small>把数四舍五入为最接近的整数</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>sin(x)</small></td>
+                        <td><small>返回数的正弦</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>sqrt(x)</small></td>
+                        <td><small>返回数的平方根</small></td>
+                    </tr>
+                    <tr>
+                        <td><small>tan(x)</small></td>
+                        <td><small>返回角的正切</small></td>
+                    </tr>
+                 
+                    </tbody>
+                </table>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Thanks</h1>
+                <p><small><a href="index.html#/1">返回目录</a></small></p>
+            </section>
+        </section>
+    </div>
+</div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

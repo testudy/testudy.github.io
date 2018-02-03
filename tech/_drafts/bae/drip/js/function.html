@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>引用类型</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>函数</h1>
+						<p>函数包含一组语句，它们是JavaScript的基础模块单元，用于代码复用、信息隐藏和组合调用。函数用于指定对象的行为。</p>
+						<p>JavaScript中的函数就是对象。对象是“名/值”对的集合并拥有一个连到原型对象的隐藏连接。函数对象连接到Function.prototype。每个函数在创建时会附加两个隐藏属性：函数的上下文和实现函数行为的代码。函数的特殊之处在于可以被调用。</p>
+						<p><small>所谓编程，就是将一组需求分解成一组函数与数据结构的技能。</small></p>
+					</section>
+					<section>
+						<ol>
+							<li>函数字面量</li>
+							<li>调用</li>
+							<li>参数</li>
+							<li>返回</li>
+							<li>异常</li>
+
+
+
+
+							<li>扩充类型的功能</li>
+							<li>作用域</li>
+							<li>闭包</li>
+							<li>模块</li>
+						</ol>
+					</section>
+				</section>
+				<section>
+					<h2>函数字面量</h2>
+					<p>函数字面量可以出现在任何允许表达式出现的地方。函数也可以被定义在其他函数中。一个内部函数除了可以访问自己的参数和变量，同时它也能自由访问把它嵌套在其中的父函数的参数和变量。通过函数字面量创建的函数对象包含一个连接到外部上下文的连接。这被称为闭包（closure）。</p>
+					<pre><code>
+var add = function(a, b){
+	return a + b;
+};
+					</code></pre>
+				</section>
+				<section>
+					<section>
+						<h2>调用</h2>
+						<p>调用一个函数会暂停当前函数的执行，传递控制权和参数给新函数。除了声明时定义的形式参数，还包括arguments和this两个附加参数。如果实际参数过多了，超出的参数值会被忽略；如果实际的参数值过少，缺失的值会被替换为undefined。对参数值不会进行类型检查：任何类型的值都可以被传递给任何参数。this值取决于调用的模式。</p>
+					</section>
+					<section>
+						<ol>
+							<li>方法调用模式</li>
+							<li>函数调用模式</li>
+							<li>构造器调用模式</li>
+							<li>Apply调用模式</li>
+						</ol>
+					</section>
+					<section>
+						<h3>方法调用模式</h3>
+						<p>当一个函数被保存为对象的一个属性时，我们称它为一个方法。当一个方法被调用时，this被邦定到该对象。方法可以使用this访问自己所属的对象，从对象中取值或对对象进行修改。</p>
+					</section>
+					<section>
+						<h3>函数调用模式</h3>
+						<p>当一个函数并非一个对象的属性时，那么它就是被当做一个函数来调用的，此时，this被邦定到全局对象。</p>
+					</section>
+					<section>
+						<h3>构造器调用模式</h3>
+						<p>JavaScript是一门基于原型继承的语言。这意味着对象可以直接从其他对象继承属性。该语言是无类型的。如果在一个函数前面带上一个new来调用，那么将创建一个连接到该函数prototype成员的新对象，同时this会被绑定到这个新对象上。这个函数可以被成为构造函数。</p>
+					</section>
+					<section>
+						<h3>Apply调用模式</h3>
+						<p>JavaScript是一门函数式的面向对象编程语言，函数可以改变自己调用的上下文。</p>
+					</section>
+				</section>
+				<section>
+					<h2>参数</h2>
+					<p>使用arguments属性可以访问所有的参数列表，包括没有分配形参的参数。arguments并不是一个真正的数组，它只是一个“类似数组”的对象，它拥有一个length属性，但却没有任何数组的方法。</p>
+				</section>
+				<section>
+					<h2>返回</h2>
+					<p>函数总是会返回一个值。如果没有指定返回值，则返回undefined。如果函数调用前面加上了new前缀，且return返回值不是一个对象，则返回this（该新对象）。</p>
+				</section>
+				<section>
+					<h2>异常</h2>
+					<p>throw语句中断函数的执行。它应该抛出一个用来识别异常类型的name属性和一个描述性的message属性。也可以添加其他自定义属性。一个try语句只会有一个捕获所有异常的catch代码块。</p>
+				</section>
+				<section>
+					<h2>扩充类型的功能</h2>
+					<p>给基本类型添加方法，新的方法会立刻被赋予到所有对象实例上，哪怕对象实例是在方法添加之前就创建好了。</p>
+				</section>
+				<section>
+					<h2>作用域</h2>
+					<p>作用域控制着变量与参数的可见性及生命周期。JavaScript支持函数作用域，而不支持块级作用域，即在一个函数内部任何位置定义的变量，在该函数的任何地方都可见，而在函数外部不可见。</p>
+				</section>
+				<section>
+					<h2>闭包</h2>
+					<p>内部函数可以访问定义它的外部函数的参数和变量（除了this和arguments）而无需复制。函数可以访问它被创建时所处的上下文环境，这被称为<strong>闭包</strong>。</p>
+				</section>
+				<section>
+					<h2>模块</h2>
+					<p>模块的一般形式是：一个定义了私有变量和函数的函数；利用闭包创建可以访问私有变量和函数的特权函数；最后返回这个特权函数，或者把它保存到一个可访问到的地方。</p>
+				</section>
+				<section>
+					<h1>再见！</h1>
+				</section>
+			</div>
+		</div>
+        <!-- footer -->
+        <script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                        return !document.body.classList;
+                    } },
+                    { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    } }
+                ]
+            });
+
+        </script>
+    </body>
+</html>

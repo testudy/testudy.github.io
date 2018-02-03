@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="/css/reveal.css"/>
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+	<div class="reveal">
+        <div class="slides">
+            <section>
+                <section>
+                    <h1>􏳲􏳳􏰝􏳵􏳲􏳳􏰝新兴的API</h1>
+                    <p style="text-align: center"><small>􏴅随着HTML5的出现，面向未来Web应用的JavascriptAPI也得到了极大的发展</small></p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>requestAnimationFrame</h2>
+                    <p><small>很长时间以来,计时器和循环间隔一直都是JavaScript动画的最核心技术。虽然CSS变换及动画为Web开发人员提供了实现动画的简单手段,但 JavaScript动画开发领域的状况这些年来并没有大的变化。 Firefox 4 最早为 JavaScript 动画添加了一个新 API,即 mozRequestAnimationFrame()。这个方法会 告诉浏览器:有一个动画开始了。进而浏览器就可以确定重绘的最佳方式。</small></p>
+                </section>
+                <section>
+                    <h3>早期动画循环</h3>
+                    <ul>
+                        <li>在 JavaScript 中创建动画的典型方式,就是使用 setInterval()方法来控制所有动画。</li>
+                        <li>最平滑动画的最佳循环间隔是 1000ms/60,约等于 17ms。 </li>
+                        <li>虽然与使用多组 setTimeout()的循环方式相比,使用 setInterval()的动画循环效率更高,但 后者也不是没有问题。无论是 setInterval()还是 setTimeout()都不十分精确。 </li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>循环间隔的问题</h3>
+                    <p>知道什么时候绘制下一帧是保证动画平滑的关键。然而,直至最近,开发人员都没有办法确保浏览 器按时绘制下一帧。随着<canvas>元素越来越流行,新的基于浏览器的游戏也开始崭露头脚,面对不 十分精确的 setInterval()和 setTimeout(),开发人员一筹莫展。</p>
+                </section>
+                <section>
+                    <p>浏览器使用的计时器的精度进一步恶化了问题。</p>
+                    <ul>
+                        <li> IE8 及更早版本的计时器精度为 15.625ms。</li>
+                        <li>IE9 及更晚版本的计时器精度为 4ms。</li>
+                        <li>Firefox 和 Safari 的计时器精度大约为 10ms。</li>
+                        <li>Chrome 的计时器精度为 4ms。</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>mozRequestAnimationFrame</h3>
+                    <p>CSS 变换 和动画的优势在于浏览器知道动画什么时候开始,因此会计算出正确的循环间隔,在恰当的时候刷新 UI。而对于 JavaScript 动画,浏览器无从知晓什么时候开始。因此他的方案就是创造一个新方法 mozRequestAnimationFrame(),通过它告诉浏览器某些 JavaScript 代码将要执行动画。这样浏览器 可以在运行某些代码后进行适当的优化。</p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Page Visibility API</h2>
+                    <p><small>不知道用户是不是正在与页面交互,这是困扰广大 Web 开发人员的一个主要问题。如果页面最小 化了或者隐藏在了其他标签页后面,那么有些功能是可以停下来的,比如轮询服务器或者某些动画效果。 而 Page Visibility API(页面可见性 API)就是为了让开发人员知道页面是否对用户可见而推出的。</small></p>
+                </section>
+                <section>
+                    <p>这个 API 本身非常简单,由以下三部分组成。</p>
+                    <ul>
+                        <li>document.hidden:表示页面是否隐藏的布尔值。页面隐藏包括页面在后台标签页中或者浏览器最小化。</li>
+                        <li>document.visibilityState:表示下列 4 个可能状态的值。</li>
+                        <li>visibilitychange 事件:当文档从可见变为不可见或从不可见变为可见时,触发该事件。</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Geolocation API</h2>
+                    <p><small>通过这套 API,JavaScript 代码能够访问到用户的当前位置信息。当然,访问之前必须得到用户的明确许可,即同意在页面中共享 其位置信息。如果页面尝试访问地理定位信息,浏览器就会显示一个对话框,请求用户许可共享其位置 信息。</small></p>
+                </section>
+                <section>
+                    <p>Geolocation API 在浏览器中的实现是 navigator.geolocation 对象,这个对象包含 3 个方法。</p>
+                    <p>第一个方法是 getCurrentPosition(),调用这个方法就会触发请求用户共享地理定位信息的对话框。这个方法接收 3 个参数:成功回调函数、可选的失败回调函数和可选的选项对象。</p>
+                    <p>其中,成功回调函数会接收到一个 Position 对象参数,该对象有两个属性:coords 和 timestamp。</p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>File API</h2>
+                    <p><small>不能直接访问用户计算机中的文件,一直都是 Web 应用开发中的一大障碍。2000 年以前,处理文 件的唯一方式就是在表单中加入&lt;input type="file"&gt;字段,仅此而已。File API(文件 API)的宗旨 是为 Web 开发人员提供一种安全的方式,以便在客户端访问用户计算机中的文件,并更好地对这些文 件执行操作。</small></p>
+                </section>
+                <section>
+                    <p>HTML5 在 DOM 中为文件输入元素添加了一个 files 集合。每个 File 对象都有下列只读属性。</p>
+                    <ul>
+                        <li>name:本地文件系统中的文件名。</li>
+                        <li>size:文件的字节大小。</li>
+                        <li>type:字符串,文件的 MIME 类型。</li>
+                        <li>lastModifiedDate:字符串,文件上一次被修改的时间(只有 Chrome 实现了这个属性)。</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>FileReader类型</h3>
+                    <p><small>FileReader 类型实现的是一种异步文件读取机制。可以把 FileReader 想象成 XMLHttpRequest, 区别只是它读取的是文件系统,而不是远程服务器。</small></p>
+                </section>
+                <section>
+                    <p>FileReader 提供了如下 几个方法</p>
+                    <ul>
+                        <li>readAsText(file,encoding):以纯文本形式读取文件,将读取到的文本保存在 result 属 性中。第二个参数用于指定编码类型,是可选的。</li>
+                        <li>readAsDataURL(file):读取文件并将文件以数据 URI 的形式保存在 result 属性中。</li>
+                        <li>readAsBinaryString(file):读取文件并将一个字符串保存在result属性中,字符串中的每个字符表示一字节。</li>
+                        <li>readAsArrayBuffer(file):读取文件并将一个包含文件内容的 ArrayBuffer 保存在result 属性中。</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>读取部分内容</h3>
+                    <p><small>File 对象还支持一个 slice()方法, 这个方法在 Firefox 中的实现叫 mozSlice(),在 Chrome 中的实现叫 webkitSlice(),Safari 的 5.1 及 之前版本不支持这个方法。slice()方法接收两个参数:起始字节及要读取的字节数。这个方法返回一 个 Blob 的实例,Blob 是 File 类型的父类型。</small></p>
+                </section>
+                <section>
+                    <h3>对象URL</h3>
+                    <p><small>对象 URL 也被称为 blob URL,指的是引用保存在 File 或 Blob 中数据的 URL。使用对象 URL 的 好处是可以不必把文件内容读取到 JavaScript 中而直接使用文件内容。为此,只要在需要文件内容的地 方提供对象 URL 即可。</small></p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Web 计时</h2>
+                    <p><small>页面性能一直都是 Web 开发人员最关注的领域。但直到最近,度量页面性能指标的唯一方式,就 是提高代码复杂程度和巧妙地使用 JavaScript 的 Date 对象。Web Timing API 改变了这个局面,让开发 人员通过 JavaScript 就能使用浏览器内部的度量结果,通过直接读取这些信息可以做任何想做的分析。 与本章介绍过的其他 API 不同,Web Timing API 实际上已经成为了 W3C 的建议标准,只不过目前支持 它的浏览器还不够多。</small></p>
+                </section>
+                <section>
+                    <p>Web 计时机制的核心是 window.performance 对象。对页面的所有度量信息,包括那些规范中已 经定义的和将来才能确定的,都包含在这个对象里面。Web Timing 规范一开始就为 performance 对象 定义了两个属性。</p>
+                    <ul>
+                        <li>redirectCount:页面加载前的重定向次数。</li>
+                        <li>type:数值常量,表示刚刚发生的导航类型。</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>Web Workers</h2>
+                    <p><small>随着 Web 应用复杂性的与日俱增,越来越复杂的计算在所难免。长时间运行的 JavaScript 进程会导 致浏览器冻结用户界面,让人感觉屏幕“冻结”了。Web Workers 规范通过让 JavaScript 在后台运行解决 了这个问题。</small></p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h1>Thanks</h1>
+                    <p style="text-align: center"><small><a href="index.html#/1">返回目录</a></small></p>
+                </section>
+            </section>
+        </div>
+    </div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

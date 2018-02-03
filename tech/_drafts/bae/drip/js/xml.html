@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="/css/reveal.css"/>
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>JavaScript与XML</h1>
+					</section>
+                    <section>
+                        <p>曾几何时，XML一度成为互联网传输和存储结构化数据的标准。透过XML的发展，能够清晰的看到Web技术发展的轨迹。自从DOM出现后，所有浏览器都内置了对XML的原生支持（XML DOM）。</p>
+                    </section>
+				</section>
+                <section>
+                    <section>
+                        <h2>浏览器对XML DOM的支持</h2>
+                    </section>
+                    <section>
+                        <p>DOM2级规范是第一个提到动态创建XML DOM概念的规范，DOM3级规范进一步增强了XML DOM，新增了解析和序列化的特性。</p>
+                    </section>
+                    <section>
+                        <h3>DOM2级核心</h3>
+                        <p>DOM2级中可以使用document.implementation.createDocument(namespaceUri, root, doctype)创建XML文档。通常只使用root参数，来指定XML DOM文档元素的标签名；而namespaceUri参数很少使用，在JavaScript中管理命名空间比较难；doctype参数使用更少。</p>
+                        <pre><code>
+// xmldoc是DOM2级Document对象
+var xmldoc = document.implementation.createDocument('', 'root', null);
+
+var child = xmldoc.createElement('child');
+xmldoc.documentElement.appendChild(child);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>可以通过hasFeature检测浏览器是否支持DOM2级XML DOM。</p>
+                        <pre><code>
+var hasXmlDom = document.implementation.hasFeature('xml', '2.0');
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>DOMParser类型</h3>
+                        <p>通过DOMParser实例的parseFromString方法解析XML，并返回Document实例对象，该方法接受要解析的XML字符串和内容类型（始终是‘text/xml’）两个参数。</p>
+                        <pre><code>
+var parser = new DOMParser();
+var xmldoc = parser.parseFromString('<root><child /></root>', 'text/xml');
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>DOMParser只能解析格式良好的XML，否则会解析错误，各浏览器对此错误的处理存在差异。</p>
+                        <ul>
+                            <li>IE会抛出错误</li>
+                            <li>Firefox返回以parsererror为根节点的Document对象</li>
+                            <li>Chrome返回以root为根节点，parsererror为子节点的Document对象</li>
+                        </ul>
+                        <pre><code>
+var parser = new DOMParser(),
+    xmldoc,
+    errors;
+
+try{
+    xmldoc = parser.parseFromString('&lt;child&gt;', 'text/xml');
+    errors = xmldoc.getElementsByTagName('parsererror');
+    if (errors.length) {
+        throw new Error('Parser error!');
+    }
+} catch(ex) {
+    alert('Parser error!');
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>XMLSerializer类型</h3>
+                        <p>XMLSerializer类可以用来序列化任何有效的DOM对象，包括HTML DOM对象。将HTML文档传入serializeToString()以后会返回格式良好的XML文档。</p>
+                        <pre><code>
+var serializer = new XMLSerializer();
+var xml = serializer.serializeToString(document.documentElement);
+alert(xml);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>IE8及之前版本中的XML</h3>
+                        <p>IE是第一个原生支持XML的浏览器，通过ActiveX对象访问MSXML库实现。</p>
+                    </section>
+                    <section>
+                        <p>有6个不同的XML文档版本可以使用：</p>
+                        <ol>
+                            <li>Microsoft.XmlDom：最初随IE发布，不建议使用；</li>
+                            <li>MSXML2.DOMDocument：为了方便脚本处理而发步的更新版本，建议作为备选版本；</li>
+                            <li>MSXML2.DOMDocument.3.0：为了在JavaScript中使用，这是最低的建议版本；</li>
+                            <li>MSXML2.DOMDocument.4.0：在通过脚本处理时并不可靠，可能会导致安全警告；</li>
+                            <li>MSXML2.DOMDocument.5.0：同4.0一样的问题；</li>
+                            <li>MSXML2.DOMDocument.6.0：通过脚本能够可靠处理的最新版本。</li>
+                        </ol>
+                        <p><small>微软只推荐使用MSXML2.DOMDocument.6.0和MSXML2.DOMDocument.3.0版本，6.0是最新最可靠的版本；3.0是大多数Windows操作系统都支持的版本，仅在针对IE5.5之前的浏览器开发时才有必要使用MSXML2.DOMDocument版本。</small></p>
+                    </section>
+                    <section>
+                        <pre><code>
+var createDocument = (function(){
+    var versions = ['MSXML2.DOMDocument.6.0', 'MSXML2.DOMDocument.3.0', 'MSXML2.DOMDocument'],
+        version,
+        i,
+        len;
+
+        for (i = 0, len = versions.length; i &lt; len; i += 1) {
+            try {
+                new ActiveXObject(versions[i]);
+                version = versions[i];
+                break;
+            } catch (ex) {
+                // 不处理
+            }
+        }
+
+    if (version) {
+        return function () {
+            return new ActiveXObject(version);
+        };
+    }
+}());
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code>
+var xmldoc = createDocument();
+xmldoc.loadXML('<parent><child /></parent>');
+alert(xmldoc.documentElement.tagName);
+alert(xmldoc.documentElement.firstChild.tagName);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>如果在解析过程中出错，可以在parseError属性中找到错误信息。parseError对象包含下列属性：</p>
+                        <ul>
+                            <li>errorCode：错误类型的数值编码；在没有发生错误时值为0；</li>
+                            <li>filepos：文件中导致错误发生的位置；</li>
+                            <li>line：发生错误的行；</li>
+                            <li>linepos：发生错误的行中字符位置；</li>
+                            <li>reason：对错误的文本解释；</li>
+                            <li>srcText：导致错误的代码；</li>
+                            <li>url：导致错误的文件的URL（如果有这个文件的话）。</li>
+                        </ul>
+                        <p><small>parseError的valueOf方法返回errorCode值</small></p>
+                    </section>
+                    <section>
+                        <h4>序列化XML</h4>
+                        <p>每个DOM节点（不包括html DOM节点）都有一个xml属性，表示该节点的xml字符串。</p>
+                    </section>
+                    <section>
+                        <h4>加载XML文件</h4>
+                        <p>IE中的XML文档对象也可以加载来自服务器的文件（需遵守同源策略），可以通过async属性来设置加载文档的形式，true表示异步（默认值），false表示同步。</p>
+                        <pre><code>
+var xmldoc = createDocument();
+xmldoc.async = false;
+xmldoc.load('xml.xml');
+if (xmldoc.parseError == 0) {
+	alert(xmldoc.documentElement.tagName);
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>可以通过XML DOM文档对象的onreadystatechange事件监听XML文件的加载状态，readyState有以下4个状态：</p>
+                        <ul>
+                            <li>1：DOM正在加载数据；</li>
+                            <li>2：DOM已经加载完数据；</li>
+                            <li>3：DOM已经可以使用，但某些部分可能还无法访问；</li>
+                            <li>4：DOM已经完全可以使用；</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <pre><code>
+var xmldoc = createDocument();
+xmldoc.onreadystatechange = function () {
+    if (xmldoc.readyStatue == 4) {
+        if (xmldoc.parseError == 0) {
+	        alert(xmldoc.documentElement.tagName);
+        }
+    }
+};
+xmldoc.load('xml.xml');
+                        </code></pre>
+                        <p><small>在事件处理程序内部，必须使用变量名，ActiveX控件为了预防安全问题，不允许使用this对象。</small></p>
+                    </section>
+                    <section>
+                        <h3>跨浏览器处理XML</h3>
+                        <pre><code>
+function parseXml(xml){
+    var xmldoc = null;
+
+    if (typeof DOMParser !== 'undefined') {
+        xmldoc = (new DOMParser()).parseFromString(xml, 'text/xml');
+
+        var errors = xmldoc.getElementsByTagName('parsererror');
+        if (errors.length) {
+            throw new Error('XML parser error: ' + errors[0].textContent);
+        }
+    } else if (typeof ActiveXObject !== 'undefined') {
+        xmldoc = createDocument();
+        xmldoc.loadXML(xml);
+
+        if (xmldoc.parseError != 0) {
+            throw new Error('XML parser error: ' + xmldoc.parseError.reason);
+        }
+    } else {
+        throw new Error('No XML parser available.');
+    }
+
+    return xmldoc;
+}
+                        </code></pre>
+                        <p><small>应将此函数的调用放在try-catch语句中，以防错误的发生。</small></p>
+                    </section>
+                    <section>
+                        <pre><code>
+function serializeXml(xmldoc){
+    if (typeof XMLSerializer !== 'undefined') {
+        return (new XMLSerializer()).serializeToString(xmldoc);
+    } else if (typeof ActiveXObject !== 'undefined') {
+        return xmldoc.xml;
+    } else {
+        throw new Error('Could not serialize XML DOM.');
+    }
+}
+                        </code></pre>
+                        <p><small>只要浏览器使用了正确的XML DOM对象，也就没有必要将此函数的调用放在try-catch语句中。</small></p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>浏览器对XPath的支持</h2>
+                        <p><small>XPath是设计用来在DOM文档中查找节点的一种手段,因而对XML处理也很重要。但是,DOM3 级以前的标准并没有就 XPath的API作出规定;XPath是在DOM3级XPath模块中首次跻身推荐标准行列的。很多浏览器都实现了这个推荐标准,但IE则以自己的方式实现了XPath</small></p>
+                    </section>
+                    <section>
+                        <h3>DOM3 级XPath</h3>
+                        <p>DOM3 级 XPath 规范定义了在 DOM 中对 XPath 表达式求值的接口。要确定某浏览器是否支持 DOM3级 XPath,可以使用以下 JavaScript 代码:</p>
+                        <pre><code>
+var supportsXPath = document.implementation.hasFeature("XPath", "3.0");                            
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>XPathEvaluator 用于在特定的上下文中对 XPath 表达式求值,这个类型有下列 3 个方法：</p>
+                        <ul>
+                            <li> createExpression(expression, nsresolver):将 XPath 表达式及相应的命名空间信息转 10 换成一个 XPathExpression</li>
+                            <li>createNSResolver(node):根据 node 的命名空间信息创建一个新的 XPathNSResolver 对象</li>
+                            <li>evaluate(expression, context, nsresolver, type, result):在给定的上下文中, 基于特定的命名空间信息来对 XPath 表达式求值</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3></h3>
+                        <p></p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>浏览器对XSLT的支持</h2>
+                    </section>
+                    <section>
+                        <p></p>
+                    </section>
+                    <section>
+                        <h3></h3>
+                        <p></p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>小结</h2>
+                    </section>
+                    <section>
+                        <p></p>
+                    </section>
+                    <section>
+                        <h3></h3>
+                        <p></p>
+                    </section>
+                </section>
+<section>
+    <section>
+        <h1>Thanks</h1>
+
+        <p>
+            <small><a href="index.html#/1">返回目录</a></small>
+        </p>
+    </section>
+</section>
+</div>
+</div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

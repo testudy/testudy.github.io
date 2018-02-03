@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+    <!-- html引用CSS脚本和JS脚本 -->
+    <link rel="stylesheet" href="http://static01.babytreeimg.com/img/bui/2.0.0/build/reset/css/reset.min.css" />
+    <link rel="stylesheet" href="http://static01.babytreeimg.com/img/bui/2.0.0/build/tab/css/tab.min.css" />
+    <style>
+    .bui-tab {
+        width:300px;
+        height: 24px;
+        margin: 10px 0 10px 20px;
+        border-bottom: 1px solid #CCC;
+    }
+    .bui-tab dt {
+        float: left;
+        height: 24px;
+        padding: 0 10px 0 0;
+        margin-bottom: -1px;
+        line-height: 24px;
+        cursor: default;
+    }
+    .bui-tab dd {
+        display: inline;;
+        float: left;
+        height: 24px;
+        line-height: 24px;
+        margin:0 10px -1px 0;
+
+    }
+    .bui-tab dd a {
+        display: block;
+        _display: inline-block;
+        height: 23px;
+        padding: 0 9px;
+        line-height: 23px;
+        border: 1px solid #CCC;
+        color: #555;
+    }
+    .bui-tab dd a:hover {
+        text-decoration: none;
+    }
+
+    .bui-tab dd a:active,
+    .bui-tab dd a:focus {
+        outline: none;
+        bb:expression(this.onFocus=this.blur());
+    }
+    .bui-tab .active a {
+        background-color: #FFF;
+        border-width: 1px 1px 0 1px;
+        height: 24px;
+        position: relative;
+    }
+
+    .bui-tab-content-block {
+        display: none;
+    }
+
+    .bui-tab-content-active {
+        display: block;
+    }
+    .bui-tab-content { margin-left: 20px; }
+    </style>
+
+
+
+</head>
+
+<!-- 用法一
+不需要JS编码，只需要在对应的html标签增加相关属性，
+标签节点设置data-toggle="tab"属性，href="#对应的内容div id"
+默认是鼠标单击切换
+-->
+<body>
+<!-- 标签节点 -->
+<dl class="bui-tab" id="myTab">
+    <dt>一.标签data-toggle</dt>
+    <dd class="active">
+        <a href="#tab1" data-toggle="tab">标签1</a></dd>
+    <dd>
+        <a href="#tab2" data-toggle="tab">标签2</a></dd>
+    <dd>
+        <a href="#tab3" data-toggle="tab">标签3</a></dd>
+</dl>
+
+<!-- 内容节点 -->
+<div class="bui-tab-content">
+    <div id="tab1" class="bui-tab-content-block bui-tab-content-active">content1</div>
+    <div id="tab2" class="bui-tab-content-block">content2</div>
+    <div id="tab3" class="bui-tab-content-block">content3</div>
+</div>
+
+
+    <!-- 此JS加载在页面尾部 -->
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/lib/jquery/1.6.4/jquery.min.js"></script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/build/tab/js/tab.min.js"></script>
+</body>
+</html>

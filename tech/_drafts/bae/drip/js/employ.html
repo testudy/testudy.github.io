@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript</title>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+    <link rel="stylesheet" href="/css/reveal.css" />
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    (function () {
+        var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+        document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">' );
+    }());
+    </script>
+</head>
+<body>
+     <div class="reveal">
+          <div class="slides">
+               <section>
+                    <section>
+                         <h1>JavaScript in HTML</h1>
+                    </section>
+                    <section>
+                         <ol>
+                              <li>内联，放置在&lt;script&gt;和&lt;/script&gt;标签之间；</li>
+                              <li class="fragment">外联，放置在&lt;script&gt;标签的src属性指定的外部文件中；</li>
+                              <li class="fragment">内嵌，放置在HTML事件处理程序中，该事件处理程序由onclick或onmouseover这样的HTML属性值指定；</li>
+                              <li class="fragment">伪协议，放在一个URL里，使用特殊的“javascript:”协议。</li>
+                         </ol>
+                    </section>
+               </section>
+               <section>
+                    <section>
+                         <h2>&lt;script&gt;元素</h2>
+                         <p class="fragment">&lt;script&gt;是向HTML页面中插入JavaScript的主要方法。</p>
+                    </section>
+                    <section>
+                         <h3>内联脚本</h3>
+                         <pre><code class="html">
+&lt;script&gt;
+    function sayScript(){
+        alert('<\/script>');
+    }
+&lt;/script&gt;
+                         </code></pre>
+                         <p>可以使用Script元素（HTMLElement对象）的text属性获取数据。</p>
+                         <p class="fragment highlight-red"><small>不要在代码中出现“&lt;/script&gt;字符串。</small></p>
+                    </section>
+                    <section>
+                         <h3>外联脚本</h3>
+                         <pre><code>
+&lt;script src="example1.js"&gt;&lt;/script&gt;
+                         </code></pre>
+                         <p class="fragment highlight-red"><small>src属性指向外部JavaScript文件的链接。</small></p>
+                    </section>
+                    <section>
+                         <h3>标签的位置</h3>
+                         <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;script标签位置&lt;/title&gt;
+        &lt;!-- 惯例位置，不推荐 --&gt;
+        &lt;script src="example1.js"&gt;&lt;/script&gt;
+        &lt;script src="example2.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;!-- 页面底部，推荐 --&gt;
+        &lt;script src="example1.js"&gt;&lt;/script&gt;
+        &lt;script src="example2.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+                         </code></pre>
+                         <p class="fragment">无论哪种脚本，只要不存在defer和async属性，浏览器都会暂停页面的处理，按照&lt;script&gt;出现的顺序对它们依次进行解析。</p>
+                    </section>
+                    <section>
+                         <h3>延迟脚本</h3>
+                         <pre><code>
+&lt;script src="example.js" defer="defer"&gt;&lt;/script&gt;
+                         </code></pre>
+                    <ul>
+                        <li style="margin-top: 20px;">脚本会被延迟到整个页面解析完成之后再运行，即遇到&lt;/html&gt;标签之后再执行。HTML5规范要求脚本按照出现的先后顺序执行，延迟脚本会在DOMContentLoaded事件触发前执行。在现实中，延迟脚本不一定会按照顺序执行，也不一定会在DOMContentLoaded事件触发前执行。</li>
+                        <li style="margin-top: 20px;">HTML5中已经明确规定，defer属性只适用于外部脚本文件。但IE4-7支持嵌入脚本。IE4、Firefox3.5、Safari5和Chrome是最早支持defer属性的浏览器。其他浏览器会忽略这个属性，像平常一样处理脚本。所以，把延迟脚本放在页面底部仍然是最佳选择。</li>
+                    </ul>
+                    </section>
+                    <section>
+                         <h3>异步脚本</h3>
+                         <pre><code>
+&lt;script src="example.js" async="async"&gt;&lt;/script&gt;
+                         </code></pre>
+                    <ul>
+                        <li style="margin-top: 20px;">HTML5为&lt;script&gt;定义了async属性。这个属性与defer属性类似，都用于改变处理脚本的行为。同样与defer属性类似，async只适用于外部脚本文件，并告诉浏览器立刻下载文件。但与defer属性不一样的地方是并不保证按照出现的先后顺序执行。</li>
+                            <li style="margin-top: 20px;">异步脚本一定会在页面的load事件之前执行，但可能会在DOMContentLoaded事件触发之前或之后。支持异步脚本的浏览器有Firefox3.6、Safari5和Chrome。</li>
+                    </ul>
+                    </section>
+                    <section>
+                        <h3>在XHMTL中的用法</h3>
+                        <p>可扩展超文本标记语言，即XHTML（Extensible HyperText Markup Language），是将HTML作为XML应用而重新定义的一个标准。</p>
+                         <p class="fragment highlight-red "><small>在XHTML中，&lt;script&gt;标签中的内容被当做其他内容一样对待。如果JavaScript代码中包含了“&lt;”或“&”字符，这些字符就被解释称为XML标记（可以将内联脚本放在CDATA中，以避免这个问题）。</small></p>
+                    </section>
+                    <section>
+                         <pre><code>
+&lt;script&gt;
+    function compare(a, b){
+        if(a &lt; b){
+            alert('A is less than B');
+        }
+        else if(a &gt; b){
+            alert('A is greater than B');
+        }
+        else{
+            alert('A is equal to B');
+        }
+    }
+&lt;/script&gt;
+                         </code></pre>
+                         <p class="fragment">在XHTML中，a &lt; b中的小于号将被当作开始一个新标签来解析。但当做标签来讲，小于号后面不能够跟空格，因此会导致语法错误。<p>
+                    </section>
+                    <section>
+                         <p>避免在XHTML中出现类似语法错误的方法有两个。一个是用相应的HTML实体（&amp;lt;）替换代吗中所有的小于号；<p>
+                         <pre><code>
+&lt;script&gt;
+    function compare(a, b){
+        if(a <em>&amp;</em>lt; b){
+            alert('A is less than B');
+        }
+        else if(a &gt; b){
+            alert('A is greater than B');
+        }
+        else{
+            alert('A is equal to B');
+        }
+    }
+&lt;/script&gt;
+                         </code></pre>
+                    </section>
+                    <section>
+                         <p>二是用CData片段来包含JavaScript代码。<p>
+                         <pre><code>
+&lt;script&gt;&lt;![CDATA[
+    function compare(a, b){
+        if(a &lt; b){
+            alert('A is less than B');
+        }
+        else if(a &gt; b){
+            alert('A is greater than B');
+        }
+        else{
+            alert('A is equal to B');
+        }
+    }
+]]&gt;&lt;/script&gt;
+                         </code></pre>
+                    </section>
+                    <section>
+                         <p>为了兼容不支持XHTML的浏览器，再使用JavaScript注释将CData标记注释掉。<p>
+                              <pre><code>
+&lt;script&gt;
+//&lt;![CDATA[
+    function compare(a, b){
+        if(a &lt; b){
+            alert('A is less than B');
+        }
+        else if(a &gt; b){
+            alert('A is greater than B');
+        }
+        else{
+            alert('A is equal to B');
+        }
+    }
+//]]&gt;
+&lt;/script&gt;
+                         </code></pre>
+                    </section>
+                    <section>
+                    <h3>&lt;script&gt;属性</h3>
+                        <table>
+                             <thead >
+                                  <tr >
+                                       <th style="padding: 15px 0">属性</th>
+                                       <th style="width: 110px">状态</th>
+                                       <th class="center">说明</th>
+                                  </tr>
+                             </thead>
+                             <tfoot>
+                             </tfoot>
+                             <tbody style="font-size: 75%;">
+                                  <tr>
+                                       <td>async</td>
+                                       <td>可选</td>
+                                       <td>下载外部脚本不应妨碍页面中的其他操作，比如下载其他资源或等待加载其他脚本。</td>
+                                  </tr>
+                                  <tr>
+                                       <td>charset</td>
+                                       <td>可选</td>
+                                       <td>外部脚本文件的字符集。大多数浏览器会忽略该值，这个属性很少使用。</td>
+                                  </tr>
+                                  <tr>
+                                       <td>defer</td>
+                                       <td>可选</td>
+                                       <td>外部脚本文件可以延迟到文档完全被解析和显示之后再执行。IE7及更早版本对嵌入脚本也支持这个属性。</td>
+                                  </tr>
+                                  <tr>
+                                       <td>language</td>
+                                       <td>已废弃</td>
+                                       <td>编写代码所使用的脚本语言（如JavaScript、JavaScript1.2或VBScript）。</td>
+                                  </tr>
+                                  <tr>
+                                       <td>src</td>
+                                       <td>可选</td>
+                                       <td>外部脚本文件的URL。</td>
+                                  </tr>
+                                  <tr>
+                                       <td>type</td>
+                                       <td>可选</td>
+                                       <td>脚本语言的内容类型，可以看作language的替代属性；默认值为text/javascript。</td>
+                                  </tr>
+                             </tbody>
+                        </table>
+                        <p><a href="http://www.w3help.org/zh-cn/causes/BG9002">BG9002: 各浏览器对 SCRIPT 标签内 type 和 language 属性值识别程度不同</a></p>
+                    </section>
+               </section>
+               <section>
+                    <section>
+                         <h2>嵌入代码与外部文件</h2>
+                    </section>
+                    <section>
+                         <p>在HTML中使用嵌入代码和外部文件都没有问题，但使用外部文件有以下优点：</p>
+                         <ol>
+                              <li>可维护性：遍及不同HTML页面的JavaScript会造成维护问题。</li>
+                              <li>可缓存：浏览器能够根据具体的设置缓存JavaScript文件。</li>
+                              <li>适应未来：通过外部文件来包含JavaScript无须使用前面提到的XHTML或注释hack。HTML和XHTML包含外部文件的语法是相同的。</li>
+                         </ol>
+                    </section>
+               </section>
+               <section>
+                    <section>
+                         <h2>文档模式</h2>
+                    </section>
+                    <section>
+                    <ul>
+                        <li>IE5.5中引入了文档模式的概念，通过切换文档类型（doctype）实现，有混杂模式（quirks mode）、标准模式（standards mode）和准标准模式（almost standards mode）三种</li>
+                        <li>混杂模式会让IE的行为与IE5相同，而标准模式则让IE的行为更接近标准行为，准标准模式下大多数浏览器特性是符合标准</li>
+                        <li>不同模式主要影响CSS内容的呈现，但在某些情况下也会影响到JavaScript的解释执行。如果没有文档类型声明，则所有浏览器默认开启混杂模式，在不同浏览器下的行为差异非常大</li>
+                    </ul>
+                    </section>
+                    <section>
+                        <p>可以通过检测document.compatMode属性值来确定浏览器的当前的文档模式。</p>
+                        <ul>
+                            <li>如果其值为“CSS1Compat”，则说明浏览器工作在标准模式</li>
+                            <li>如果其值为“BackCompat”或undefined，则说明浏览器工作在怪异模式</li>
+                        </ul>
+                    </section>
+                    <section>
+                         <h3>标准模式</h3>
+                         <pre><code>
+&lt;!-- HTML 4.01严格版（Strict） --&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;
+
+&lt;!-- XHTML 1.0严格版（Strict） --&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xh
+tml1-strict.dtd"&gt;
+
+&lt;!-- XHTML 1.1 --&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11
+.dtd"&gt;
+
+&lt;!-- HTML 5 --&gt;
+&lt;!DOCTYPE html&gt;
+                         </code></pre>
+                    </section>
+                    <section>
+                         <p>准标准模式</p>
+                         <pre><code>
+&lt;!-- HTML 4.01过渡版（Transitional） --&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org
+/TR/html4/loose.dtd"&gt;
+
+&lt;!-- HTML 4.01框架集（Frameset） --&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR
+/html4/frameset.dtd"&gt;
+
+&lt;!-- XHTML 1.0过渡版（Transitional） --&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR
+/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+
+&lt;!-- XHTML 1.0框架集（Frameset） --&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1
+/DTD/xhtml1-frameset.dtd"&gt;
+                         </code></pre>
+                    </section>
+                    <section>
+                        <h3>DOCTYPE的那些事</h3>
+                        <ul>
+                            <li><a href="http://www.w3help.org/zh-cn/casestudies/002" target="_blank">DOCTYPE 与浏览器模式分析</a></li>
+                        </ul>
+                 
+                    </section>
+                </section>
+                <section>
+                    <section>
+                         <h2>条件注释</h2>
+                         <p class="fragment">客户端JavaScript编程中，很多不兼容性都是针对IE的。IE5引入了条件注释，在处理兼容性问题时非常有用。</p>
+                    </section>
+                    <section>
+                         <h3>HTML中的条件注释</h3>
+                         <pre><code>
+&lt;!--[if IE 6]&gt;
+    此处内容仅在IE6浏览器中渲染！
+&lt;![endif]--&gt;
+&lt;!--[if lte IE 8]&gt;
+    此处内容仅在IE5、6、7、8中渲染，也可以使用“lt”，“gt”或“gte”，
+    分别代表版本“低于”，“高于”或“高于或等于”IE8（或其他指定的版本）。
+&lt;![endif]--&gt;
+&lt;!--[if !IE]&gt;&lt;--&gt;
+    此处内容仅在非IE浏览器下渲染！
+&lt;!--&gt;&lt;![endif]--&gt;
+
+// 使用场景，利用条件注释去区分浏览器
+&lt;!--[if lt IE 7]&gt;&lt;html class="ie6"&gt;&lt;![endif]--&gt;
+&lt;!--[if IE 7]&gt;&lt;html class="ie7"&gt;&lt;![endif]--&gt;
+&lt;!--[if IE 8]&gt;&lt;html class="ie8"&gt;&lt;![endif]--&gt;
+&lt;!--[if (gte IE 9)]&gt;&lt;!--&gt;&lt;html&gt;&lt;!--&lt;![endif]--&gt;
+                         </code></pre>
+                         <p class="fragment"><small>注意分隔符的技巧。</small></p>
+                    </section>
+                    <section>
+                         <h3>JavaScript中的条件注释</h3>
+                         <p>IE中的条件注释以文本/*@cc_on开头，以文本@*/结束。类似于条件编译。</p>
+                         <pre><code class="javascript">
+/*@cc_on
+  @if (@_jscript)
+    alert("IE浏览器");
+  @end
+@*/
+
+/*@cc_on
+  @if (@_jscript)
+    alert("IE浏览器");
+  @else*/
+    alert("非IE浏览器");
+  /*@end
+@*/
+                         </code></pre>
+                         <p class="fragment"><small>关键字@if、@else和@end划分出哪些是要被IE的JavaScript解释器有条件的执行的代码。@_jscript变量在IE中值总是true。</small></p>
+                    </section>
+               </section>
+               <section>
+                    <section>
+                         <h2>&lt;noscript&gt;元素</h2>
+                    </section>
+                    <section>
+                         <p>在不支持JavaScript的浏览器会显示&lt;noscript&gt;中包含的内容。</p>
+                         <ol style="margin-top: 50px">
+                              <li>浏览器不支持脚本</li>
+                              <li>浏览器支持脚本，脚本被禁用</li>
+                         </ol>
+                    </section>
+                    <section>
+                         <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;noscript标签&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;noscript&gt;
+            &lt;p&gt;本页面需要浏览器支持（启用）JavaScript&lt;/p&gt;
+        &lt;/noscript&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+                         </code></pre>
+                    </section>
+               </section>
+            <section>
+                <section>
+                    <h2>Thanks</h2>
+                    <p class="center"><small><a href="index.html#/1">返回目录</a></small></p>
+                </section>
+            </section>
+          </div>
+     </div>
+    <script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+            ]
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="ie6" lang="zh-cn"><![endif]-->
+<!--[if IE 7]><html class="ie7" lang="zh-cn"><![endif]-->
+<!--[if IE 8]><html class="ie8" lang="zh-cn"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="zh-cn"><!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>Scrollspy Demo</title>
+    <link rel="stylesheet" href="http://static01.babytreeimg.com/img/bui/2.0.0/build/reset/css/reset.min.css" />
+    <style>
+        .container {
+            margin: auto;
+            width: 960px;
+        }
+        #nav-side {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            margin-left: 480px;
+        }
+        .ie6 #nav-side {
+            position: absolute;
+            _top: expression(documentElement.scrollTop);
+        }
+        #nav-side li {
+            padding-left: 10px;
+            width: 100px;
+            height: 50px;
+            line-height: 50px;
+            background-color: #7bcfa6;
+        }
+        #nav-side .active {
+            background-color: #eaff56;
+        }
+        .section {
+            height: 560px;
+        }
+        #impression {
+            background-color: #ed5736;
+        }
+        #qa {
+            background-color: #9d2933;
+        }
+        #life {
+            background-color: #fff143;
+        }
+        #show {
+            background-color: #ca6924;
+        }
+        #editor {
+            background-color: #0eb83a;
+            overflow: hidden;
+        }
+        #editor .nav {
+            overflow: hidden;
+        }
+        #editor .nav li {
+            float: left;
+            padding-left: 10px;
+            width: 100px;
+            height: 50px;
+            line-height: 50px;
+            background-color: #7bcfa6;
+        }
+        #editor .nav .active {
+            background-color: #eaff56;
+        }
+        #editor .editor-container {
+            height: 510px;
+            overflow: auto;
+        }
+        #editor1 {
+            background-color: #f0c239;
+        }
+        #editor2 {
+            background-color: #b35c44;
+        }
+        #editor3 {
+            background-color: #a88462;
+        }
+        @media screen and (max-device-width:480px) and (orientation:portrait) {
+            .container {
+                width: 100%;
+            }
+            #nav-side {
+                position: fixed;
+                left: auto;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body class="container">
+    <div id="nav-side">
+        <ul class="nav">
+            <li><a href="#impression">TA印象</a></li>
+            <li><a href="#qa">Q&A</a></li>
+            <li><a href="#life">TA生活</a></li>
+            <li><a href="#show">TA秀场</a></li>
+            <li><a href="#editor">编辑说</a></li>
+        </ul>
+    </div>
+    <div id="impression" class="section">
+        <h3>TA印象</h3>
+    </div>
+    <div id="qa" class="section">
+        <h3>Q&A</h3>
+    </div>
+    <div id="life" class="section">
+        <h3>TA生活</h3>
+    </div>
+    <div id="show" class="section">
+        <h3>TA秀场</h3>
+    </div>
+    <div id="editor" class="section">
+        <div id="editor-nav">
+            <ul class="nav">
+                <li><h3>编辑说</h3></li>
+                <li><a href="#editor1">醉翁之意</a></li>
+                <li><a href="#editor2">车水马龙</a></li>
+                <li><a href="#editor3">万家灯火</a></li>
+            </ul>
+        </div>
+        <div class="editor-container"
+                data-spy="scroll"
+                data-target="#editor-nav"
+                data-offset="100">
+            <div id="editor1" class="section">
+                醉
+            </div>
+            <div id="editor2" class="section">
+                龙
+            </div>
+            <div id="editor3" class="section">
+                火
+            </div>
+        </div>
+    </div>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/lib/jquery/1.6.4/jquery.min.js"></script>
+    <script src="http://static01.babytreeimg.com/img/bui/2.0.0/build/scrollspy/js/scrollspy.min.js"></script>
+    <script>
+        $(document.body).scrollspy({
+            offset : 100,
+            target: '#nav-side'
+        });
+    </script>
+</body>
+</html>

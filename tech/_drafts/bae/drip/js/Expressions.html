@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>引用类型</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section>
+                <h1>函数表达式</h1>
+
+                <p>
+                    <small>“函数表达式是JavaScript中一个既强大有容易令人困惑的特性”</small>
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>定义函数</h2>
+
+                <p>定义函数的两种方式：一种是函数声明，另一种是函数表达式</p>
+            </section>
+            <section>
+                <h2>函数声明提升</h2>
+                <pre><code class="javascript">
+                    sayHi();
+
+                    function sayHi() {
+                    alert('hi')
+                    };
+                </code></pre>
+                <p>
+                    <small>这个例子不会抛出错误，因为在代码执行之前会读取函数声明</small>
+                </p>
+            </section>
+            <section>
+                <h2>使用函数表达式</h2>
+                <pre><code class="javascript">
+                    var functionName = function(arg0, arg1,arg 2){
+                    //函数体
+                    };
+                </code></pre>
+                <p style="text-align: left;padding: .5em 0">
+                    <small>
+                        这种形式看起来好像是常规的变量赋值语句，创建个函数并将它赋值变量functionName。这种情况下创建的函数叫匿名函数，因为function关键字后面没有标示符。匿名函数的name属性是空字符串
+                    </small>
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>递归</h2>
+            </section>
+            <section>
+                <p style="text-align: left;padding: .5em 0">递归函数是在一个函数通过名字调用自身的情况下构成的</p>
+                <pre><code class="javascript">
+  function factorial(num) {
+      if (num <= 1) {
+      return 1;
+    }else{
+      return num * factorial(num-1);
+         }
+  };
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>闭包</h2>
+
+                <p>
+                    <small>闭包是指有权访问另一个函数作用域中的变量函数</small>
+                </p>
+            </section>
+            <section>
+                <p style="text-align: left;padding: .5em 0">
+                    由于闭包会携带包含它的作用域，因此会比其他函数占用更多的内存，过度使用闭包可能会到导致内存占用过多，我们建议读者只在绝对必要时再考虑使用闭包。虽然像v8等优化后的javascript引擎会尝试回收被闭包占用的内存，但请大家还是要慎重使用闭包。</p>
+            </section>
+            <section>
+                <h2>闭包与变量</h2>
+
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>私有变量</h2>
+            </section>
+            <section>
+                <p style="text-align: left;padding: .5em 0">
+                    严格来讲，javascript中没有私有成员的概念；所有对象属性都是公有的。不过倒是有个私有变量的概念。任何在函数中定义的变量，都可以认为是私有变量，因为不能在函数的外部访问这些变量。私有变量包括函数的参数、局部变量和在函数内部定义的其他函数。</p>
+            </section>
+            <section>
+                <p style="text-align: left;padding: .5em 0">
+                    <small>举个例子</small>
+                </p>
+                <pre><code>
+ function add(num1, num2) {
+ var sum = num1 + num2;
+ return sum;
+ //在这个函数内部有三个私有变量：num1 , num2, sum
+ };
+                </code></pre>
+            </section>
+            <section>
+                <p>有权访问私有变量和私有函数的公有方法称为特权方法</p>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>可以使用构造函数模式、原型模式来实现自定义类型的特权方法，也可以使用模块模式、增强
+                        的模块模式来实现单例的特权方法
+                    </small>
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>小结</h1>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>在 JavaScript 编程中，函数表达式是一种非常有用的技术。使用函数表达式可以无须对函数命名，从而实现动态编程。匿名函数，也称为拉姆达函数，是一种使用 JavaScript
+                        函数的强大方式。以下总结了函数表达式的特点。
+                    </small>
+                </p>
+                <ul>
+                    <li style="padding: .5em 0"> 函数表达式不同于函数声明。函数声明要求有名字，但函数表达式不需要。没有名字的函数表达式也叫做匿名函数。</li>
+                    <li style="padding: .5em 0"> 在无法确定如何引用函数的情况下，递归函数就会变得比较复杂；</li>
+                    <li style="padding: .5em 0"> 递归函数应该始终使用 arguments.callee 来递归地调用自身，不要使用函数名——函数名可能会发生变化。</li>
+                </ul>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>当在函数内部定义了其他函数时，就创建了闭包。闭包有权访问包含函数内部的所有变量，原理如下。</small>
+                </p>
+                <ul>
+                    <li style="padding: .5em 0">在后台执行环境中，闭包的作用域链包含着它自己的作用域、包含函数的作用域和全局作用域。</li>
+                    <li style="padding: .5em 0"> 通常，函数的作用域及其所有变量都会在函数执行结束后被销毁。</li>
+                    <li style="padding: .5em 0"> 但是，当函数返回了一个闭包时，这个函数的作用域将会一直在内存中保存到闭包不存在为止。</li>
+                </ul>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>使用闭包可以在 JavaScript中模仿块级作用域（JavaScript本身没有块级作用域的概念），要点如下.</small>
+                </p>
+                <ul>
+                    <li style="padding: .5em 0">创建并立即调用一个函数，这样既可以执行其中的代码，又不会在内存中留下对该函数的引用。</li>
+                    <li style="padding: .5em 0"> 结果就是函数内部的所有变量都会被立即销毁——除非将某些变量赋值给了包含作用域（即外部作用域）中的变量。</li>
+                </ul>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>闭包还可以用于在对象中创建私有变量，相关概念和要点如下。</small>
+                </p>
+                <ul>
+                    <li style="padding: .5em 0">即使 JavaScript
+                        中没有正式的私有对象属性的概念，但可以使用闭包来实现公有方法，而通过公有方法可以访问在包含作用域中定义的变量。
+                    </li>
+                    <li style="padding: .5em 0"> 有权访问私有变量的公有方法叫做特权方法。</li>
+                    <li style="padding: .5em 0"> 可以使用构造函数模式、原型模式来实现自定义类型的特权方法，也可以使用模块模式、增强的模块模式来实现单例的特权方法。</li>
+                </ul>
+            </section>
+            <section>
+                <p style="padding: .5em 0;text-align: left">
+                    <small>JavaScript 中的函数表达式和闭包都是极其有用的特性，利用它们可以实现很多功能。不过，因为
+                        创建闭包必须维护额外的作用域，所以过度使用它们可能会占用大量内存。
+                    </small>
+                </p>
+            </section>
+        </section>
+        <section>
+            <h1>Thanks</h1>
+
+            <p>
+                <small><a href="index.html#/1">返回目录</a></small>
+            </p>
+        </section>
+
+    </div>
+</div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

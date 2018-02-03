@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="/css/reveal.css"/>
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+	<div class="reveal">
+        <div class="slides">
+            <section>
+                <section>
+                    <h1>最佳实践</h1>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>可维护性</h2>
+                    <p><small>编写可维护的代码很重要,因为大部分开发人员都花费大量时间维护他人代码。很难从头开始开发 新代码的,很多情况下是以他人的工作成果为基础的。确保自己代码的可维护性,以便其他开发人员在 此基础上更好的开展工作。</small></p>
+                </section>
+                <section>
+                    <h3>什么是可维护的代码</h3>
+                    <ul>
+                        <li>可理解性——其他人可以接手代码并理解它的意图和一般途径,而无需原开发人员的完整解释。</li>
+                        <li>直观性——代码中的东西一看就能明白,不管其操作过程多么复杂。</li>
+                        <li>可适应性——代码以一种数据上的变化不要求完全重写的方法撰写。</li>
+                        <li>可扩展性——在代码架构上已考虑到在未来允许对核心功能进行扩展。</li>
+                        <li>可调试性——当有地方出错时,代码可以给予你足够的信息来尽可能直接地确定问题所在。</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>代码约定</h3>
+                    <ul>
+                        <li>1. 可读性</li>
+                        <li>2. 变量和函数命名</li>
+                        <li>3. 变量类型透明</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>松散耦合</h3>
+                    <ul>
+                        <li>1. 解耦 HTML/JavaScript</li>
+                        <li>2. 解耦 CSS/JavaScript</li>
+                        <li>3. 解耦应用逻辑/事件处理程序</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>编程实践</h3>
+                    <ul>
+                        <li>1. 尊重对象所有权</li>
+                        <li>2. 避免全局量</li>
+                        <li>3.避免与 null 进行比较</li>
+                        <li>4. 使用常量</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>性能</h2>
+                </section>
+                <section>
+                    <h3>编程实践</h3>
+                    <ul>
+                        <li>1.避免全局查找</li>
+                        <li>2. 避免 with 语句</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>选择正确方法</h3>
+                    <ul>
+                        <li>1. 避免不必要的属性查找</li>
+                        <li>2. 优化循环</li>
+                        <li>3. 展开循环</li>
+                        <li>4. 避免双重解释</li>
+                        <li>5. 其他（原生方法较快／Switch 语句较快／位运算符较快）</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>最小化语句数</h3>
+                    <ul>
+                        <li>1. 多个变量声明</li>
+                        <li>2. 插入迭代值</li>
+                        <li>3. 使用数组和对象字面量</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>优化DOM交互</h3>
+                    <ul>
+                        <li>1. 最小化现场更新</li>
+                        <li>2. 使用 innerHTML</li>
+                        <li>3. 使用事件代理</li>
+                        <li>4. 注意 HTMLCollection</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>部署</h2>
+                    <p><small>也许所有 JavaScript 解决方案最重要的部分,便是最后部署到运营中的网站或者是 Web 应用的过程。 在这之前可能你已经做了相当多的工作,为普通的使用进行架构并优化一个解决方案。现在是时候从开 发环境中走出来并进入 Web 阶段了,在此将会和真正的用户交互。然而,在这之前还有一系列需要解 决的问题。</small></p>
+                </section>
+                <section>
+                    <h3>构建过程</h3>
+                    <ul>
+                        <li>知识产权问题 —— 如果把带有完整注释的代码放到线上,那别人就更容易知道你的意图,对它 再利用,并且可能找到安全漏洞。</li>
+                        <li>文件大小 —— 书写代码要保证容易阅读,才能更好地维护,但是这对于性能是不利的。</li>
+                        <li>代码组织 —— 组织代码要考虑到可维护性并不一定是传送给浏览器的最好方式</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>验证</h3>
+                    <p>JSLint 可以查找 JavaScript 代码中的语法错误以及常见的编码错误。</p>
+                </section>
+                <section>
+                    <h3>压缩</h3>
+                     <ul>
+                        <li>1. 文件压缩</li>
+                        <li>2. HTTP 压缩</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h1>Thanks</h1>
+                    <p style="text-align: center"><small><a href="index.html#/1">返回目录</a></small></p>
+                </section>
+            </section>
+        </div>
+    </div>
+<!-- footer -->
+<script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } }
+        ]
+    });
+
+</script>
+</body>
+</html>

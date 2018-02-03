@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>条件注释</title>
+    <script>
+/*@cc_on
+  @if (@_jscript)
+    alert("In IE");
+  @end
+@*/
+
+/*@cc_on
+  @if (@_jscript)
+    alert("IE浏览器");
+  @else*/
+    alert("非IE浏览器");
+  /*@end
+@*/
+    </script>
+</head>
+<body>
+    <!--[if ie]>
+    <h1>IE</h1>
+    <![endif]-->
+    <!--[if !ie]> <-->
+    <h1>非IE浏览器</h1>
+    <!--> <![endif]-->
+</body>
+</html>

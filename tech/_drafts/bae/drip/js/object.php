@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>对象</title>
+		<?php
+			include('../header.php');
+		?>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>对象</h1>
+                        <p>对象是JavaScript的基本数据类型，是一组键值对的无序集合。也可以叫做“散列”（hash）、“散列表”（hashtable）、“字典”（dictionary）、“关联数组”（associative array）。</p>
+                        <p>除字符串、数字、true、false、null和undefined外，JavaScript中的值都是对象。</p>
+					</section>
+					<section>
+						<ol>
+							<li>创建对象</li>
+							<li>属性的查询和设置</li>
+						</ol>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>创建对象</h2>
+                        <ol>
+                            <li>对象直接量</li>
+                            <li>通过new创建对象</li>
+                            <li>原型</li>
+                            <li>Object.create()</li>
+                        </ol>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>属性的查询和设置</h2>
+					</section>
+					<section>
+						<h3></h3>
+						<p></p>
+					</section>
+				</section>
+				<section>
+					<h1>再见！</h1>
+				</section>
+			</div>
+		</div>
+		<?php
+			include('../footer.php');
+		?>
+	</body>
+</html>

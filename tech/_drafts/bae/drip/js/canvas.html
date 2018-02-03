@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM</title>
+    <meta charset="utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <script src="/lib/reveal/2.6.1/lib/js/head.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/reveal.css">
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/lib/reveal/2.6.1/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        (function () {
+            var name = location.search.match(/print-pdf/gi) ? 'pdf' : 'paper';
+            document.write('<link rel="stylesheet" href="/lib/reveal/2.6.1/css/print/' + name + '.css" media="print">');
+        }());
+    </script>
+</head>
+<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>Canvas</h1>
+						<p>&lt;canvas&gt;元素自身是没有任何外观的，它只是在文档中创建了一个画板，同时提供了强大的客户端JavaScript绘制的API。</p>
+					</section>
+					<section>
+						<ol>
+							<li>理解&lt;canvas&gt;元素</li>
+							<li>绘制简单的2D图形</li>
+							<li>使用WebGL绘制3D图形</li>
+						</ol>
+					</section>
+				</section>
+                <section>
+                    <section>
+                        <h1>基本用法</h1>
+                        <p><small>要使用&lt;canvas&gt;元素，必须先设置其width和height属性，指定可以绘图的区域大小。出现在
+                            开始和结束标签中的内容是后备信息，如果浏览器不支持&lt;canvas&gt;元素，就会显示这些信息。可以CSS为该元素添加样式，如果不添加任何样式或者不绘制任何图形，在页面中是看
+                            不到该元素的</small></p>
+                    </section>
+                    <section>
+                        <h2>基本用法</h2>
+                        <pre><code  class="html">
+    &lt;canvas id="drawing" width=" 200" height="200"&gt;A drawing of something. &lt;/canvas&gt;
+                        </code></pre>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>在使用&lt;canvas&gt;元素之前，首先要检测getContext()方法是否存在。</li>
+                            <li>要在画布（canvas）上绘图，需要取得绘图上下文。而取得绘图上下文对象的引用，需要调用
+                                getContext()方法并传入上下文的名字。传入"2d"，就可以取得2D上下文对象</li>
+                            <li>使用toDataURL()方法，可以导出在&lt;canvas&gt;元素上绘制的图像;该方法不能跨域</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>2D上下文</h2>
+                        <p style="text-align: left">使用2D绘图上下文提供的方法，可以绘制简单的2D图形，比如矩形、弧线和路径。2D上下文的
+                            坐标开始于&lt;canvas&gt;元素的左上角，原点坐标是(0,0)。所有坐标值都基于这个原点计算，x值越大表示
+                                越靠右，y值越大表示越靠下。默认情况下，width和height表示水平和垂直两个方向上可用的像素
+                                数目。</p>
+                    </section>
+                    <section>
+                        <h2>填充和描边</h2>
+                        <p style="text-align: left">2D上下文的两种基本绘图操作是填充和描边。填充，就是用指定的样式（颜色、渐变或图像）填
+                            充图形；描边，就是只在图形的边缘画线。大多数2D上下文操作都会细分为填充和描边两个操作，而操作的结果取决于两个属性：fillStyle和strokeStyle</p>
+                        <p style="text-align: left">这两个属性的值可以是字符串、渐变对象或模式对象，而且它们的默认值都是"#000000"。如果为
+                            它们指定表示颜色的字符串值，可以使用CSS中指定颜色值的任何格式，包括颜色名、十六进制码、
+                            rgb、rgba、hsl或hsla</p>
+                    </section>
+                    <section>
+                        <h2>绘制矩形</h2>
+                        <p style="text-align: left">矩形有关的方法包括fillRect()、
+                            strokeRect()和clearRect()。这三个方法都能接收4个参数：矩形的x坐标、矩形的y坐标、矩形
+                            宽度和矩形高度。这些参数的单位都是像素</p>
+                        <p style="text-align: left">这两个属性的值可以是字符串、渐变对象或模式对象，而且它们的默认值都是"#000000"。如果为
+                            它们指定表示颜色的字符串值，可以使用CSS中指定颜色值的任何格式，包括颜色名、十六进制码、
+                            rgb、rgba、hsl或hsla</p>
+                    </section>
+                    <section>
+                        <h3>绘制矩形</h3>
+                        <pre><code>
+var drawing = document.getElementById("drawing");
+//确定浏览器支持&lt;canvas&gt;元素
+if (drawing.getContext){
+    var context = drawing.getContext("2d");
+    /*
+    * 根据Mozilla的文档
+    * http://developer.mozilla.org/en/docs/Canvas_tutorial:Basic_usage
+    */
+    //绘制红色矩形
+    context.fillStyle = "#ff0000";
+    context.fillRect(10, 10, 50, 50);
+    //绘制半透明的蓝色矩形
+    context.fillStyle = "rgba(0,0,255,0.5)";
+    context.fillRect(30, 30, 50, 50);
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>绘制矩形描边</h3>
+                        <pre><code>
+var drawing = document.getElementById("drawing");
+//确定浏览器支持&lt;canvas&gt;元素
+if (drawing.getContext){
+    var context = drawing.getContext("2d");
+    /*
+    * 根据Mozilla的文档
+    * http://developer.mozilla.org/en/docs/Canvas_tutorial:Basic_usage
+    */
+    //绘制红色描边矩形
+    context.strokeStyle = "#ff0000";
+    context.strokeRect(10, 10, 50, 50);
+    //绘制半透明的蓝色描边矩形
+    context.strokeStyle = "rgba(0,0,255,0.5)";
+    context.strokeRect(30, 30, 50, 50);
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <p>描边线条的宽度由lineWidth属性控制，该属性的值可以是任意整数。另外，
+                            通过lineCap 属性可以控制线条末端的形状是平头、圆头还是方头（"butt"、
+                            "round"或"square"），通过lineJoin属性可以控制线条相交的方式是圆交、斜
+                            交还是斜接（"round"、"bevel"或"miter"）。</p>
+                    </section>
+                    <section>
+                        <h3>clearRect</h3>
+                        <p>clearRect()方法用于清除画布上的矩形区域。本质上，这个方法可以把绘制上下文中的某
+                            一矩形区域变透明。通过绘制形状然后再清除指定区域，就可以生成有意思的效果，例如把某个形状切
+                            掉一块。</p>
+                    </section>
+                    <section>
+                        <h3>绘制路径</h3>
+                        <p>2D绘制上下文支持很多在画布上绘制路径的方法。通过路径可以创造出复
+                            杂的形状和线条。要绘制路径，首先必须调用beginPath()方法，表示要开始
+                            绘制新路径。</p>
+                    </section>
+                    <section>
+                        <h3>绘制路径的方法</h3>
+                        <ul>
+                            <li>arc(x, y, radius, startAngle, endAngle, counterclockwise):以(x,y)为圆心绘 制一条弧线,弧线半径为 radius,起始和结束角度(用弧度表示)分别为 startAngle 和 endAngle。最后一个参数表示 startAngle 和 endAngle 是否按逆时针方向计算,值为 false 表示按顺时针方向计算</li>
+                            <li>arcTo(x1, y1, x2, y2, radius):从上一点开始绘制一条弧线,到(x2,y2)为止,并且以 给定的半径 radius 穿过(x1,y1)</li>
+                            <li>bezierCurveTo(c1x, c1y, c2x, c2y, x, y):从上一点开始绘制一条曲线,到(x,y)为 止,并且以(c1x,c1y)和(c2x,c2y)为控制点</li>
+                            <li>lineTo(x, y):从上一点开始绘制一条直线,到(x,y)为止。</li>
+                            <li>moveTo(x, y):将绘图游标移动到(x,y),不画线</li>
+                            <li>quadraticCurveTo(cx, cy, x, y):从上一点开始绘制一条二次曲线,到(x,y)为止,并
+                                且以(cx,cy)作为控制点</li>
+                            <li>rect(x, y, width, height):从点(x,y)开始绘制一个矩形,宽度和高度分别由 width 和
+                                height 指定。这个方法绘制的是矩形路径,而不是 strokeRect()和 fillRect()所绘制的独
+                                立的形状。</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>绘制文本</h3>
+                        <p>绘制文本主要有两个 方法:fillText()和 strokeText()。这两个方法都可以接收 4 个参数:要绘制的文本字符串、x 坐 标、y 坐标和可选的最大像素宽度。</p>
+                    </section>
+                    <section>
+                        <h3>绘制文本的方法</h3>
+                        <ul>
+                            <li>font:表示文本样式、大小及字体,用 CSS 中指定字体的格式来指定</li>
+                            <li>textAlign:表示文本对齐方式。</li>
+                            <li>textBaseline:表示文本的基线。</li>
+                            <li>textBaseline:表示文本的基线。</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>变换</h3>
+                        <p>通过上下文的变换,可以把处理后的图像绘制到画布上。</p>
+                    </section>
+                    <section>
+                        <h3>变换的方法</h3>
+                        <ul>
+                            <li>rotate(angle):围绕原点旋转图像 angle 弧度。</li>
+                            <li>scale(scaleX, scaleY):缩放图像,在 x 方向乘以 scaleX,在 y 方向乘以 scaleY。</li>
+                            <li>ranslate(x,y):将坐标原点移动到(x,y)。</li>
+                            <li>transform(m1_1, m1_2, m2_1, m2_2, dx, dy):直接修改变换矩阵,方式是乘以矩阵</li>
+                            <li>setTransform(m1_1, m1_2, m2_1, m2_2, dx, dy):将变换矩阵重置为默认状态,然后 再调用 transform()</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>绘制图像</h3>
+                        <p>如果你想把一幅图像绘制到画布上,可以使用 drawImage() 方法。drawImage()方法的这种调 用方式总共需要传入 9 个参数:要绘制的图像、源图像的 x 坐标、源图像的 y 坐标、源图像的宽度、源 图像的高度、目标图像的 x 坐标、目标图像的 y 坐标、目标图像的宽度、目标图像的高度。</p>
+                    </section>
+                    <section>
+                        <h3>阴影</h3>
+                        <p>2D 上下文会根据以下几个属性的值,自动为形状或路径绘制出阴影。</p>
+                        <ul>
+                            <li>shadowColor:用 CSS 颜色格式表示的阴影颜色,默认为黑色。</li>
+                            <li>shadowOffsetX:形状或路径 x 轴方向的阴影偏移量,默认为 0。</li>
+                            <li>shadowOffsetY:形状或路径 y 轴方向的阴影偏移量,默认为 0。</li>
+                            <li>shadowBlur:模糊的像素数,默认 0,即不模糊。</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>渐变</h3>
+                        <p>渐变由 CanvasGradient 实例表示,很容易通过 2D 上下文来创建和修改。要创建一个新的线性渐 变,可以调用 createLinearGradient()方法。这个方法接收 4 个参数:起点的 x 坐标、起点的 y 坐 标、终点的 x 坐标、终点的 y 坐标。调用这个方法后,它就会创建一个指定大小的渐变,并返回 CanvasGradient 对象的实例。</p>
+                    </section>
+                    <section>
+                        <h3>模式</h3>
+                        <p>模式其实就是重复的图像,可以用来填充或描边图形。要创建一个新模式,可以调用 createPattern()方法并传入两个参数:一个 HTML &lt;img&gt;元素和一个表示如何重复图像的字符串。 其中,第二个参数的值与 CSS 的 background-repeat 属性值相同,包括"repeat"、"repeat-x"、 "repeat-y"和"no-repeat"。</p>
+                    </section>
+                    <section>
+                        <h3>使用图像数据</h3>
+                        <p>2D 上下文的一个明显的长处就是,可以通过 getImageData()取得原始图像数据。这个方法接收 4 个参数:要取得其数据的画面区域的 x 和 y 坐标以及该区域的像素宽度和高度。</p>
+                    </section>
+                </section>
+
+				<section>
+					<h1>再见！</h1>
+				</section>
+			</div>
+		</div>
+        <!-- footer -->
+        <script src="/lib/reveal/2.6.1/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '/lib/reveal/2.6.1/lib/js/classList.js', condition: function () {
+                        return !document.body.classList;
+                    } },
+                    { src: '/lib/reveal/2.6.1/plugin/highlight/highlight.js', async: true, callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    } }
+                ]
+            });
+
+        </script>
+</body>
+</html>
