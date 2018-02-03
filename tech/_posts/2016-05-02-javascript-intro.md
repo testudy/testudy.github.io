@@ -194,6 +194,7 @@ tags: 原创 技术
 </section>
 <section>
     <section>
-        <h1>Thanks</h1>
+        <h2>Thanks</h2>
+        <p><small><a href="/tech/2016/05/01/javascript-ppt-table.html#/1">返回目录</a></small></p>
     </section>
 </section>
