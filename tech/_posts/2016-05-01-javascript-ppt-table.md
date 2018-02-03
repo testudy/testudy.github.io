@@ -42,7 +42,6 @@ tags: 原创 技术
             <li><a href="lexical.php">词法结构</a></li>
             <li><a href="object.php">对象</a></li>
             <li><a href="array.php">数组</a></li>
-            <li><a href="client.html">客户端检测</a></li>
             <li><a href="json.html">JSON</a></li>
             <li><a href="ajax.html">Ajax与Comet</a></li>
             <li><a href="xml.php">JavaScript与XML</a></li>
@@ -58,10 +57,10 @@ tags: 原创 技术
     <section>
         <h2>Contents目录——浏览器与js</h2>
         <ol style="width: 600px">
+            <li><a href="/tech/2016/05/20/client.html">客户端检测</a></li>
         </ol>
         <ol style="display:none;">
             <li><a href="bom.html">BOM</a></li>
-            <li><a href="client.html">客户端检测</a></li>
             <li><a href="dom.html">DOM</a></li>
             <li><a href="dom2.html">DOM扩展</a></li>
             <li><a href="dom3.html">DOM2 和 DOM3</a></li>
