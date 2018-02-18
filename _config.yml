@@ -34,5 +34,3 @@ markdown: kramdown
 
 kramdown:
     input: GFM
-
-theme: jekyll-theme-leap-day
