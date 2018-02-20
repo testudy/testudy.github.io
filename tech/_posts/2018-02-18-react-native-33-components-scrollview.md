@@ -18,9 +18,9 @@ Doesn't yet support other contained responders from blocking this scroll view fr
 
 目前尚不支持，内部的Responder阻止其成为Responder。
 
-`<ScrollView>` vs [`<FlatList>`](/tech/2018/02/18/react-native-32-components-flatlist.html) - which one to use?
+`<ScrollView>` vs [`<FlatList>`](/tech/2018/02/19/react-native-35-components-flatlist.html) - which one to use?
 
-`<ScrollView>`对比[`<FlatList>`](/tech/2018/02/18/react-native-32-components-flatlist.html)，两者的使用场景有什么不同？
+`<ScrollView>`对比[`<FlatList>`](/tech/2018/02/19/react-native-35-components-flatlist.html)，两者的使用场景有什么不同？
 
 `ScrollView` simply renders all its react child components at once. That makes it very easy to understand and use.
 
