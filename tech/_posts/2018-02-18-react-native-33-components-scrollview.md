@@ -1,6 +1,6 @@
 ---
 layout: post
-title: React Native 31 - 组件：滚动视图（ScrollView）
+title: React Native 33 - 组件：滚动视图（ScrollView）
 tags: 原创 技术 翻译 React-Native
 ---
 
