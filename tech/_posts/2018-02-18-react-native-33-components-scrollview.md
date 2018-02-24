@@ -441,7 +441,7 @@ Controls whether iOS should automatically adjust the content inset for scroll vi
 
 When true, the scroll view bounces when it reaches the end of the content if the content is larger then the scroll view along the axis of the scroll direction. When false, it disables all bouncing even if the `alwaysBounce*` props are true. The default value is true.
 
-设置滚动视图是否在滚动到边界时，支持滚动方向上的滚性效果。如果此属性设置为`false`，即使`alwaysBounce*`属性是`true`，也会禁用所有的惯性效果。默认值为`true`。
+设置滚动视图是否在滚动到边界时，支持滚动方向上的弹性效果。如果此属性设置为`false`，即使`alwaysBounce*`属性是`true`，也会禁用所有的弹性效果。默认值为`true`。
 
 | Type | Required | Platform |
 | ---- | -------- | -------- |
