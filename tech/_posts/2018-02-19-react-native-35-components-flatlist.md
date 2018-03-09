@@ -449,6 +449,8 @@ If provided, a standard RefreshControl will be added for "Pull to Refresh" funct
 
 Called when the viewability of rows changes, as defined by the `viewabilityConfig` prop.
 
+当`viewabilityConfig`属性定义的可见行发生变化时触发。
+
 | Type     | Required |
 | -------- | -------- |
 | function | No       |
@@ -504,7 +506,7 @@ This may improve scroll performance for large lists.
 
 See `ViewabilityHelper.js` for flow type and further documentation.
 
-详见[`ViewabilityHelper.js`](https://github.com/facebook/react-native/blob/26684cf3adf4094eb6c405d345a75bf8c7c0bf88/Libraries/Lists/ViewabilityHelper.js#L31)。
+详见[`ViewabilityHelper.js`](https://github.com/facebook/react-native/blob/26684cf3adf4094eb6c405d345a75bf8c7c0bf88/Libraries/Lists/ViewabilityHelper.js#L31) 中的flow类型定义，未来会补充文档。
 
 | Type              | Required |
 | ----------------- | -------- |
@@ -514,6 +516,9 @@ See `ViewabilityHelper.js` for flow type and further documentation.
 #### `viewabilityConfigCallbackPairs`
 
 List of `ViewabilityConfig`/`onViewableItemsChanged` pairs. A specific `onViewableItemsChanged` will be called when its corresponding `ViewabilityConfig`'s conditions are met. See `ViewabilityHelper.js` for flow type and further documentation.
+
+`ViewabilityConfig`/`onViewableItemsChanged`属性对列表，特定的`ViewabilityConfig`配置条件触发时，会调用对应的`onViewableItemsChanged`方法。
+详见[`ViewabilityHelper.js`](https://github.com/facebook/react-native/blob/26684cf3adf4094eb6c405d345a75bf8c7c0bf88/Libraries/Lists/ViewabilityHelper.js#L31) 中的flow类型定义，未来会补充文档。
 
 | Type                                   | Required |
 | -------------------------------------- | -------- |
